@@ -9,6 +9,7 @@ import GroupStandings from "./GroupStandings";
 import KnockoutBracket from "./KnockoutBracket";
 import CalendarPicker from "./ui/CalendarPicker";
 import { Calendar, Trophy, Heart, Search, Grid, Flame, Star } from "lucide-react";
+import { useMatchStore } from "../hooks/useMatchStore";
 
 const TABS = [
   { id: "date", label: "Lịch thi đấu theo ngày", icon: Calendar },
@@ -18,14 +19,19 @@ const TABS = [
   { id: "favorites", label: "Trận yêu thích", icon: Heart },
 ] as const;
 
-interface ScheduleDashboardProps {
-  initialMatches: Match[];
-}
-
-export default function ScheduleDashboard({ initialMatches }: ScheduleDashboardProps) {
+export default function ScheduleDashboard() {
   const [activeTab, setActiveTab] = useState<"date" | "all" | "group" | "knockout" | "favorites">("date");
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const fetchMatches = useMatchStore((state) => state.fetchMatches);
+  const matches = useMatchStore((state) => state.matches);
+  const isLoadedMatches = useMatchStore((state) => state.isLoaded);
+
+  // Initialize Zustand global matches store on mount
+  useEffect(() => {
+    fetchMatches();
+  }, [fetchMatches]);
 
   // Load persistent favorites list (SSR hydration mismatch safe)
   const [favorites, setFavorites, isLoadedFavs] = usePersistentState<string[]>("wc2026_favorites_v1", []);
@@ -33,9 +39,9 @@ export default function ScheduleDashboard({ initialMatches }: ScheduleDashboardP
   // Index matches by match_id for rapid O(1) lookups
   const matchesMap = useMemo(() => {
     const map = new Map<string, Match>();
-    initialMatches.forEach((m) => map.set(m.match_id, m));
+    matches.forEach((m) => map.set(m.match_id, m));
     return map;
-  }, [initialMatches]);
+  }, [matches]);
 
   // Recursively resolve placeholders (e.g. W74, L101) into actual team names and ISO2s
   const resolveTeam = (placeholder: string): { name: string; iso2: string } => {
@@ -79,14 +85,14 @@ export default function ScheduleDashboard({ initialMatches }: ScheduleDashboardP
 
   // Extract and sort unique dates from all matches (both group and knockout stage)
   const sortedDates = useMemo(() => {
-    const allDates = initialMatches.map((m) => m.local_date.split(" ")[0]);
+    const allDates = matches.map((m) => m.local_date.split(" ")[0]);
 
     return Array.from(new Set(allDates)).sort((a, b) => {
       const [dayA, monthA, yearA] = a.split("/").map(Number);
       const [dayB, monthB, yearB] = b.split("/").map(Number);
       return new Date(yearA, monthA - 1, dayA).getTime() - new Date(yearB, monthB - 1, dayB).getTime();
     });
-  }, [initialMatches]);
+  }, [matches]);
 
   // Initialise first date when mounted
   useEffect(() => {
@@ -111,9 +117,8 @@ export default function ScheduleDashboard({ initialMatches }: ScheduleDashboardP
     };
   }, [setFavorites]);
 
-  // Filter matches for the "date" tab (resolving placeholder knockout teams dynamically)
   const filteredMatchesByDate = useMemo(() => {
-    return initialMatches
+    return matches
       .filter((m) => {
         const matchesDate = m.local_date.split(" ")[0] === selectedDate;
         const matchesSearch =
@@ -138,11 +143,11 @@ export default function ScheduleDashboard({ initialMatches }: ScheduleDashboardP
         }
         return m;
       });
-  }, [initialMatches, selectedDate, searchQuery, matchesMap]);
+  }, [matches, selectedDate, searchQuery, matchesMap]);
 
   // Filter matches for the "favorites" tab (resolving placeholder knockout teams dynamically)
   const favoriteMatches = useMemo(() => {
-    return initialMatches
+    return matches
       .filter((m) => favorites.includes(m.match_id))
       .filter((m) => {
         return (
@@ -165,11 +170,11 @@ export default function ScheduleDashboard({ initialMatches }: ScheduleDashboardP
         }
         return m;
       });
-  }, [initialMatches, favorites, searchQuery, matchesMap]);
+  }, [matches, favorites, searchQuery, matchesMap]);
 
   // Filter and resolve ALL matches (with search query filtering and placeholder resolving)
   const allMatchesResolved = useMemo(() => {
-    return initialMatches
+    return matches
       .filter((m) => {
         return (
           searchQuery === "" ||
@@ -193,7 +198,7 @@ export default function ScheduleDashboard({ initialMatches }: ScheduleDashboardP
         }
         return m;
       });
-  }, [initialMatches, searchQuery, matchesMap]);
+  }, [matches, searchQuery, matchesMap]);
 
   // Group all matches by date chronologically
   const groupedMatches = useMemo(() => {
@@ -366,7 +371,7 @@ export default function ScheduleDashboard({ initialMatches }: ScheduleDashboardP
 
       {/* 5. Main Dashboard Content Area */}
       <main className="min-h-[350px]">
-        {!isLoadedFavs ? (
+        {!(isLoadedFavs && isLoadedMatches) ? (
           /* Loading Placeholder */
           <div className="flex flex-col items-center justify-center py-20 space-y-4">
             <div className="w-10 h-10 border-4 border-secondary/35 border-t-secondary rounded-full animate-spin" />
@@ -444,7 +449,7 @@ export default function ScheduleDashboard({ initialMatches }: ScheduleDashboardP
             {activeTab === "group" && (
               <div className="animate-slide-up">
                 <GroupStandings
-                  matches={initialMatches}
+                  matches={matches}
                 />
               </div>
             )}
@@ -452,7 +457,7 @@ export default function ScheduleDashboard({ initialMatches }: ScheduleDashboardP
             {activeTab === "knockout" && (
               <div className="animate-slide-up">
                 <KnockoutBracket
-                  matches={initialMatches}
+                  matches={matches}
                 />
               </div>
             )}

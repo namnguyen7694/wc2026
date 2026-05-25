@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Match } from "../types/match";
 import { Star, MapPin, Trophy, Clock } from "lucide-react";
 import Modal from "./ui/Modal";
@@ -14,8 +15,17 @@ export default React.memo(function MatchCard({
   match,
   showDateHeader = false,
 }: MatchCardProps) {
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+
+  // Navigate to country profile page (excluding placeholder team names)
+  const handleTeamClick = (e: React.MouseEvent, iso2: string) => {
+    e.stopPropagation();
+    if (iso2 && iso2.length >= 2 && !/^\d[A-L]$|^W\d+|^L\d+|^3[A-L]\//.test(iso2)) {
+      router.push(`/teams/${iso2.toLowerCase()}`);
+    }
+  };
   
   const homeScore = match.home_score;
   const awayScore = match.away_score;
@@ -107,8 +117,15 @@ export default React.memo(function MatchCard({
         {/* Main Teams Match Area */}
         <div className="flex items-center justify-between gap-1 py-0.5 sm:py-1.5">
           {/* Home Team */}
-          <div className="flex flex-col items-center text-center flex-1 min-w-0">
-            <div className="relative w-9 h-6 sm:w-11 sm:h-8 rounded shadow-sm overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-1 sm:mb-2 group-hover:scale-105 transition-transform">
+          <div
+            onClick={(e) => handleTeamClick(e, match.home_team_iso2)}
+            className={`flex flex-col items-center text-center flex-1 min-w-0 ${
+              match.home_team_iso2 && !isPlaceholderTeam(match.home_team_name)
+                ? "cursor-pointer group/team hover:scale-102 transition-transform"
+                : ""
+            }`}
+          >
+            <div className="relative w-9 h-6 sm:w-11 sm:h-8 rounded shadow-sm overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-1 sm:mb-2 group-hover/team:border-secondary transition-colors">
               {getFlagUrl(match.home_team_iso2) ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -124,7 +141,7 @@ export default React.memo(function MatchCard({
               )}
             </div>
             <span
-              className={`text-[10px] sm:text-xs font-bold truncate w-full ${
+              className={`text-[10px] sm:text-xs font-bold truncate w-full group-hover/team:text-secondary transition-colors ${
                 isPlaceholderTeam(match.home_team_name) ? "text-secondary/80 italic font-medium" : "text-foreground"
               }`}
             >
@@ -155,8 +172,15 @@ export default React.memo(function MatchCard({
           </div>
 
           {/* Away Team */}
-          <div className="flex flex-col items-center text-center flex-1 min-w-0">
-            <div className="relative w-9 h-6 sm:w-11 sm:h-8 rounded shadow-sm overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-1 sm:mb-2 group-hover:scale-105 transition-transform">
+          <div
+            onClick={(e) => handleTeamClick(e, match.away_team_iso2)}
+            className={`flex flex-col items-center text-center flex-1 min-w-0 ${
+              match.away_team_iso2 && !isPlaceholderTeam(match.away_team_name)
+                ? "cursor-pointer group/team hover:scale-102 transition-transform"
+                : ""
+            }`}
+          >
+            <div className="relative w-9 h-6 sm:w-11 sm:h-8 rounded shadow-sm overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-1 sm:mb-2 group-hover/team:border-secondary transition-colors">
               {getFlagUrl(match.away_team_iso2) ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -172,7 +196,7 @@ export default React.memo(function MatchCard({
               )}
             </div>
             <span
-              className={`text-[10px] sm:text-xs font-bold truncate w-full ${
+              className={`text-[10px] sm:text-xs font-bold truncate w-full group-hover/team:text-secondary transition-colors ${
                 isPlaceholderTeam(match.away_team_name) ? "text-secondary/80 italic font-medium" : "text-foreground"
               }`}
             >
@@ -201,8 +225,15 @@ export default React.memo(function MatchCard({
           {/* Main Scoreboard Layout */}
           <div className="flex items-center justify-between gap-2 py-2 border-b border-slate-200/60 dark:border-white/5 pb-6">
             {/* Home Team */}
-            <div className="flex flex-col items-center text-center flex-1 min-w-0">
-              <div className="relative w-12 h-8 sm:w-16 sm:h-10 rounded-lg shadow overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-2">
+            <div
+              onClick={(e) => handleTeamClick(e, match.home_team_iso2)}
+              className={`flex flex-col items-center text-center flex-1 min-w-0 ${
+                match.home_team_iso2 && !isPlaceholderTeam(match.home_team_name)
+                  ? "cursor-pointer group/modal-team hover:scale-102 transition-transform"
+                  : ""
+              }`}
+            >
+              <div className="relative w-12 h-8 sm:w-16 sm:h-10 rounded-lg shadow overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-2 group-hover/modal-team:border-secondary transition-colors">
                 {getFlagUrl(match.home_team_iso2) ? (
                   <img
                     src={getFlagUrl(match.home_team_iso2)!.replace("w40", "w80")}
@@ -213,7 +244,7 @@ export default React.memo(function MatchCard({
                   <Trophy size={20} className="text-secondary/55" />
                 )}
               </div>
-              <span className="text-xs sm:text-sm font-black truncate w-full text-foreground">
+              <span className="text-xs sm:text-sm font-black truncate w-full text-foreground group-hover/modal-team:text-secondary transition-colors">
                 {match.home_team_name}
               </span>
             </div>
@@ -241,8 +272,15 @@ export default React.memo(function MatchCard({
             </div>
 
             {/* Away Team */}
-            <div className="flex flex-col items-center text-center flex-1 min-w-0">
-              <div className="relative w-12 h-8 sm:w-16 sm:h-10 rounded-lg shadow overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-2">
+            <div
+              onClick={(e) => handleTeamClick(e, match.away_team_iso2)}
+              className={`flex flex-col items-center text-center flex-1 min-w-0 ${
+                match.away_team_iso2 && !isPlaceholderTeam(match.away_team_name)
+                  ? "cursor-pointer group/modal-team hover:scale-102 transition-transform"
+                  : ""
+              }`}
+            >
+              <div className="relative w-12 h-8 sm:w-16 sm:h-10 rounded-lg shadow overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-2 group-hover/modal-team:border-secondary transition-colors">
                 {getFlagUrl(match.away_team_iso2) ? (
                   <img
                     src={getFlagUrl(match.away_team_iso2)!.replace("w40", "w80")}
@@ -253,7 +291,7 @@ export default React.memo(function MatchCard({
                   <Trophy size={20} className="text-secondary/55" />
                 )}
               </div>
-              <span className="text-xs sm:text-sm font-black truncate w-full text-foreground">
+              <span className="text-xs sm:text-sm font-black truncate w-full text-foreground group-hover/modal-team:text-secondary transition-colors">
                 {match.away_team_name}
               </span>
             </div>

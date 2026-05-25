@@ -1,45 +1,6 @@
-import { parseCSV } from "../utils/csvParser";
-import { FALLBACK_CSV } from "../constants/fallbackData";
 import ScheduleDashboard from "../components/ScheduleDashboard";
-import { Trophy } from "lucide-react";
 
-// In Next.js App Router, we fetch data on the server with revalidation (1 hour)
-// conforming to server-hoist-static-io and async-parallel guidelines.
-async function getScheduleData() {
-  const url = "https://vnexpress.net/the-thao/microservice/wc2026-score?t=1779112205024";
-  
-  try {
-    const res = await fetch(url, {
-      next: { revalidate: 3600 }, // Cache on server for 1 hour
-      headers: {
-        "Accept": "text/csv,text/plain,application/csv",
-      },
-    });
-
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
-    }
-
-    const text = await res.text();
-    if (text && text.trim().startsWith('"match_id"')) {
-      console.log("Successfully fetched live World Cup 2026 schedule from VNExpress!");
-      return parseCSV(text);
-    } else {
-      throw new Error("Invalid CSV format returned from live API");
-    }
-  } catch (error) {
-    console.warn(
-      "Unable to fetch live World Cup 2026 data from VNExpress (Using offline fallback data):",
-      error instanceof Error ? error.message : error
-    );
-    // Silent failover to offline high-grade static data
-    return parseCSV(FALLBACK_CSV);
-  }
-}
-
-export default async function Home() {
-  const matches = await getScheduleData();
-
+export default function Home() {
   return (
     <main className="flex-1 w-full min-h-screen py-6 bg-background text-foreground transition-colors duration-300 selection:bg-secondary/35 selection:text-white">
       {/* Dynamic Background Effects */}
@@ -49,17 +10,7 @@ export default async function Home() {
       </div>
 
       <div className="relative z-10 w-full">
-        {matches.length > 0 ? (
-          <ScheduleDashboard initialMatches={matches} />
-        ) : (
-          <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-8 space-y-4">
-            <Trophy size={48} className="text-rose-500 animate-bounce" />
-            <h2 className="text-xl font-extrabold text-rose-400">Lỗi Tải Dữ Liệu</h2>
-            <p className="text-sm text-foreground/50 max-w-sm">
-              Không thể phân tích cú pháp lịch thi đấu World Cup. Vui lòng kiểm tra lại mã nguồn hoặc thử lại sau.
-            </p>
-          </div>
-        )}
+        <ScheduleDashboard />
       </div>
 
       {/* Footer */}
@@ -74,3 +25,4 @@ export default async function Home() {
     </main>
   );
 }
+
