@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect, use, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Heart, Trophy, Users, Calendar, MapPin, Sparkles } from "lucide-react";
+import { ArrowLeft, Heart, Trophy, Users, Calendar } from "lucide-react";
 import PremiumToggle from "../../../components/ui/PremiumToggle";
 import MatchCard from "../../../components/MatchCard";
 import { useMatchStore } from "../../../hooks/useMatchStore";
@@ -30,19 +30,36 @@ export default function TeamProfilePage({ params }: PageProps) {
   useEffect(() => {
     if (!isLoaded) {
       // Dynamic import to keep page lightweight
-      Promise.all([
-        import("../../../constants/fallbackData"),
-        import("../../../utils/csvParser")
-      ]).then(([{ FALLBACK_CSV }, { parseCSV }]) => {
-        const parsed = parseCSV(FALLBACK_CSV);
-        setMatches(parsed);
-      }).catch((err) => {
-        console.error("Failed to load fallback match data in store:", err);
-      });
+      Promise.all([import("../../../constants/fallbackData"), import("../../../utils/csvParser")])
+        .then(([{ FALLBACK_CSV }, { parseCSV }]) => {
+          const parsed = parseCSV(FALLBACK_CSV);
+          setMatches(parsed);
+        })
+        .catch((err) => {
+          console.error("Failed to load fallback match data in store:", err);
+        });
     }
   }, [isLoaded, setMatches]);
 
-  const teamMatches = matchesByTeam[code.toLowerCase()] || [];
+  const teamMatches = useMemo(() => {
+    return matchesByTeam[code.toLowerCase()] || [];
+  }, [matchesByTeam, code]);
+
+  // Resolve actual country name and group dynamically from matches
+  const teamName = useMemo(() => {
+    const match = teamMatches.find(
+      (m) => m.home_team_iso2?.toUpperCase() === code || m.away_team_iso2?.toUpperCase() === code,
+    );
+    if (match) {
+      return match.home_team_iso2?.toUpperCase() === code ? match.home_team_name : match.away_team_name;
+    }
+    return code;
+  }, [teamMatches, code]);
+
+  const teamGroup = useMemo(() => {
+    const match = teamMatches.find((m) => m.phase === "group" && m.group);
+    return match ? match.group.toUpperCase() : "";
+  }, [teamMatches]);
 
   // Sync "Đội bóng tôi yêu" from localStorage
   useEffect(() => {
@@ -72,7 +89,7 @@ export default function TeamProfilePage({ params }: PageProps) {
       try {
         const stored = localStorage.getItem("wc2026_my_teams");
         let teamsList: string[] = stored ? JSON.parse(stored) : [];
-        
+
         // Backward compatibility migration just in case stored was empty but single exists
         if (teamsList.length === 0) {
           const single = localStorage.getItem("wc2026_my_team") || "";
@@ -132,7 +149,7 @@ export default function TeamProfilePage({ params }: PageProps) {
           >
             <ArrowLeft size={14} /> Quay lại Lịch thi đấu
           </button>
-          
+
           <div className="flex items-center gap-3">
             <button
               onClick={handleToggleMyTeam}
@@ -168,9 +185,7 @@ export default function TeamProfilePage({ params }: PageProps) {
 
           <div className="text-center md:text-left space-y-2 flex-1">
             <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-3">
-              <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-foreground">
-                Đội tuyển {code}
-              </h1>
+              <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-foreground">Đội tuyển {teamName}</h1>
               <span className="inline-flex self-center md:self-auto px-3 py-1 rounded-full text-xs font-extrabold bg-primary/10 border border-primary/20 text-primary dark:text-rose-400">
                 Mã Quốc gia: #{code}
               </span>
@@ -207,13 +222,14 @@ export default function TeamProfilePage({ params }: PageProps) {
               </div>
               <div className="flex justify-between pb-1">
                 <span className="text-foreground/45 font-bold">Bảng đấu World Cup 2026</span>
-                <span className="font-extrabold text-secondary">Đang lấy dữ liệu...</span>
+                <span className="font-extrabold text-secondary">{teamGroup ? `Bảng ${teamGroup}` : "—"}</span>
               </div>
             </div>
 
             <div className="pt-2">
               <div className="bg-slate-100/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/5 rounded-xl p-3.5 text-[11px] text-foreground/50 leading-relaxed font-bold">
-                ⚠️ <span className="text-secondary">Lưu ý:</span> Toàn bộ hồ sơ của 48 quốc gia sẽ được tự động đồng bộ hóa thông tin và số liệu thực tế từ dữ liệu VNExpress API khi bắt đầu giải đấu chính thức.
+                ⚠️ <span className="text-secondary">Lưu ý:</span> Toàn bộ hồ sơ của 48 quốc gia sẽ được tự động đồng bộ
+                hóa thông tin và số liệu thực tế từ dữ liệu VNExpress API khi bắt đầu giải đấu chính thức.
               </div>
             </div>
           </div>
@@ -225,14 +241,17 @@ export default function TeamProfilePage({ params }: PageProps) {
               <h3 className="text-sm font-extrabold text-secondary uppercase tracking-wider flex items-center gap-2 pb-2 border-b border-white/5">
                 <Users size={16} /> Danh sách Cầu thủ (Squad List)
               </h3>
-              
+
               {/* Squad placeholder */}
               <div className="flex flex-col items-center justify-center py-16 text-center space-y-3 bg-slate-50 dark:bg-white/[0.01] border border-slate-200/50 dark:border-white/5 rounded-xl">
                 <Users size={32} className="text-foreground/30 animate-pulse" />
                 <div>
-                  <p className="text-xs font-black text-foreground/60 uppercase tracking-widest">Đội hình sơ bộ đang được cập nhật</p>
+                  <p className="text-xs font-black text-foreground/60 uppercase tracking-widest">
+                    Đội hình sơ bộ đang được cập nhật
+                  </p>
                   <p className="text-[11px] text-foreground/40 mt-1 max-w-sm px-4">
-                    Danh sách chính thức 26 cầu thủ của #{code} tham dự FIFA World Cup 2026 sẽ được tải tự động trong các phiên bản cập nhật tiếp theo.
+                    Danh sách chính thức 26 cầu thủ của #{code} tham dự FIFA World Cup 2026 sẽ được tải tự động trong
+                    các phiên bản cập nhật tiếp theo.
                   </p>
                 </div>
               </div>
