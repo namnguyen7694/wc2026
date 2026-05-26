@@ -80,13 +80,9 @@ export const useMatchStore = create<MatchState>((set, get) => ({
     // Avoid double fetching if already successfully loaded
     if (get().isLoaded && get().matches.length > 0) return;
 
-    const url = "https://vnexpress.net/the-thao/microservice/wc2026-score?t=1779112205024";
+    const url = "/api/matches";
     try {
-      const res = await fetch(url, {
-        headers: {
-          "Accept": "text/csv,text/plain,application/csv",
-        },
-      });
+      const res = await fetch(url);
 
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
