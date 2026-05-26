@@ -72,10 +72,10 @@ Bản đặc tả sản phẩm này tổng hợp chi tiết các tính năng, gi
 Dưới đây là kế hoạch kiến trúc và thiết kế cho các ý tưởng phát triển tiếp theo được đồng sáng tạo nhằm nâng cấp ứng dụng thành một **FIFA World Cup 2026 Companion Portal (Cổng Thông Tin Bạn Đồng Hành World Cup 2026)** đích thực:
 
 ### 1. Banner Hero Động (Dynamic Hero Feature Match)
-*   **Thiết kế hiển thị:** Thay thế thẻ đấu mở màn tĩnh trên banner Hero bằng một vùng hiển thị thông minh, tự động luân chuyển giữa 3 trạng thái:
-    *   **Trận đấu Hot nhất:** Tự động lọc các trận đấu có sự tham gia của các đội tuyển hạt giống lớn (ví dụ: Brazil, Argentina, Pháp, Anh, Đức, Tây Ban Nha, Bồ Đào Nha...).
-    *   **Trận sắp diễn ra gần nhất:** Quét lịch đấu thời gian thực và hiển thị trận có trạng thái `notstarted` với thời gian bắt đầu cận kề nhất.
-    *   **Trận của Đội tuyển yêu thích:** Nếu người dùng đã chọn một "Đội bóng tôi yêu", trận đấu tiếp theo của đội tuyển đó sẽ tự động được ghim lên Banner Hero với hiệu ứng hào quang (glow accent) tuyệt đẹp để nhắc lịch.
+*   **Thiết kế hiển thị:** Thay thế thẻ đấu mở màn tĩnh trên banner Hero bằng một vùng hiển thị thông minh, tự động luân chuyển giữa 3 thẻ:
+    *   **Trận đấu Hot nhất:** Tự động lọc các trận đấu có sự tham gia của các đội tuyển hạt giống lớn theo top 10 Bảng xếp hạng của Fifa (ví dụ: Brazil, Argentina, Pháp, Anh, Đức, Tây Ban Nha, Bồ Đào Nha...).
+    *   **Trận sắp diễn ra gần nhất:** Quét lịch đấu thời gian thực và hiển thị trận đấu yêu thích sắp diễn ra, nếu không có thì fallback sang trận đấu có trạng thái `notstarted` với thời gian bắt đầu cận kề nhất.
+    *   **Trận của Đội tuyển yêu thích:** Nếu người dùng đã chọn một hoặc nhiều "Đội bóng tôi yêu", trận đấu tiếp theo của đội tuyển đó sẽ tự động được ghim lên Banner Hero với hiệu ứng hào quang (glow accent) tuyệt đẹp để nhắc lịch.
 
 ### 2. Trang Wiki 48 Quốc Gia & Cá nhân hóa "Đội bóng Tôi Yêu"
 *   **Trang Wiki Đội tuyển:**

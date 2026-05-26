@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Match } from "../types/match";
 import { usePersistentState } from "../hooks/usePersistentState";
 import PremiumToggle from "./ui/PremiumToggle";
@@ -10,7 +10,8 @@ import KnockoutBracket from "./KnockoutBracket";
 import CalendarPicker from "./ui/CalendarPicker";
 import { Calendar, Trophy, Heart, Search, Grid, Flame, Star, Users } from "lucide-react";
 import { useMatchStore } from "../hooks/useMatchStore";
-import Link from "next/link";
+import HeroBanner from "./HeroBanner";
+import FavoriteTeamsTab from "./FavoriteTeamsTab";
 
 const TABS = [
   { id: "all", label: "Tất cả trận đấu", icon: Grid },
@@ -348,75 +349,8 @@ export default function ScheduleDashboard() {
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-8 space-y-6">
-      {/* 1. Stunning Hero Section (Separated from the dashboard controls) */}
-      <section className="relative overflow-hidden rounded-[32px] border border-card-border bg-slate-900 text-white p-6 sm:p-10 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black select-none">
-        {/* Abstract football field pitch lines (pure CSS art) */}
-        <div className="absolute inset-0 opacity-[0.04] pointer-events-none select-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] h-[160%] border-[2px] border-white rounded-full" />
-          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[1.5px] bg-white" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border-[2px] border-white rounded-full" />
-        </div>
-
-        {/* Ambient glowing accent light overlays */}
-        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-primary/20 blur-[120px] pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-secondary/20 blur-[120px] pointer-events-none" />
-
-        {/* Left Side: Branding and Title */}
-        <div className="relative z-10 space-y-6 max-w-xl text-left">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-rose-400 font-extrabold text-[10px] sm:text-xs uppercase tracking-wider animate-pulse-slow">
-              🏆 FIFA WORLD CUP 2026
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-slate-300 font-extrabold text-[10px] sm:text-xs uppercase tracking-wider">
-              🇺🇸 Mỹ • 🇨🇦 Canada • 🇲🇽 Mexico
-            </span>
-          </div>
-
-          <div className="space-y-3">
-            <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-none uppercase">
-              Hành Trình <br className="hidden sm:inline" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-amber-400 to-secondary animate-pulse-slow">
-                Chinh Phục Cúp Vàng
-              </span>
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-300 font-medium leading-relaxed">
-              Trải nghiệm lịch thi đấu bóng đá World Cup 2026 đẳng cấp. Theo dõi sát sao 104 trận cầu đỉnh cao từ vòng
-              bảng đến chung kết loại trực tiếp được đồng bộ tự động trực tiếp từ nguồn tin cậy **VNExpress**.
-            </p>
-          </div>
-        </div>
-
-        {/* Right Side: Big Premium Opening Match highlighted card */}
-        <div className="relative z-10 w-full md:w-auto flex justify-center">
-          <div className="relative p-6 sm:p-8 rounded-[24px] border border-white/10 bg-white/5 backdrop-blur-md shadow-2xl flex flex-col items-center justify-center min-w-[250px] text-center overflow-hidden group hover:border-white/20 transition-all duration-500">
-            {/* Ambient gold gradient glow */}
-            <div className="absolute inset-0 bg-gradient-to-b from-amber-500/10 via-transparent to-transparent opacity-50 group-hover:scale-110 transition-transform duration-500" />
-
-            <span className="text-[9px] font-black text-amber-400 uppercase tracking-widest mb-4 block animate-pulse">
-              ⚡ TRẬN KHAI MẠC ⚡
-            </span>
-
-            <div className="space-y-1 mb-4 relative z-10">
-              <div className="text-xl sm:text-2xl font-black text-white">11 / 06 / 2026</div>
-              <p className="text-[10px] text-slate-400 font-bold">Estadio Azteca, Mexico City</p>
-            </div>
-
-            <div className="w-12 h-[1px] bg-white/15 my-1" />
-
-            <div className="mt-4 flex items-center justify-center gap-6 relative z-10">
-              <div className="flex flex-col items-center">
-                <span className="text-2xl sm:text-3xl">Mexico</span>
-                <span className="text-[10px] font-extrabold text-slate-300 mt-1">🇲🇽</span>
-              </div>
-              <span className="text-xs font-black text-amber-400">VS</span>
-              <div className="flex flex-col items-center">
-                <span className="text-lg font-bold text-slate-400">South Africa</span>
-                <span className="text-[10px] font-bold text-slate-500 mt-1">SA</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 1. Stunning Hero Section */}
+      <HeroBanner matches={matches} favorites={favorites} myTeams={myTeams} />
 
       {/* 2. Dedicated Tab Selectors Bar */}
       <div className="w-full">
@@ -576,188 +510,13 @@ export default function ScheduleDashboard() {
             )}
 
             {activeTab === "favorite_teams" && (
-              <div className="space-y-8 animate-slide-up">
-                {/* Section 1: My Favorite Teams list */}
-                <div className="space-y-4">
-                  <div className="flex items-center gap-1.5 text-sm font-extrabold text-secondary border-b border-slate-200 dark:border-white/5 pb-2">
-                    <Heart size={16} className="fill-rose-500 text-rose-500" /> Đội Tuyển Yêu Thích Của Tôi (
-                    {myTeams.length})
-                  </div>
-
-                  {myTeams.length > 0 ? (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                      {allTeams
-                        .filter((t) => myTeams.includes(t.iso2))
-                        .map((team) => {
-                          const flagUrl =
-                            team.iso2.toLowerCase() === "eng"
-                              ? "https://flagcdn.com/w80/gb-eng.png"
-                              : team.iso2.toLowerCase() === "sco"
-                                ? "https://flagcdn.com/w80/gb-sct.png"
-                                : `https://flagcdn.com/w80/${team.iso2.toLowerCase()}.png`;
-
-                          return (
-                            <div
-                              key={team.iso2}
-                              className="glass-panel glass-panel-hover rounded-2xl p-4 flex flex-col items-center justify-between border border-rose-500/20 shadow-[0_0_10px_rgba(244,63,94,0.04)] relative group text-center h-[170px]"
-                            >
-                              {/* Quick heart toggle inside dashboard */}
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleToggleFavoriteTeam(team.iso2);
-                                }}
-                                className="absolute top-2 right-2 text-rose-500 hover:scale-110 p-1.5 rounded-lg transition-transform cursor-pointer"
-                                aria-label="Bỏ thích"
-                              >
-                                <Heart size={15} className="fill-rose-500 text-rose-500" />
-                              </button>
-
-                              <Link
-                                href={`/teams/${team.iso2.toLowerCase()}`}
-                                className="flex-1 flex flex-col items-center justify-center space-y-2.5 w-full"
-                              >
-                                <div className="w-14 h-9 sm:w-16 sm:h-10 rounded-md overflow-hidden shadow-sm border border-slate-200 dark:border-white/10 group-hover:border-rose-500/40 transition-colors">
-                                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                                  <img src={flagUrl} alt={team.name} className="w-full h-full object-cover" />
-                                </div>
-                                <div className="w-full">
-                                  <h4 className="text-xs sm:text-sm font-black text-foreground truncate w-full group-hover:text-rose-500 transition-colors">
-                                    {team.name}
-                                  </h4>
-                                  {team.group && (
-                                    <span className="text-[10px] text-foreground/45 font-bold uppercase tracking-wider">
-                                      Bảng {team.group}
-                                    </span>
-                                  )}
-                                </div>
-                              </Link>
-
-                              <Link
-                                href={`/teams/${team.iso2.toLowerCase()}`}
-                                className="mt-2 text-[10px] font-black text-secondary uppercase tracking-widest hover:underline hover:text-rose-500 transition-colors"
-                              >
-                                Xem Hồ Sơ &rarr;
-                              </Link>
-                            </div>
-                          );
-                        })}
-                    </div>
-                  ) : (
-                    <div className="text-center py-10 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/5 text-sm text-foreground/50 space-y-2 max-w-xl mx-auto">
-                      <p className="font-bold text-foreground/75 text-base">Bạn chưa chọn đội tuyển yêu thích nào!</p>
-                      <p className="text-xs px-6 leading-relaxed max-w-md mx-auto">
-                        Hãy kéo xuống phần **Khám phá 48 quốc gia** bên dưới và nhấn biểu tượng ❤️ để bắt đầu cá nhân
-                        hóa hành trình World Cup 2026 của riêng bạn.
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Section 2: Fixtures of Favorite Teams */}
-                {myTeams.length > 0 && (
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-1.5 text-sm font-extrabold text-secondary border-b border-slate-200 dark:border-white/5 pb-2">
-                      <Calendar size={16} className="text-secondary" /> Lịch Thi Đấu Đội Yêu Thích (
-                      {favoriteTeamsMatches.length} trận)
-                    </div>
-                    {favoriteTeamsMatches.length > 0 ? (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {favoriteTeamsMatches.map((match) => (
-                          <div key={match.match_id} className="h-[125px]">
-                            <MatchCard match={match} />
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-10 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/5 text-xs text-foreground/45">
-                        Không tìm thấy lịch đấu nào phù hợp của các đội tuyển yêu thích.
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Section 3: Explore 48 Countries */}
-                <div className="space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200 dark:border-white/5 pb-2">
-                    <div className="flex items-center gap-1.5 text-sm font-extrabold text-secondary">
-                      <Grid size={16} /> Khám Phá 48 Quốc Gia Tham Dự
-                    </div>
-                    <span className="text-[10px] text-foreground/45 font-bold uppercase tracking-wider">
-                      FIFA World Cup 2026
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                    {allTeams
-                      .filter(
-                        (t) =>
-                          searchQuery === "" ||
-                          t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          t.iso2.toLowerCase().includes(searchQuery.toLowerCase()),
-                      )
-                      .map((team) => {
-                        const isFav = myTeams.includes(team.iso2);
-                        const flagUrl =
-                          team.iso2.toLowerCase() === "eng"
-                            ? "https://flagcdn.com/w80/gb-eng.png"
-                            : team.iso2.toLowerCase() === "sco"
-                              ? "https://flagcdn.com/w80/gb-sct.png"
-                              : `https://flagcdn.com/w80/${team.iso2.toLowerCase()}.png`;
-
-                        return (
-                          <div
-                            key={team.iso2}
-                            className={`glass-panel glass-panel-hover rounded-2xl p-4 flex flex-col items-center justify-between relative group text-center h-[170px] border ${
-                              isFav ? "border-rose-500/20 shadow-[0_0_10px_rgba(244,63,94,0.04)]" : "border-card-border"
-                            }`}
-                          >
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleToggleFavoriteTeam(team.iso2);
-                              }}
-                              className="absolute top-2 right-2 hover:scale-110 p-1.5 rounded-lg transition-transform cursor-pointer"
-                              aria-label={isFav ? "Bỏ thích" : "Thích"}
-                            >
-                              <Heart
-                                size={15}
-                                className={`${isFav ? "fill-rose-500 text-rose-500" : "text-foreground/30 hover:text-rose-500"}`}
-                              />
-                            </button>
-
-                            <Link
-                              href={`/teams/${team.iso2.toLowerCase()}`}
-                              className="flex-1 flex flex-col items-center justify-center space-y-2.5 w-full"
-                            >
-                              <div className="w-14 h-9 sm:w-16 sm:h-10 rounded-md overflow-hidden shadow-sm border border-slate-200 dark:border-white/10 group-hover:border-secondary transition-colors">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img src={flagUrl} alt={team.name} className="w-full h-full object-cover" />
-                              </div>
-                              <div className="w-full">
-                                <h4 className="text-xs sm:text-sm font-black text-foreground truncate w-full group-hover:text-rose-500 transition-colors">
-                                  {team.name}
-                                </h4>
-                                {team.group && (
-                                  <span className="text-[10px] text-foreground/45 font-bold uppercase tracking-wider">
-                                    Bảng {team.group}
-                                  </span>
-                                )}
-                              </div>
-                            </Link>
-
-                            <Link
-                              href={`/teams/${team.iso2.toLowerCase()}`}
-                              className="mt-2 text-[10px] font-black text-secondary uppercase tracking-widest hover:underline hover:text-rose-500 transition-colors"
-                            >
-                              Xem Hồ Sơ &rarr;
-                            </Link>
-                          </div>
-                        );
-                      })}
-                  </div>
-                </div>
-              </div>
+              <FavoriteTeamsTab
+                myTeams={myTeams}
+                allTeams={allTeams}
+                favoriteTeamsMatches={favoriteTeamsMatches}
+                searchQuery={searchQuery}
+                handleToggleFavoriteTeam={handleToggleFavoriteTeam}
+              />
             )}
           </>
         )}

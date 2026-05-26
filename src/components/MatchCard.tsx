@@ -11,10 +11,7 @@ interface MatchCardProps {
   showDateHeader?: boolean;
 }
 
-export default React.memo(function MatchCard({
-  match,
-  showDateHeader = false,
-}: MatchCardProps) {
+export default React.memo(function MatchCard({ match, showDateHeader = false }: MatchCardProps) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -27,7 +24,7 @@ export default React.memo(function MatchCard({
       router.push(`/teams/${iso2.toLowerCase()}`);
     }
   };
-  
+
   const homeScore = match.home_score;
   const awayScore = match.away_score;
 
@@ -89,7 +86,6 @@ export default React.memo(function MatchCard({
 
   const isHomeFavorite = match.home_team_iso2 && myTeams.includes(match.home_team_iso2.toUpperCase());
   const isAwayFavorite = match.away_team_iso2 && myTeams.includes(match.away_team_iso2.toUpperCase());
-  const hasFavoriteTeam = isHomeFavorite || isAwayFavorite;
 
   // Handle local toggle and dispatch window event to synchronize all cards and tabs
   const handleToggleFavoriteInternal = (e: React.MouseEvent) => {
@@ -98,13 +94,13 @@ export default React.memo(function MatchCard({
       try {
         const favs = JSON.parse(localStorage.getItem("wc2026_favorites_v1") || "[]");
         let newFavs: string[] = Array.isArray(favs) ? favs : [];
-        
+
         if (newFavs.includes(match.match_id)) {
           newFavs = newFavs.filter((id) => id !== match.match_id);
         } else {
           newFavs = [...newFavs, match.match_id];
         }
-        
+
         localStorage.setItem("wc2026_favorites_v1", JSON.stringify(newFavs));
         setIsFavorite(newFavs.includes(match.match_id));
         window.dispatchEvent(new Event("wc2026_favorites_changed"));
@@ -182,8 +178,8 @@ export default React.memo(function MatchCard({
             </div>
             <span
               className={`text-[10px] sm:text-xs font-bold truncate w-full group-hover/team:text-secondary transition-colors flex items-center justify-center gap-0.5 ${
-                isPlaceholderTeam(match.home_team_name) 
-                  ? "text-secondary/80 italic font-medium" 
+                isPlaceholderTeam(match.home_team_name)
+                  ? "text-secondary/80 italic font-medium"
                   : isHomeFavorite
                     ? "text-rose-600 dark:text-rose-400 font-extrabold"
                     : "text-foreground"
@@ -197,7 +193,9 @@ export default React.memo(function MatchCard({
           {/* Center Score / State Indicator */}
           <div className="flex flex-col items-center px-2.5 py-1 sm:px-4 sm:py-2 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 select-none">
             {match.status === "notstarted" ? (
-              <span className="text-xs sm:text-sm font-black text-foreground/44 tracking-widest py-0.5 sm:py-1 block">- - -</span>
+              <span className="text-xs sm:text-sm font-black text-foreground/44 tracking-widest py-0.5 sm:py-1 block">
+                - - -
+              </span>
             ) : (
               <div className="flex items-center gap-1 text-sm sm:text-base md:text-lg font-black tracking-wider text-foreground">
                 <span>{homeScore}</span>
@@ -242,8 +240,8 @@ export default React.memo(function MatchCard({
             </div>
             <span
               className={`text-[10px] sm:text-xs font-bold truncate w-full group-hover/team:text-secondary transition-colors flex items-center justify-center gap-0.5 ${
-                isPlaceholderTeam(match.away_team_name) 
-                  ? "text-secondary/80 italic font-medium" 
+                isPlaceholderTeam(match.away_team_name)
+                  ? "text-secondary/80 italic font-medium"
                   : isAwayFavorite
                     ? "text-rose-600 dark:text-rose-400 font-extrabold"
                     : "text-foreground"
@@ -260,7 +258,9 @@ export default React.memo(function MatchCard({
           <MapPin size={10} className="text-secondary" />
           <span className="truncate flex-1 font-bold">{match.stadium_city}</span>
           {!showDateHeader && (
-            <span className="text-right whitespace-nowrap opacity-85">{match.local_date.split(" ")[0].slice(0, 5)}</span>
+            <span className="text-right whitespace-nowrap opacity-85">
+              {match.local_date.split(" ")[0].slice(0, 5)}
+            </span>
           )}
         </div>
       </div>
@@ -361,16 +361,12 @@ export default React.memo(function MatchCard({
                   {/* Home scorers */}
                   <div className="space-y-1 pr-2 border-r border-slate-200/60 dark:border-white/5">
                     <p className="font-extrabold text-foreground/80 truncate">{match.home_team_name}</p>
-                    <p className="text-foreground/60 leading-relaxed font-medium">
-                      {match.home_scorers || "—"}
-                    </p>
+                    <p className="text-foreground/60 leading-relaxed font-medium">{match.home_scorers || "—"}</p>
                   </div>
                   {/* Away scorers */}
                   <div className="space-y-1 pl-2">
                     <p className="font-extrabold text-foreground/80 truncate">{match.away_team_name}</p>
-                    <p className="text-foreground/60 leading-relaxed font-medium">
-                      {match.away_scorers || "—"}
-                    </p>
+                    <p className="text-foreground/60 leading-relaxed font-medium">{match.away_scorers || "—"}</p>
                   </div>
                 </div>
               </div>
