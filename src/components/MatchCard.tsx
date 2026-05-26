@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Match } from "../types/match";
-import { Star, MapPin, Trophy, Clock } from "lucide-react";
+import { Star, MapPin, Trophy, Clock, Heart } from "lucide-react";
 import Modal from "./ui/Modal";
 
 interface MatchCardProps {
@@ -18,6 +18,7 @@ export default React.memo(function MatchCard({
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [myTeams, setMyTeams] = useState<string[]>([]);
 
   // Navigate to country profile page (excluding placeholder team names)
   const handleTeamClick = (e: React.MouseEvent, iso2: string) => {
@@ -50,6 +51,45 @@ export default React.memo(function MatchCard({
       window.removeEventListener("wc2026_favorites_changed", checkFavorite);
     };
   }, [match.match_id]);
+
+  // Sync "Đội bóng tôi yêu" list and listen to events
+  useEffect(() => {
+    const checkMyTeams = () => {
+      if (typeof window !== "undefined") {
+        try {
+          const stored = localStorage.getItem("wc2026_my_teams");
+          if (stored) {
+            setMyTeams(JSON.parse(stored));
+          } else {
+            // Migration fallback
+            const single = localStorage.getItem("wc2026_my_team");
+            if (single) {
+              const migrated = [single.toUpperCase()];
+              localStorage.setItem("wc2026_my_teams", JSON.stringify(migrated));
+              setMyTeams(migrated);
+            } else {
+              setMyTeams([]);
+            }
+          }
+        } catch {
+          setMyTeams([]);
+        }
+      }
+    };
+
+    checkMyTeams();
+
+    window.addEventListener("wc2026_my_teams_changed", checkMyTeams);
+    window.addEventListener("wc2026_my_team_changed", checkMyTeams);
+    return () => {
+      window.removeEventListener("wc2026_my_teams_changed", checkMyTeams);
+      window.removeEventListener("wc2026_my_team_changed", checkMyTeams);
+    };
+  }, []);
+
+  const isHomeFavorite = match.home_team_iso2 && myTeams.includes(match.home_team_iso2.toUpperCase());
+  const isAwayFavorite = match.away_team_iso2 && myTeams.includes(match.away_team_iso2.toUpperCase());
+  const hasFavoriteTeam = isHomeFavorite || isAwayFavorite;
 
   // Handle local toggle and dispatch window event to synchronize all cards and tabs
   const handleToggleFavoriteInternal = (e: React.MouseEvent) => {
@@ -91,7 +131,7 @@ export default React.memo(function MatchCard({
     <>
       <div
         onClick={() => setIsModalOpen(true)}
-        className="glass-panel glass-panel-hover rounded-2xl overflow-hidden p-2.5 sm:p-3.5 relative border border-card-border flex flex-col justify-between h-full group text-foreground transition-all duration-300 cursor-pointer select-none"
+        className="glass-panel glass-panel-hover rounded-2xl overflow-hidden p-2.5 sm:p-3.5 relative flex flex-col justify-between h-full group text-foreground transition-all duration-300 cursor-pointer select-none border border-card-border"
       >
         {/* Top Meta info */}
         <div className="flex items-center justify-between mb-1.5 sm:mb-2.5 text-[10px] sm:text-xs">
@@ -119,7 +159,7 @@ export default React.memo(function MatchCard({
           {/* Home Team */}
           <div
             onClick={(e) => handleTeamClick(e, match.home_team_iso2)}
-            className={`flex flex-col items-center text-center flex-1 min-w-0 ${
+            className={`flex flex-col items-center text-center flex-1 min-w-0 relative ${
               match.home_team_iso2 && !isPlaceholderTeam(match.home_team_name)
                 ? "cursor-pointer group/team hover:scale-102 transition-transform"
                 : ""
@@ -141,11 +181,16 @@ export default React.memo(function MatchCard({
               )}
             </div>
             <span
-              className={`text-[10px] sm:text-xs font-bold truncate w-full group-hover/team:text-secondary transition-colors ${
-                isPlaceholderTeam(match.home_team_name) ? "text-secondary/80 italic font-medium" : "text-foreground"
+              className={`text-[10px] sm:text-xs font-bold truncate w-full group-hover/team:text-secondary transition-colors flex items-center justify-center gap-0.5 ${
+                isPlaceholderTeam(match.home_team_name) 
+                  ? "text-secondary/80 italic font-medium" 
+                  : isHomeFavorite
+                    ? "text-rose-600 dark:text-rose-400 font-extrabold"
+                    : "text-foreground"
               }`}
             >
-              {match.home_team_name}
+              {isHomeFavorite && <Heart size={9} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
+              <span className="truncate">{match.home_team_name}</span>
             </span>
           </div>
 
@@ -174,7 +219,7 @@ export default React.memo(function MatchCard({
           {/* Away Team */}
           <div
             onClick={(e) => handleTeamClick(e, match.away_team_iso2)}
-            className={`flex flex-col items-center text-center flex-1 min-w-0 ${
+            className={`flex flex-col items-center text-center flex-1 min-w-0 relative ${
               match.away_team_iso2 && !isPlaceholderTeam(match.away_team_name)
                 ? "cursor-pointer group/team hover:scale-102 transition-transform"
                 : ""
@@ -196,11 +241,16 @@ export default React.memo(function MatchCard({
               )}
             </div>
             <span
-              className={`text-[10px] sm:text-xs font-bold truncate w-full group-hover/team:text-secondary transition-colors ${
-                isPlaceholderTeam(match.away_team_name) ? "text-secondary/80 italic font-medium" : "text-foreground"
+              className={`text-[10px] sm:text-xs font-bold truncate w-full group-hover/team:text-secondary transition-colors flex items-center justify-center gap-0.5 ${
+                isPlaceholderTeam(match.away_team_name) 
+                  ? "text-secondary/80 italic font-medium" 
+                  : isAwayFavorite
+                    ? "text-rose-600 dark:text-rose-400 font-extrabold"
+                    : "text-foreground"
               }`}
             >
-              {match.away_team_name}
+              {isAwayFavorite && <Heart size={9} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
+              <span className="truncate">{match.away_team_name}</span>
             </span>
           </div>
         </div>
@@ -235,6 +285,7 @@ export default React.memo(function MatchCard({
             >
               <div className="relative w-12 h-8 sm:w-16 sm:h-10 rounded-lg shadow overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-2 group-hover/modal-team:border-secondary transition-colors">
                 {getFlagUrl(match.home_team_iso2) ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={getFlagUrl(match.home_team_iso2)!.replace("w40", "w80")}
                     alt={match.home_team_name}
@@ -282,6 +333,7 @@ export default React.memo(function MatchCard({
             >
               <div className="relative w-12 h-8 sm:w-16 sm:h-10 rounded-lg shadow overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-2 group-hover/modal-team:border-secondary transition-colors">
                 {getFlagUrl(match.away_team_iso2) ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={getFlagUrl(match.away_team_iso2)!.replace("w40", "w80")}
                     alt={match.away_team_name}

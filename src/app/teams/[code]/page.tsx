@@ -47,23 +47,63 @@ export default function TeamProfilePage({ params }: PageProps) {
   // Sync "Đội bóng tôi yêu" from localStorage
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const myTeam = localStorage.getItem("wc2026_my_team") || "";
-      setIsMyTeam(myTeam.toUpperCase() === code);
+      try {
+        let teamsList: string[] = [];
+        const stored = localStorage.getItem("wc2026_my_teams");
+        if (stored) {
+          teamsList = JSON.parse(stored);
+        } else {
+          // Migration path
+          const single = localStorage.getItem("wc2026_my_team") || "";
+          if (single) {
+            teamsList = [single.toUpperCase()];
+            localStorage.setItem("wc2026_my_teams", JSON.stringify(teamsList));
+          }
+        }
+        setIsMyTeam(teamsList.includes(code));
+      } catch (err) {
+        console.error("Error loading favorite teams:", err);
+      }
     }
   }, [code]);
 
   const handleToggleMyTeam = () => {
     if (typeof window !== "undefined") {
-      const currentMyTeam = localStorage.getItem("wc2026_my_team") || "";
-      if (currentMyTeam.toUpperCase() === code) {
-        localStorage.removeItem("wc2026_my_team");
-        setIsMyTeam(false);
-      } else {
-        localStorage.setItem("wc2026_my_team", code);
-        setIsMyTeam(true);
+      try {
+        const stored = localStorage.getItem("wc2026_my_teams");
+        let teamsList: string[] = stored ? JSON.parse(stored) : [];
+        
+        // Backward compatibility migration just in case stored was empty but single exists
+        if (teamsList.length === 0) {
+          const single = localStorage.getItem("wc2026_my_team") || "";
+          if (single) {
+            teamsList = [single.toUpperCase()];
+          }
+        }
+
+        if (teamsList.includes(code)) {
+          teamsList = teamsList.filter((c) => c !== code);
+          setIsMyTeam(false);
+        } else {
+          teamsList = [...teamsList, code];
+          setIsMyTeam(true);
+        }
+
+        localStorage.setItem("wc2026_my_teams", JSON.stringify(teamsList));
+
+        // Keep wc2026_my_team single string in sync for absolute backward compatibility
+        if (teamsList.length > 0) {
+          localStorage.setItem("wc2026_my_team", teamsList[0]);
+        } else {
+          localStorage.removeItem("wc2026_my_team");
+        }
+
+        // Broadcast events
+        window.dispatchEvent(new Event("wc2026_my_teams_changed"));
+        window.dispatchEvent(new Event("wc2026_my_team_changed"));
+      } catch (err) {
+        console.error("Error toggling favorite team:", err);
       }
-      // Broadcast change event to synchronize all cards immediately
-      window.dispatchEvent(new Event("wc2026_my_team_changed"));
     }
   };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { Match } from "../types/match";
 import { usePersistentState } from "../hooks/usePersistentState";
 import PremiumToggle from "./ui/PremiumToggle";
@@ -8,19 +8,63 @@ import MatchCard from "./MatchCard";
 import GroupStandings from "./GroupStandings";
 import KnockoutBracket from "./KnockoutBracket";
 import CalendarPicker from "./ui/CalendarPicker";
-import { Calendar, Trophy, Heart, Search, Grid, Flame, Star } from "lucide-react";
+import { Calendar, Trophy, Heart, Search, Grid, Flame, Star, Users } from "lucide-react";
 import { useMatchStore } from "../hooks/useMatchStore";
+import Link from "next/link";
 
 const TABS = [
-  { id: "date", label: "Lịch thi đấu theo ngày", icon: Calendar },
   { id: "all", label: "Tất cả trận đấu", icon: Grid },
+  { id: "date", label: "Lịch thi đấu theo ngày", icon: Calendar },
   { id: "group", label: "Bảng đấu & Xếp hạng", icon: Trophy },
   { id: "knockout", label: "Nhánh đấu Knockout", icon: Flame },
   { id: "favorites", label: "Trận yêu thích", icon: Heart },
+  { id: "favorite_teams", label: "Đội yêu thích", icon: Users },
 ] as const;
 
+// Recursively resolve placeholders (e.g. W74, L101) into actual team names and ISO2s
+function resolveTeam(placeholder: string, matchesMap: Map<string, Match>): { name: string; iso2: string } {
+  if (!placeholder) return { name: "", iso2: "" };
+
+  const matchWinner = placeholder.match(/^W(\d+)$/);
+  const matchLoser = placeholder.match(/^L(\d+)$/);
+
+  if (!matchWinner && !matchLoser) {
+    return { name: placeholder, iso2: "" };
+  }
+
+  const refMatchId = matchWinner ? matchWinner[1] : matchLoser![1];
+  const refMatch = matchesMap.get(refMatchId);
+
+  if (!refMatch) return { name: placeholder, iso2: "" };
+
+  const isPlayed = refMatch.finished;
+
+  if (!isPlayed) {
+    return {
+      name: matchWinner ? `Thắng Trận ${refMatchId}` : `Thua Trận ${refMatchId}`,
+      iso2: "",
+    };
+  }
+
+  const hScore = refMatch.home_score;
+  const aScore = refMatch.away_score;
+
+  const homeTeamResolved = resolveTeam(refMatch.home_team_name, matchesMap);
+  const awayTeamResolved = resolveTeam(refMatch.away_team_name, matchesMap);
+
+  const homeWins = hScore >= aScore;
+
+  if (matchWinner) {
+    return homeWins ? homeTeamResolved : awayTeamResolved;
+  } else {
+    return homeWins ? awayTeamResolved : homeTeamResolved;
+  }
+}
+
 export default function ScheduleDashboard() {
-  const [activeTab, setActiveTab] = useState<"date" | "all" | "group" | "knockout" | "favorites">("date");
+  const [activeTab, setActiveTab] = useState<"date" | "all" | "group" | "knockout" | "favorites" | "favorite_teams">(
+    "all",
+  );
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -36,52 +80,15 @@ export default function ScheduleDashboard() {
   // Load persistent favorites list (SSR hydration mismatch safe)
   const [favorites, setFavorites, isLoadedFavs] = usePersistentState<string[]>("wc2026_favorites_v1", []);
 
+  const [myTeams, setMyTeams] = useState<string[]>([]);
+  const [isLoadedMyTeams, setIsLoadedMyTeams] = useState(false);
+
   // Index matches by match_id for rapid O(1) lookups
   const matchesMap = useMemo(() => {
     const map = new Map<string, Match>();
     matches.forEach((m) => map.set(m.match_id, m));
     return map;
   }, [matches]);
-
-  // Recursively resolve placeholders (e.g. W74, L101) into actual team names and ISO2s
-  const resolveTeam = (placeholder: string): { name: string; iso2: string } => {
-    if (!placeholder) return { name: "", iso2: "" };
-
-    const matchWinner = placeholder.match(/^W(\d+)$/);
-    const matchLoser = placeholder.match(/^L(\d+)$/);
-
-    if (!matchWinner && !matchLoser) {
-      return { name: placeholder, iso2: "" };
-    }
-
-    const refMatchId = matchWinner ? matchWinner[1] : matchLoser![1];
-    const refMatch = matchesMap.get(refMatchId);
-
-    if (!refMatch) return { name: placeholder, iso2: "" };
-
-    const isPlayed = refMatch.finished;
-
-    if (!isPlayed) {
-      return {
-        name: matchWinner ? `Thắng Trận ${refMatchId}` : `Thua Trận ${refMatchId}`,
-        iso2: "",
-      };
-    }
-
-    const hScore = refMatch.home_score;
-    const aScore = refMatch.away_score;
-
-    const homeTeamResolved = resolveTeam(refMatch.home_team_name);
-    const awayTeamResolved = resolveTeam(refMatch.away_team_name);
-
-    const homeWins = hScore >= aScore;
-
-    if (matchWinner) {
-      return homeWins ? homeTeamResolved : awayTeamResolved;
-    } else {
-      return homeWins ? awayTeamResolved : homeTeamResolved;
-    }
-  };
 
   // Extract and sort unique dates from all matches (both group and knockout stage)
   const sortedDates = useMemo(() => {
@@ -117,6 +124,143 @@ export default function ScheduleDashboard() {
     };
   }, [setFavorites]);
 
+  // Sync my favorite teams
+  useEffect(() => {
+    const handleUpdateMyTeams = () => {
+      if (typeof window !== "undefined") {
+        try {
+          const stored = localStorage.getItem("wc2026_my_teams");
+          if (stored) {
+            setMyTeams(JSON.parse(stored));
+          } else {
+            // Migration check
+            const single = localStorage.getItem("wc2026_my_team");
+            if (single) {
+              const migrated = [single.toUpperCase()];
+              localStorage.setItem("wc2026_my_teams", JSON.stringify(migrated));
+              setMyTeams(migrated);
+            } else {
+              setMyTeams([]);
+            }
+          }
+        } catch {
+          setMyTeams([]);
+        }
+      }
+      setIsLoadedMyTeams(true);
+    };
+
+    handleUpdateMyTeams();
+
+    window.addEventListener("wc2026_my_teams_changed", handleUpdateMyTeams);
+    window.addEventListener("wc2026_my_team_changed", handleUpdateMyTeams);
+    return () => {
+      window.removeEventListener("wc2026_my_teams_changed", handleUpdateMyTeams);
+      window.removeEventListener("wc2026_my_team_changed", handleUpdateMyTeams);
+    };
+  }, []);
+
+  // Quick toggle helper for favorite teams right from the dashboard
+  const handleToggleFavoriteTeam = (code: string) => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("wc2026_my_teams");
+        let list: string[] = stored ? JSON.parse(stored) : [];
+
+        if (list.includes(code)) {
+          list = list.filter((c) => c !== code);
+        } else {
+          list = [...list, code];
+        }
+
+        localStorage.setItem("wc2026_my_teams", JSON.stringify(list));
+
+        // Sync compatibility key
+        if (list.length > 0) {
+          localStorage.setItem("wc2026_my_team", list[0]);
+        } else {
+          localStorage.removeItem("wc2026_my_team");
+        }
+
+        setMyTeams(list);
+        window.dispatchEvent(new Event("wc2026_my_teams_changed"));
+        window.dispatchEvent(new Event("wc2026_my_team_changed"));
+      } catch (err) {
+        console.error("Error toggling favorite team:", err);
+      }
+    }
+  };
+
+  // Dynamically extract all 48 unique teams participating in the World Cup from matches list
+  const allTeams = useMemo(() => {
+    const teamsMap = new Map<string, { name: string; iso2: string; group: string }>();
+    matches.forEach((m) => {
+      if (m.home_team_iso2 && m.home_team_name && !/^\d[A-L]$|^W\d+|^L\d+|^3[A-L]\//.test(m.home_team_iso2)) {
+        const iso = m.home_team_iso2.toUpperCase();
+        if (!teamsMap.has(iso)) {
+          teamsMap.set(iso, {
+            name: m.home_team_name,
+            iso2: iso,
+            group: m.group || "",
+          });
+        } else if (m.group && !teamsMap.get(iso)?.group) {
+          teamsMap.get(iso)!.group = m.group;
+        }
+      }
+      if (m.away_team_iso2 && m.away_team_name && !/^\d[A-L]$|^W\d+|^L\d+|^3[A-L]\//.test(m.away_team_iso2)) {
+        const iso = m.away_team_iso2.toUpperCase();
+        if (!teamsMap.has(iso)) {
+          teamsMap.set(iso, {
+            name: m.away_team_name,
+            iso2: iso,
+            group: m.group || "",
+          });
+        } else if (m.group && !teamsMap.get(iso)?.group) {
+          teamsMap.get(iso)!.group = m.group;
+        }
+      }
+    });
+    return Array.from(teamsMap.values()).sort((a, b) => a.name.localeCompare(b.name, "vi"));
+  }, [matches]);
+
+  // Filter and resolve ALL matches (with search query filtering and placeholder resolving)
+  const allMatchesResolved = useMemo(() => {
+    return matches
+      .filter((m) => {
+        return (
+          searchQuery === "" ||
+          m.home_team_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          m.away_team_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          m.stadium_city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          m.stage_label.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      })
+      .map((m) => {
+        if (m.phase === "knockout") {
+          const resolvedHome = resolveTeam(m.home_team_name, matchesMap);
+          const resolvedAway = resolveTeam(m.away_team_name, matchesMap);
+          return {
+            ...m,
+            home_team_name: resolvedHome.name || m.home_team_name,
+            home_team_iso2: resolvedHome.iso2 || m.home_team_iso2,
+            away_team_name: resolvedAway.name || m.away_team_name,
+            away_team_iso2: resolvedAway.iso2 || m.away_team_iso2,
+          };
+        }
+        return m;
+      });
+  }, [matches, searchQuery, matchesMap]);
+
+  // List of all matches involving any of the user's favorite teams
+  const favoriteTeamsMatches = useMemo(() => {
+    if (myTeams.length === 0) return [];
+    return allMatchesResolved.filter((m) => {
+      const homeIso = m.home_team_iso2?.toUpperCase();
+      const awayIso = m.away_team_iso2?.toUpperCase();
+      return (homeIso && myTeams.includes(homeIso)) || (awayIso && myTeams.includes(awayIso));
+    });
+  }, [allMatchesResolved, myTeams]);
+
   const filteredMatchesByDate = useMemo(() => {
     return matches
       .filter((m) => {
@@ -131,8 +275,8 @@ export default function ScheduleDashboard() {
       })
       .map((m) => {
         if (m.phase === "knockout") {
-          const resolvedHome = resolveTeam(m.home_team_name);
-          const resolvedAway = resolveTeam(m.away_team_name);
+          const resolvedHome = resolveTeam(m.home_team_name, matchesMap);
+          const resolvedAway = resolveTeam(m.away_team_name, matchesMap);
           return {
             ...m,
             home_team_name: resolvedHome.name || m.home_team_name,
@@ -158,8 +302,8 @@ export default function ScheduleDashboard() {
       })
       .map((m) => {
         if (m.phase === "knockout") {
-          const resolvedHome = resolveTeam(m.home_team_name);
-          const resolvedAway = resolveTeam(m.away_team_name);
+          const resolvedHome = resolveTeam(m.home_team_name, matchesMap);
+          const resolvedAway = resolveTeam(m.away_team_name, matchesMap);
           return {
             ...m,
             home_team_name: resolvedHome.name || m.home_team_name,
@@ -171,34 +315,6 @@ export default function ScheduleDashboard() {
         return m;
       });
   }, [matches, favorites, searchQuery, matchesMap]);
-
-  // Filter and resolve ALL matches (with search query filtering and placeholder resolving)
-  const allMatchesResolved = useMemo(() => {
-    return matches
-      .filter((m) => {
-        return (
-          searchQuery === "" ||
-          m.home_team_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          m.away_team_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          m.stadium_city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          m.stage_label.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-      })
-      .map((m) => {
-        if (m.phase === "knockout") {
-          const resolvedHome = resolveTeam(m.home_team_name);
-          const resolvedAway = resolveTeam(m.away_team_name);
-          return {
-            ...m,
-            home_team_name: resolvedHome.name || m.home_team_name,
-            home_team_iso2: resolvedHome.iso2 || m.home_team_iso2,
-            away_team_name: resolvedAway.name || m.away_team_name,
-            away_team_iso2: resolvedAway.iso2 || m.away_team_iso2,
-          };
-        }
-        return m;
-      });
-  }, [matches, searchQuery, matchesMap]);
 
   // Group all matches by date chronologically
   const groupedMatches = useMemo(() => {
@@ -302,27 +418,7 @@ export default function ScheduleDashboard() {
         </div>
       </section>
 
-      {/* 2. Statistical Metrics Row */}
-      <section className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="glass-panel border border-card-border rounded-2xl p-4 text-center shadow-lg">
-          <span className="text-xs text-foreground/50 font-bold block mb-1">Tổng số trận đấu</span>
-          <span className="text-2xl font-black text-secondary">104</span>
-        </div>
-        <div className="glass-panel border border-card-border rounded-2xl p-4 text-center shadow-lg">
-          <span className="text-xs text-foreground/50 font-bold block mb-1">Vòng bảng</span>
-          <span className="text-2xl font-black text-secondary">72</span>
-        </div>
-        <div className="glass-panel border border-card-border rounded-2xl p-4 text-center shadow-lg">
-          <span className="text-xs text-foreground/50 font-bold block mb-1">Trận yêu thích</span>
-          <span
-            className={`text-2xl font-black transition-colors ${favorites.length > 0 ? "text-amber-400" : "text-foreground/70"}`}
-          >
-            {isLoadedFavs ? favorites.length : "--"}
-          </span>
-        </div>
-      </section>
-
-      {/* 3. Dedicated Tab Selectors Bar */}
+      {/* 2. Dedicated Tab Selectors Bar */}
       <div className="w-full">
         <div className="flex bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl p-1 overflow-x-auto scrollbar-none">
           {TABS.map((tab) => {
@@ -338,7 +434,12 @@ export default function ScheduleDashboard() {
                     : "text-foreground/60 hover:text-foreground hover:bg-slate-200/60 dark:hover:bg-white/5"
                 }`}
               >
-                <Icon size={16} /> {tab.label}
+                <Icon size={16} />
+                <span>
+                  {tab.label}
+                  {tab.id === "favorites" && isLoadedFavs && ` (${favorites.length})`}
+                  {tab.id === "favorite_teams" && isLoadedMyTeams && ` (${myTeams.length})`}
+                </span>
               </button>
             );
           })}
@@ -389,9 +490,7 @@ export default function ScheduleDashboard() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {filteredMatchesByDate.map((match) => (
                       <div key={match.match_id} className="h-[125px]">
-                        <MatchCard
-                          match={match}
-                        />
+                        <MatchCard match={match} />
                       </div>
                     ))}
                   </div>
@@ -409,9 +508,6 @@ export default function ScheduleDashboard() {
                   <div className="flex items-center gap-1.5 text-sm font-extrabold text-secondary">
                     <Grid size={16} /> Tất Cả Trận Đấu ({allMatchesResolved.length} trận)
                   </div>
-                  <span className="text-[10px] text-foreground/45 font-bold uppercase tracking-wider">
-                    104 Trận Đấu Toàn Giải
-                  </span>
                 </div>
                 {groupedMatches.length > 0 ? (
                   <div className="space-y-8">
@@ -429,9 +525,7 @@ export default function ScheduleDashboard() {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                           {group.matches.map((match) => (
                             <div key={match.match_id} className="h-[125px]">
-                              <MatchCard
-                                match={match}
-                              />
+                              <MatchCard match={match} />
                             </div>
                           ))}
                         </div>
@@ -448,17 +542,13 @@ export default function ScheduleDashboard() {
 
             {activeTab === "group" && (
               <div className="animate-slide-up">
-                <GroupStandings
-                  matches={matches}
-                />
+                <GroupStandings matches={matches} />
               </div>
             )}
 
             {activeTab === "knockout" && (
               <div className="animate-slide-up">
-                <KnockoutBracket
-                  matches={matches}
-                />
+                <KnockoutBracket matches={matches} />
               </div>
             )}
 
@@ -472,9 +562,7 @@ export default function ScheduleDashboard() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {favoriteMatches.map((match) => (
                       <div key={match.match_id} className="h-[125px]">
-                        <MatchCard
-                          match={match}
-                        />
+                        <MatchCard match={match} />
                       </div>
                     ))}
                   </div>
@@ -486,6 +574,191 @@ export default function ScheduleDashboard() {
                 )}
               </div>
             )}
+
+            {activeTab === "favorite_teams" && (
+              <div className="space-y-8 animate-slide-up">
+                {/* Section 1: My Favorite Teams list */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-1.5 text-sm font-extrabold text-secondary border-b border-slate-200 dark:border-white/5 pb-2">
+                    <Heart size={16} className="fill-rose-500 text-rose-500" /> Đội Tuyển Yêu Thích Của Tôi (
+                    {myTeams.length})
+                  </div>
+
+                  {myTeams.length > 0 ? (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                      {allTeams
+                        .filter((t) => myTeams.includes(t.iso2))
+                        .map((team) => {
+                          const flagUrl =
+                            team.iso2.toLowerCase() === "eng"
+                              ? "https://flagcdn.com/w80/gb-eng.png"
+                              : team.iso2.toLowerCase() === "sco"
+                                ? "https://flagcdn.com/w80/gb-sct.png"
+                                : `https://flagcdn.com/w80/${team.iso2.toLowerCase()}.png`;
+
+                          return (
+                            <div
+                              key={team.iso2}
+                              className="glass-panel glass-panel-hover rounded-2xl p-4 flex flex-col items-center justify-between border border-rose-500/20 shadow-[0_0_10px_rgba(244,63,94,0.04)] relative group text-center h-[170px]"
+                            >
+                              {/* Quick heart toggle inside dashboard */}
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleToggleFavoriteTeam(team.iso2);
+                                }}
+                                className="absolute top-2 right-2 text-rose-500 hover:scale-110 p-1.5 rounded-lg transition-transform cursor-pointer"
+                                aria-label="Bỏ thích"
+                              >
+                                <Heart size={15} className="fill-rose-500 text-rose-500" />
+                              </button>
+
+                              <Link
+                                href={`/teams/${team.iso2.toLowerCase()}`}
+                                className="flex-1 flex flex-col items-center justify-center space-y-2.5 w-full"
+                              >
+                                <div className="w-14 h-9 sm:w-16 sm:h-10 rounded-md overflow-hidden shadow-sm border border-slate-200 dark:border-white/10 group-hover:border-rose-500/40 transition-colors">
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img src={flagUrl} alt={team.name} className="w-full h-full object-cover" />
+                                </div>
+                                <div className="w-full">
+                                  <h4 className="text-xs sm:text-sm font-black text-foreground truncate w-full group-hover:text-rose-500 transition-colors">
+                                    {team.name}
+                                  </h4>
+                                  {team.group && (
+                                    <span className="text-[10px] text-foreground/45 font-bold uppercase tracking-wider">
+                                      Bảng {team.group}
+                                    </span>
+                                  )}
+                                </div>
+                              </Link>
+
+                              <Link
+                                href={`/teams/${team.iso2.toLowerCase()}`}
+                                className="mt-2 text-[10px] font-black text-secondary uppercase tracking-widest hover:underline hover:text-rose-500 transition-colors"
+                              >
+                                Xem Hồ Sơ &rarr;
+                              </Link>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  ) : (
+                    <div className="text-center py-10 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/5 text-sm text-foreground/50 space-y-2 max-w-xl mx-auto">
+                      <p className="font-bold text-foreground/75 text-base">Bạn chưa chọn đội tuyển yêu thích nào!</p>
+                      <p className="text-xs px-6 leading-relaxed max-w-md mx-auto">
+                        Hãy kéo xuống phần **Khám phá 48 quốc gia** bên dưới và nhấn biểu tượng ❤️ để bắt đầu cá nhân
+                        hóa hành trình World Cup 2026 của riêng bạn.
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Section 2: Fixtures of Favorite Teams */}
+                {myTeams.length > 0 && (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-1.5 text-sm font-extrabold text-secondary border-b border-slate-200 dark:border-white/5 pb-2">
+                      <Calendar size={16} className="text-secondary" /> Lịch Thi Đấu Đội Yêu Thích (
+                      {favoriteTeamsMatches.length} trận)
+                    </div>
+                    {favoriteTeamsMatches.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {favoriteTeamsMatches.map((match) => (
+                          <div key={match.match_id} className="h-[125px]">
+                            <MatchCard match={match} />
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-10 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/5 text-xs text-foreground/45">
+                        Không tìm thấy lịch đấu nào phù hợp của các đội tuyển yêu thích.
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Section 3: Explore 48 Countries */}
+                <div className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200 dark:border-white/5 pb-2">
+                    <div className="flex items-center gap-1.5 text-sm font-extrabold text-secondary">
+                      <Grid size={16} /> Khám Phá 48 Quốc Gia Tham Dự
+                    </div>
+                    <span className="text-[10px] text-foreground/45 font-bold uppercase tracking-wider">
+                      FIFA World Cup 2026
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    {allTeams
+                      .filter(
+                        (t) =>
+                          searchQuery === "" ||
+                          t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          t.iso2.toLowerCase().includes(searchQuery.toLowerCase()),
+                      )
+                      .map((team) => {
+                        const isFav = myTeams.includes(team.iso2);
+                        const flagUrl =
+                          team.iso2.toLowerCase() === "eng"
+                            ? "https://flagcdn.com/w80/gb-eng.png"
+                            : team.iso2.toLowerCase() === "sco"
+                              ? "https://flagcdn.com/w80/gb-sct.png"
+                              : `https://flagcdn.com/w80/${team.iso2.toLowerCase()}.png`;
+
+                        return (
+                          <div
+                            key={team.iso2}
+                            className={`glass-panel glass-panel-hover rounded-2xl p-4 flex flex-col items-center justify-between relative group text-center h-[170px] border ${
+                              isFav ? "border-rose-500/20 shadow-[0_0_10px_rgba(244,63,94,0.04)]" : "border-card-border"
+                            }`}
+                          >
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggleFavoriteTeam(team.iso2);
+                              }}
+                              className="absolute top-2 right-2 hover:scale-110 p-1.5 rounded-lg transition-transform cursor-pointer"
+                              aria-label={isFav ? "Bỏ thích" : "Thích"}
+                            >
+                              <Heart
+                                size={15}
+                                className={`${isFav ? "fill-rose-500 text-rose-500" : "text-foreground/30 hover:text-rose-500"}`}
+                              />
+                            </button>
+
+                            <Link
+                              href={`/teams/${team.iso2.toLowerCase()}`}
+                              className="flex-1 flex flex-col items-center justify-center space-y-2.5 w-full"
+                            >
+                              <div className="w-14 h-9 sm:w-16 sm:h-10 rounded-md overflow-hidden shadow-sm border border-slate-200 dark:border-white/10 group-hover:border-secondary transition-colors">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={flagUrl} alt={team.name} className="w-full h-full object-cover" />
+                              </div>
+                              <div className="w-full">
+                                <h4 className="text-xs sm:text-sm font-black text-foreground truncate w-full group-hover:text-rose-500 transition-colors">
+                                  {team.name}
+                                </h4>
+                                {team.group && (
+                                  <span className="text-[10px] text-foreground/45 font-bold uppercase tracking-wider">
+                                    Bảng {team.group}
+                                  </span>
+                                )}
+                              </div>
+                            </Link>
+
+                            <Link
+                              href={`/teams/${team.iso2.toLowerCase()}`}
+                              className="mt-2 text-[10px] font-black text-secondary uppercase tracking-widest hover:underline hover:text-rose-500 transition-colors"
+                            >
+                              Xem Hồ Sơ &rarr;
+                            </Link>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
+              </div>
+            )}
           </>
         )}
       </main>
@@ -494,7 +767,6 @@ export default function ScheduleDashboard() {
       <div className="fixed bottom-6 right-6 z-50">
         <PremiumToggle />
       </div>
-
     </div>
   );
 }
