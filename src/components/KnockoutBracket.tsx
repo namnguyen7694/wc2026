@@ -4,6 +4,7 @@ import React, { useState, useMemo } from "react";
 import { Match } from "../types/match";
 import MatchCard from "./MatchCard";
 import { GitCommit, Grid, TreeDeciduous, Trophy } from "lucide-react";
+import { getMatchOrFallback } from "../utils/matchUtils";
 
 interface KnockoutBracketProps {
   matches: Match[];
@@ -49,177 +50,55 @@ export default function KnockoutBracket({ matches }: KnockoutBracketProps) {
   // Map of specific matches in tree bracket (mathematically ordered to align branch lines)
   const rounds = useMemo(() => {
     // Round of 32 ordered so that match pairs feed exactly into their corresponding Round of 16 match
-    // W74 vs W77 (Match 89) -> feeds from Match 74 & 77
-    // W73 vs W75 (Match 90) -> feeds from Match 73 & 75
-    // W83 vs W84 (Match 93) -> feeds from Match 83 & 84
-    // W81 vs W82 (Match 94) -> feeds from Match 81 & 82
-    // W91 vs W92 (Match 99) -> plays Match 91 & 92
-    // W95 vs W96 (Match 100) -> plays Match 95 & 96
     const r32Order = [74, 77, 73, 75, 83, 84, 81, 82, 76, 78, 79, 80, 86, 88, 85, 87];
-    const r32: Match[] = [];
-    r32Order.forEach((i) => {
-      const matchId = String(i);
-      const found = matchesMap.get(matchId);
-      if (found) {
-        r32.push(found);
-      } else {
-        // Fallback placeholder
-        r32.push({
-          match_id: matchId,
-          stage_key: "round32",
-          stage_label: "Vòng 32 Đội",
-          phase: "knockout",
-          group: "",
-          local_date: "",
-          home_team_name: `Thắng trận ${i - 72}`,
-          away_team_name: `Thắng trận ${i - 56}`,
-          home_team_iso2: "",
-          away_team_iso2: "",
-          home_score: 0,
-          away_score: 0,
-          status: "notstarted",
-          stadium_name: "",
-          stadium_city: "",
-          stadium_country: "",
-          home_scorers: "",
-          away_scorers: "",
-        } as unknown as Match);
-      }
-    });
+    const r32 = r32Order.map((i) =>
+      getMatchOrFallback(matchesMap, i, "round32", "Vòng 32 Đội", `Thắng trận ${i - 72}`, `Thắng trận ${i - 56}`),
+    );
 
     // Round of 16 ordered to pair matches feeding into Quarterfinals:
-    // Match 89 & Match 90 -> feed into Quarterfinal Match 97
-    // Match 93 & Match 94 -> feed into Quarterfinal Match 98
-    // Match 91 & Match 92 -> feed into Quarterfinal Match 99
-    // Match 95 & Match 96 -> feed into Quarterfinal Match 100
     const r16Order = [89, 90, 93, 94, 91, 92, 95, 96];
-    const r16: Match[] = [];
-    r16Order.forEach((i) => {
-      const matchId = String(i);
-      const found = matchesMap.get(matchId);
-      if (found) {
-        r16.push(found);
-      } else {
-        r16.push({
-          match_id: matchId,
-          stage_key: "round16",
-          stage_label: "Vòng 16 Đội",
-          phase: "knockout",
-          group: "",
-          local_date: "",
-          home_team_name: `Thắng trận ${73 + (i - 89) * 2}`,
-          away_team_name: `Thắng trận ${74 + (i - 89) * 2}`,
-          home_team_iso2: "",
-          away_team_iso2: "",
-          home_score: 0,
-          away_score: 0,
-          status: "notstarted",
-          stadium_name: "",
-          stadium_city: "",
-          stadium_country: "",
-          home_scorers: "",
-          away_scorers: "",
-        } as unknown as Match);
-      }
-    });
+    const r16 = r16Order.map((i) =>
+      getMatchOrFallback(
+        matchesMap,
+        i,
+        "round16",
+        "Vòng 16 Đội",
+        `Thắng trận ${73 + (i - 89) * 2}`,
+        `Thắng trận ${74 + (i - 89) * 2}`,
+      ),
+    );
 
     // Quarterfinals ordered to pair matches feeding into Semifinals:
-    // Match 97 & Match 98 -> feed into Semifinal Match 101
-    // Match 99 & Match 100 -> feed into Semifinal Match 102
     const qfOrder = [97, 98, 99, 100];
-    const qf: Match[] = [];
-    qfOrder.forEach((i) => {
-      const matchId = String(i);
-      const found = matchesMap.get(matchId);
-      if (found) {
-        qf.push(found);
-      } else {
-        qf.push({
-          match_id: matchId,
-          stage_key: "quarterfinal",
-          stage_label: "Tứ Kết",
-          phase: "knockout",
-          group: "",
-          local_date: "",
-          home_team_name: `Thắng trận ${89 + (i - 97) * 2}`,
-          away_team_name: `Thắng trận ${90 + (i - 97) * 2}`,
-          home_team_iso2: "",
-          away_team_iso2: "",
-          home_score: 0,
-          away_score: 0,
-          status: "notstarted",
-          stadium_name: "",
-          stadium_city: "",
-          stadium_country: "",
-          home_scorers: "",
-          away_scorers: "",
-        } as unknown as Match);
-      }
-    });
+    const qf = qfOrder.map((i) =>
+      getMatchOrFallback(
+        matchesMap,
+        i,
+        "quarterfinal",
+        "Tứ Kết",
+        `Thắng trận ${89 + (i - 97) * 2}`,
+        `Thắng trận ${90 + (i - 97) * 2}`,
+      ),
+    );
 
     // Semifinals: Match 101 & Match 102 -> feed into Finals (Match 104)
     const sfOrder = [101, 102];
-    const sf: Match[] = [];
-    sfOrder.forEach((i) => {
-      const matchId = String(i);
-      const found = matchesMap.get(matchId);
-      if (found) {
-        sf.push(found);
-      } else {
-        sf.push({
-          match_id: matchId,
-          stage_key: "semifinal",
-          stage_label: "Bán Kết",
-          phase: "knockout",
-          group: "",
-          local_date: "",
-          home_team_name: `Thắng trận ${97 + (i - 101) * 2}`,
-          away_team_name: `Thắng trận ${98 + (i - 101) * 2}`,
-          home_team_iso2: "",
-          away_team_iso2: "",
-          home_score: 0,
-          away_score: 0,
-          status: "notstarted",
-          stadium_name: "",
-          stadium_city: "",
-          stadium_country: "",
-          home_scorers: "",
-          away_scorers: "",
-        } as unknown as Match);
-      }
-    });
+    const sf = sfOrder.map((i) =>
+      getMatchOrFallback(matchesMap, i, "semifinal", "Bán Kết", `Thắng trận ${97 + (i - 101) * 2}`, `Thắng trận ${98 + (i - 101) * 2}`),
+    );
 
     // Finals: Match 103 (Third place) and Match 104 (Final)
     const fnOrder = [103, 104];
-    const fn: Match[] = [];
-    fnOrder.forEach((i) => {
-      const matchId = String(i);
-      const found = matchesMap.get(matchId);
-      if (found) {
-        fn.push(found);
-      } else {
-        fn.push({
-          match_id: matchId,
-          stage_key: i === 103 ? "third_place" : "final",
-          stage_label: i === 103 ? "Tranh Hạng Ba" : "Chung Kết",
-          phase: "knockout",
-          group: "",
-          local_date: "",
-          home_team_name: i === 103 ? `Thua trận 101` : `Thắng trận 101`,
-          away_team_name: i === 103 ? `Thua trận 102` : `Thắng trận 102`,
-          home_team_iso2: "",
-          away_team_iso2: "",
-          home_score: 0,
-          away_score: 0,
-          status: "notstarted",
-          stadium_name: "",
-          stadium_city: "",
-          stadium_country: "",
-          home_scorers: "",
-          away_scorers: "",
-        } as unknown as Match);
-      }
-    });
+    const fn = fnOrder.map((i) =>
+      getMatchOrFallback(
+        matchesMap,
+        i,
+        i === 103 ? "third_place" : "final",
+        i === 103 ? "Tranh Hạng Ba" : "Chung Kết",
+        i === 103 ? `Thua trận 101` : `Thắng trận 101`,
+        i === 103 ? `Thua trận 102` : `Thắng trận 102`,
+      ),
+    );
 
     return {
       round32: { label: "Vòng 32 Đội", matches: r32 },

@@ -177,7 +177,7 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
               )}
             </div>
             <span
-              className={`text-[10px] sm:text-xs font-bold truncate w-full group-hover/team:text-secondary transition-colors flex items-center justify-center gap-0.5 ${
+              className={`text-[10px] sm:text-xs font-bold w-full group-hover/team:text-secondary transition-colors flex items-center justify-center gap-0.5 min-w-0 ${
                 isPlaceholderTeam(match.home_team_name)
                   ? "text-secondary/80 italic font-medium"
                   : isHomeFavorite
@@ -186,7 +186,7 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
               }`}
             >
               {isHomeFavorite && <Heart size={9} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
-              <span className="truncate">{match.home_team_name}</span>
+              <span className="truncate pr-1 min-w-0">{match.home_team_name}</span>
             </span>
           </div>
 
@@ -239,7 +239,7 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
               )}
             </div>
             <span
-              className={`text-[10px] sm:text-xs font-bold truncate w-full group-hover/team:text-secondary transition-colors flex items-center justify-center gap-0.5 ${
+              className={`text-[10px] sm:text-xs font-bold w-full group-hover/team:text-secondary transition-colors flex items-center justify-center gap-0.5 min-w-0 ${
                 isPlaceholderTeam(match.away_team_name)
                   ? "text-secondary/80 italic font-medium"
                   : isAwayFavorite
@@ -248,7 +248,7 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
               }`}
             >
               {isAwayFavorite && <Heart size={9} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
-              <span className="truncate">{match.away_team_name}</span>
+              <span className="truncate pr-1 min-w-0">{match.away_team_name}</span>
             </span>
           </div>
         </div>

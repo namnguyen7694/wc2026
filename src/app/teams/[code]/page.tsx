@@ -23,23 +23,15 @@ export default function TeamProfilePage({ params }: PageProps) {
 
   // Zustand Store Integration
   const isLoaded = useMatchStore((state) => state.isLoaded);
-  const setMatches = useMatchStore((state) => state.setMatches);
+  const fetchMatches = useMatchStore((state) => state.fetchMatches);
   const matchesByTeam = useMatchStore((state) => state.matchesByTeam);
 
   // Fetch matches fallback if navigated to directly
   useEffect(() => {
     if (!isLoaded) {
-      // Dynamic import to keep page lightweight
-      Promise.all([import("../../../constants/fallbackData"), import("../../../utils/csvParser")])
-        .then(([{ FALLBACK_CSV }, { parseCSV }]) => {
-          const parsed = parseCSV(FALLBACK_CSV);
-          setMatches(parsed);
-        })
-        .catch((err) => {
-          console.error("Failed to load fallback match data in store:", err);
-        });
+      fetchMatches();
     }
-  }, [isLoaded, setMatches]);
+  }, [isLoaded, fetchMatches]);
 
   const teamMatches = useMemo(() => {
     return matchesByTeam[code.toLowerCase()] || [];

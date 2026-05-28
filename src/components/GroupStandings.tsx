@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Match, SimScores, GroupTeamStanding } from "../types/match";
+import { Match, GroupTeamStanding } from "../types/match";
 import MatchCard from "./MatchCard";
+
+import { useMatchStore } from "../hooks/useMatchStore";
 
 interface GroupStandingsProps {
   matches: Match[];
@@ -10,105 +12,19 @@ interface GroupStandingsProps {
 
 const GROUPS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
 
-export default function GroupStandings({
-  matches,
-}: GroupStandingsProps) {
+export default function GroupStandings({ matches }: GroupStandingsProps) {
   const [selectedGroup, setSelectedGroup] = useState<string>("A");
-
+  const getGroupStandings = useMatchStore((state) => state.getGroupStandings);
 
   // Get all group-stage matches
   const groupMatches = useMemo(() => {
     return matches.filter((m) => m.phase === "group");
   }, [matches]);
 
-  // Compute standings for the selected group dynamically (Derived State)
+  // Compute standings for the selected group dynamically from the store
   const standings = useMemo(() => {
-    const teamsData: Record<string, GroupTeamStanding> = {};
-
-    // Filter matches for the selected group
-    const matchesInGroup = groupMatches.filter((m) => m.group === selectedGroup);
-
-    // Initialise all teams in this group to make sure they show up in standings even with 0 games played
-    matchesInGroup.forEach((m) => {
-      if (m.home_team_name) {
-        teamsData[m.home_team_name] = teamsData[m.home_team_name] || {
-          teamName: m.home_team_name,
-          teamIso2: m.home_team_iso2,
-          played: 0,
-          won: 0,
-          drawn: 0,
-          lost: 0,
-          goalsFor: 0,
-          goalsAgainst: 0,
-          goalDifference: 0,
-          points: 0,
-        };
-      }
-      if (m.away_team_name) {
-        teamsData[m.away_team_name] = teamsData[m.away_team_name] || {
-          teamName: m.away_team_name,
-          teamIso2: m.away_team_iso2,
-          played: 0,
-          won: 0,
-          drawn: 0,
-          lost: 0,
-          goalsFor: 0,
-          goalsAgainst: 0,
-          goalDifference: 0,
-          points: 0,
-        };
-      }
-    });
-
-    // Populate data based on played matches
-    matchesInGroup.forEach((m) => {
-      const isPlayed = m.finished;
-
-      if (!isPlayed) return;
-
-      const hScore = m.home_score;
-      const aScore = m.away_score;
-
-      const homeTeam = teamsData[m.home_team_name];
-      const awayTeam = teamsData[m.away_team_name];
-
-      if (homeTeam && awayTeam) {
-        homeTeam.played += 1;
-        awayTeam.played += 1;
-
-        homeTeam.goalsFor += hScore;
-        homeTeam.goalsAgainst += aScore;
-        awayTeam.goalsFor += aScore;
-        awayTeam.goalsAgainst += hScore;
-
-        if (hScore > aScore) {
-          homeTeam.won += 1;
-          homeTeam.points += 3;
-          awayTeam.lost += 1;
-        } else if (hScore < aScore) {
-          awayTeam.won += 1;
-          awayTeam.points += 3;
-          homeTeam.lost += 1;
-        } else {
-          homeTeam.drawn += 1;
-          homeTeam.points += 1;
-          awayTeam.drawn += 1;
-          awayTeam.points += 1;
-        }
-
-        homeTeam.goalDifference = homeTeam.goalsFor - homeTeam.goalsAgainst;
-        awayTeam.goalDifference = awayTeam.goalsFor - awayTeam.goalsAgainst;
-      }
-    });
-
-    // Convert record to array and sort according to FIFA rules: Points -> GD -> GF
-    return Object.values(teamsData).sort((a, b) => {
-      if (b.points !== a.points) return b.points - a.points;
-      if (b.goalDifference !== a.goalDifference) return b.goalDifference - a.goalDifference;
-      if (b.goalsFor !== a.goalsFor) return b.goalsFor - a.goalsFor;
-      return a.teamName.localeCompare(b.teamName);
-    });
-  }, [groupMatches, selectedGroup]);
+    return getGroupStandings(selectedGroup);
+  }, [getGroupStandings, selectedGroup]);
 
   // Selected group's fixtures
   const selectedGroupFixtures = useMemo(() => {
@@ -187,21 +103,23 @@ export default function GroupStandings({
                             {index + 1}
                           </span>
                         </td>
-                        <td className="py-3 px-2 flex items-center gap-2 font-bold truncate max-w-[150px] sm:max-w-none">
-                          {getFlagUrl(team.teamIso2) && (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
-                              src={getFlagUrl(team.teamIso2)!}
-                              alt={team.teamName}
-                              className="w-5 h-3.5 object-cover rounded shadow-sm border border-slate-200 dark:border-white/10"
-                            />
-                          )}
-                          <span className="truncate">{team.teamName}</span>
-                          {isTopTwo && (
-                            <span className="text-[9px] text-emerald-400 font-bold hidden sm:inline px-1 py-0.2 bg-emerald-500/10 border border-emerald-500/20 rounded">
-                              Đi tiếp
-                            </span>
-                          )}
+                        <td className="py-3 px-2 max-w-[150px] sm:max-w-none">
+                          <div className="flex items-center gap-2 font-bold min-w-0">
+                            {getFlagUrl(team.teamIso2) && (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img
+                                src={getFlagUrl(team.teamIso2)!}
+                                alt={team.teamName}
+                                className="w-5 h-3.5 object-cover rounded shadow-sm border border-slate-200 dark:border-white/10"
+                              />
+                            )}
+                            <span className="truncate pr-1 min-w-0">{team.teamName}</span>
+                            {isTopTwo && (
+                              <span className="text-[9px] text-emerald-400 font-bold hidden sm:inline px-1 py-0.2 bg-emerald-500/10 border border-emerald-500/20 rounded">
+                                Đi tiếp
+                              </span>
+                            )}
+                          </div>
                         </td>
                         <td className="py-3 px-2 text-center">{team.played}</td>
                         <td className="py-3 px-2 text-center text-emerald-400">{team.won}</td>
@@ -241,10 +159,7 @@ export default function GroupStandings({
           <div className="space-y-3 overflow-y-auto max-h-[400px] pr-1">
             {selectedGroupFixtures.map((match) => (
               <div key={match.match_id} className="h-[125px]">
-                <MatchCard
-                  match={match}
-                  showDateHeader={true}
-                />
+                <MatchCard match={match} showDateHeader={true} />
               </div>
             ))}
           </div>

@@ -8,10 +8,11 @@ import MatchCard from "./MatchCard";
 import GroupStandings from "./GroupStandings";
 import KnockoutBracket from "./KnockoutBracket";
 import CalendarPicker from "./ui/CalendarPicker";
-import { Calendar, Trophy, Heart, Search, Grid, Flame, Star, Users } from "lucide-react";
+import { Calendar, Trophy, Heart, Search, Grid, Flame, Star, Users, Sparkles, Activity } from "lucide-react";
 import { useMatchStore } from "../hooks/useMatchStore";
 import HeroBanner from "./HeroBanner";
 import FavoriteTeamsTab from "./FavoriteTeamsTab";
+import { resolveTeam } from "../utils/matchUtils";
 
 const TABS = [
   { id: "all", label: "Tất cả trận đấu", icon: Grid },
@@ -21,46 +22,6 @@ const TABS = [
   { id: "favorites", label: "Trận yêu thích", icon: Heart },
   { id: "favorite_teams", label: "Đội yêu thích", icon: Users },
 ] as const;
-
-// Recursively resolve placeholders (e.g. W74, L101) into actual team names and ISO2s
-function resolveTeam(placeholder: string, matchesMap: Map<string, Match>): { name: string; iso2: string } {
-  if (!placeholder) return { name: "", iso2: "" };
-
-  const matchWinner = placeholder.match(/^W(\d+)$/);
-  const matchLoser = placeholder.match(/^L(\d+)$/);
-
-  if (!matchWinner && !matchLoser) {
-    return { name: placeholder, iso2: "" };
-  }
-
-  const refMatchId = matchWinner ? matchWinner[1] : matchLoser![1];
-  const refMatch = matchesMap.get(refMatchId);
-
-  if (!refMatch) return { name: placeholder, iso2: "" };
-
-  const isPlayed = refMatch.finished;
-
-  if (!isPlayed) {
-    return {
-      name: matchWinner ? `Thắng Trận ${refMatchId}` : `Thua Trận ${refMatchId}`,
-      iso2: "",
-    };
-  }
-
-  const hScore = refMatch.home_score;
-  const aScore = refMatch.away_score;
-
-  const homeTeamResolved = resolveTeam(refMatch.home_team_name, matchesMap);
-  const awayTeamResolved = resolveTeam(refMatch.away_team_name, matchesMap);
-
-  const homeWins = hScore >= aScore;
-
-  if (matchWinner) {
-    return homeWins ? homeTeamResolved : awayTeamResolved;
-  } else {
-    return homeWins ? awayTeamResolved : homeTeamResolved;
-  }
-}
 
 export default function ScheduleDashboard() {
   const [activeTab, setActiveTab] = useState<"date" | "all" | "group" | "knockout" | "favorites" | "favorite_teams">(
@@ -72,6 +33,8 @@ export default function ScheduleDashboard() {
   const fetchMatches = useMatchStore((state) => state.fetchMatches);
   const matches = useMatchStore((state) => state.matches);
   const isLoadedMatches = useMatchStore((state) => state.isLoaded);
+  const isSimulated = useMatchStore((state) => state.isSimulated);
+  const toggleSimulation = useMatchStore((state) => state.toggleSimulation);
 
   // Initialize Zustand global matches store on mount
   useEffect(() => {
@@ -351,6 +314,45 @@ export default function ScheduleDashboard() {
     <div className="w-full max-w-6xl mx-auto px-4 py-8 space-y-6">
       {/* 1. Stunning Hero Section */}
       <HeroBanner matches={matches} favorites={favorites} myTeams={myTeams} />
+
+      {/* 1.5. Simulation Control Bar */}
+      <div className="w-full glass-panel border border-card-border rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg bg-card-bg/40 backdrop-blur-md transition-all duration-300">
+        <div className="flex items-center gap-3">
+          <div className={`p-2.5 rounded-xl transition-all duration-300 ${
+            isSimulated 
+              ? "bg-amber-500/10 text-amber-500 border border-amber-500/20" 
+              : "bg-primary/10 text-primary border border-primary/20"
+          }`}>
+            {isSimulated ? <Sparkles size={20} className="animate-pulse" /> : <Activity size={20} />}
+          </div>
+          <div className="text-left space-y-0.5">
+            <h4 className="text-sm font-black text-foreground flex items-center gap-1.5">
+              {isSimulated ? "Chế độ mô phỏng tỷ số" : "Dữ liệu lịch thi đấu thực tế"}
+              {isSimulated && (
+                <span className="inline-flex px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                  Simulated
+                </span>
+              )}
+            </h4>
+            <p className="text-[11px] text-foreground/50 font-bold max-w-md leading-relaxed">
+              {isSimulated 
+                ? "Đã mô phỏng tỷ số vòng bảng nhằm hiển thị điểm số, hiệu số, và xếp hạng của 12 bảng đấu." 
+                : "Hiển thị dữ liệu thực tế từ VNExpress. Hiện tại các trận đấu chưa diễn ra (0-0)."}
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={toggleSimulation}
+          className={`relative flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-300 hover:scale-102 active:scale-98 shadow-md border cursor-pointer ${
+            isSimulated
+              ? "bg-amber-500 hover:bg-amber-600 text-white border-amber-600/30 shadow-amber-500/20"
+              : "bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-foreground border-slate-200 dark:border-white/10"
+          }`}
+        >
+          {isSimulated ? "Reset Dữ liệu thực tế" : "Kích hoạt Mô phỏng"}
+        </button>
+      </div>
 
       {/* 2. Dedicated Tab Selectors Bar */}
       <div className="w-full">
