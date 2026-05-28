@@ -1,4 +1,4 @@
-import { Match } from "../types/match";
+import { Match, GroupTeamStanding } from "../types/match";
 
 /**
  * Retrieves a match by numeric ID from the provided map, or generates
@@ -38,10 +38,38 @@ export function getMatchOrFallback(
   );
 }
 
-export // Recursively resolve placeholders (e.g. W74, L101) into actual team names and ISO2s
-function resolveTeam(placeholder: string, matchesMap: Map<string, Match>): { name: string; iso2: string } {
+export // Recursively resolve placeholders (e.g. W74, L101, 1A, 2B) into actual team names and ISO2s
+function resolveTeam(
+  placeholder: string,
+  matchesMap: Map<string, Match>,
+  getGroupStandings?: (group: string) => GroupTeamStanding[],
+): { name: string; iso2: string } {
   if (!placeholder) return { name: "", iso2: "" };
 
+  // 1. Resolve group standing placeholders like "1A", "2B", etc.
+  const groupMatch = placeholder.match(/^([12])([A-L])$/i);
+  if (groupMatch && getGroupStandings) {
+    const rank = parseInt(groupMatch[1], 10);
+    const groupLetter = groupMatch[2].toUpperCase();
+    try {
+      const standings = getGroupStandings(groupLetter);
+      // Only resolve if every team in this group has completed all 3 matches
+      const isGroupComplete = standings.length > 0 && standings.every((t) => t.played === 3);
+      if (isGroupComplete) {
+        const team = standings[rank - 1];
+        if (team) {
+          return {
+            name: team.teamName,
+            iso2: team.teamIso2.toUpperCase(),
+          };
+        }
+      }
+    } catch (err) {
+      console.warn(`Failed to resolve group standing placeholder ${placeholder}:`, err);
+    }
+  }
+
+  // 2. Resolve knockout winner/loser placeholders like "W74", "L101"
   const matchWinner = placeholder.match(/^W(\d+)$/);
   const matchLoser = placeholder.match(/^L(\d+)$/);
 
@@ -66,8 +94,8 @@ function resolveTeam(placeholder: string, matchesMap: Map<string, Match>): { nam
   const hScore = refMatch.home_score;
   const aScore = refMatch.away_score;
 
-  const homeTeamResolved = resolveTeam(refMatch.home_team_name, matchesMap);
-  const awayTeamResolved = resolveTeam(refMatch.away_team_name, matchesMap);
+  const homeTeamResolved = resolveTeam(refMatch.home_team_name, matchesMap, getGroupStandings);
+  const awayTeamResolved = resolveTeam(refMatch.away_team_name, matchesMap, getGroupStandings);
 
   const homeWins = hScore >= aScore;
 

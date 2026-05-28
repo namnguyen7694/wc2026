@@ -35,6 +35,7 @@ export default function ScheduleDashboard() {
   const isLoadedMatches = useMatchStore((state) => state.isLoaded);
   const isSimulated = useMatchStore((state) => state.isSimulated);
   const toggleSimulation = useMatchStore((state) => state.toggleSimulation);
+  const getGroupStandings = useMatchStore((state) => state.getGroupStandings);
 
   // Initialize Zustand global matches store on mount
   useEffect(() => {
@@ -201,19 +202,21 @@ export default function ScheduleDashboard() {
       })
       .map((m) => {
         if (m.phase === "knockout") {
-          const resolvedHome = resolveTeam(m.home_team_name, matchesMap);
-          const resolvedAway = resolveTeam(m.away_team_name, matchesMap);
+          const resolvedHome = resolveTeam(m.home_team_name, matchesMap, getGroupStandings);
+          const resolvedAway = resolveTeam(m.away_team_name, matchesMap, getGroupStandings);
           return {
             ...m,
             home_team_name: resolvedHome.name || m.home_team_name,
             home_team_iso2: resolvedHome.iso2 || m.home_team_iso2,
             away_team_name: resolvedAway.name || m.away_team_name,
             away_team_iso2: resolvedAway.iso2 || m.away_team_iso2,
+            home_placeholder: m.home_team_name !== resolvedHome.name ? m.home_team_name : undefined,
+            away_placeholder: m.away_team_name !== resolvedAway.name ? m.away_team_name : undefined,
           };
         }
         return m;
       });
-  }, [matches, searchQuery, matchesMap]);
+  }, [matches, searchQuery, matchesMap, getGroupStandings]);
 
   // List of all matches involving any of the user's favorite teams
   const favoriteTeamsMatches = useMemo(() => {
@@ -239,19 +242,21 @@ export default function ScheduleDashboard() {
       })
       .map((m) => {
         if (m.phase === "knockout") {
-          const resolvedHome = resolveTeam(m.home_team_name, matchesMap);
-          const resolvedAway = resolveTeam(m.away_team_name, matchesMap);
+          const resolvedHome = resolveTeam(m.home_team_name, matchesMap, getGroupStandings);
+          const resolvedAway = resolveTeam(m.away_team_name, matchesMap, getGroupStandings);
           return {
             ...m,
             home_team_name: resolvedHome.name || m.home_team_name,
             home_team_iso2: resolvedHome.iso2 || m.home_team_iso2,
             away_team_name: resolvedAway.name || m.away_team_name,
             away_team_iso2: resolvedAway.iso2 || m.away_team_iso2,
+            home_placeholder: m.home_team_name !== resolvedHome.name ? m.home_team_name : undefined,
+            away_placeholder: m.away_team_name !== resolvedAway.name ? m.away_team_name : undefined,
           };
         }
         return m;
       });
-  }, [matches, selectedDate, searchQuery, matchesMap]);
+  }, [matches, selectedDate, searchQuery, matchesMap, getGroupStandings]);
 
   // Filter matches for the "favorites" tab (resolving placeholder knockout teams dynamically)
   const favoriteMatches = useMemo(() => {
@@ -266,19 +271,21 @@ export default function ScheduleDashboard() {
       })
       .map((m) => {
         if (m.phase === "knockout") {
-          const resolvedHome = resolveTeam(m.home_team_name, matchesMap);
-          const resolvedAway = resolveTeam(m.away_team_name, matchesMap);
+          const resolvedHome = resolveTeam(m.home_team_name, matchesMap, getGroupStandings);
+          const resolvedAway = resolveTeam(m.away_team_name, matchesMap, getGroupStandings);
           return {
             ...m,
             home_team_name: resolvedHome.name || m.home_team_name,
             home_team_iso2: resolvedHome.iso2 || m.home_team_iso2,
             away_team_name: resolvedAway.name || m.away_team_name,
             away_team_iso2: resolvedAway.iso2 || m.away_team_iso2,
+            home_placeholder: m.home_team_name !== resolvedHome.name ? m.home_team_name : undefined,
+            away_placeholder: m.away_team_name !== resolvedAway.name ? m.away_team_name : undefined,
           };
         }
         return m;
       });
-  }, [matches, favorites, searchQuery, matchesMap]);
+  }, [matches, favorites, searchQuery, matchesMap, getGroupStandings]);
 
   // Group all matches by date chronologically
   const groupedMatches = useMemo(() => {

@@ -4,7 +4,8 @@ import React, { useState, useMemo } from "react";
 import { Match } from "../types/match";
 import MatchCard from "./MatchCard";
 import { GitCommit, Grid, TreeDeciduous, Trophy } from "lucide-react";
-import { getMatchOrFallback } from "../utils/matchUtils";
+import { getMatchOrFallback, resolveTeam } from "../utils/matchUtils";
+import { useMatchStore } from "../hooks/useMatchStore";
 
 interface KnockoutBracketProps {
   matches: Match[];
@@ -13,18 +14,37 @@ interface KnockoutBracketProps {
 export default function KnockoutBracket({ matches }: KnockoutBracketProps) {
   const [viewMode, setViewMode] = useState<"tree" | "list">("list");
   const [activeRound, setActiveRound] = useState<string>("all");
+  const getGroupStandings = useMatchStore((state) => state.getGroupStandings);
 
-  // Filter knockout matches
-  const knockoutMatches = useMemo(() => {
-    return matches.filter((m) => m.phase === "knockout");
-  }, [matches]);
+  // Filter and resolve knockout matches (Vercel optimization: batch-resolving)
+  const knockoutMatchesResolved = useMemo(() => {
+    // 1. Create a rapid matches map for resolution lookups of WXX/LXX
+    const tempMap = new Map<string, Match>();
+    matches.forEach((m) => tempMap.set(m.match_id, m));
 
-  // Index matches by match_id for rapid O(1) lookups (Vercel optimization: js-set-map-lookups)
+    return matches
+      .filter((m) => m.phase === "knockout")
+      .map((m) => {
+        const resolvedHome = resolveTeam(m.home_team_name, tempMap, getGroupStandings);
+        const resolvedAway = resolveTeam(m.away_team_name, tempMap, getGroupStandings);
+        return {
+          ...m,
+          home_team_name: resolvedHome.name || m.home_team_name,
+          home_team_iso2: resolvedHome.iso2 || m.home_team_iso2,
+          away_team_name: resolvedAway.name || m.away_team_name,
+          away_team_iso2: resolvedAway.iso2 || m.away_team_iso2,
+          home_placeholder: m.home_team_name !== resolvedHome.name ? m.home_team_name : undefined,
+          away_placeholder: m.away_team_name !== resolvedAway.name ? m.away_team_name : undefined,
+        };
+      });
+  }, [matches, getGroupStandings]);
+
+  // Index matches by match_id for rapid O(1) lookups
   const matchesMap = useMemo(() => {
     const map = new Map<string, Match>();
-    knockoutMatches.forEach((m) => map.set(m.match_id, m));
+    knockoutMatchesResolved.forEach((m) => map.set(m.match_id, m));
     return map;
-  }, [knockoutMatches]);
+  }, [knockoutMatchesResolved]);
 
   // Group by round for list view (retains chronological order)
   const groupedByRound = useMemo(() => {
@@ -36,7 +56,7 @@ export default function KnockoutBracket({ matches }: KnockoutBracketProps) {
       finals: { label: "Chung kết & Tranh hạng ba", matches: [] },
     };
 
-    knockoutMatches.forEach((m) => {
+    knockoutMatchesResolved.forEach((m) => {
       if (m.stage_key === "round32" || m.stage_key === "round_32") groups.round_32.matches.push(m);
       else if (m.stage_key === "round16" || m.stage_key === "round_16") groups.round_16.matches.push(m);
       else if (m.stage_key === "quarterfinal" || m.stage_key === "quarterfinals") groups.quarterfinals.matches.push(m);
@@ -45,7 +65,7 @@ export default function KnockoutBracket({ matches }: KnockoutBracketProps) {
     });
 
     return groups;
-  }, [knockoutMatches]);
+  }, [knockoutMatchesResolved]);
 
   // Map of specific matches in tree bracket (mathematically ordered to align branch lines)
   const rounds = useMemo(() => {

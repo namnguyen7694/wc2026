@@ -24,6 +24,8 @@ export interface Match {
   time_elapsed: string;
   home_scorers: string;
   away_scorers: string;
+  home_placeholder?: string;
+  away_placeholder?: string;
 }
 
 export interface UserScore {

@@ -177,7 +177,7 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
               )}
             </div>
             <span
-              className={`text-[10px] sm:text-xs font-bold w-full group-hover/team:text-secondary transition-colors flex items-center justify-center gap-0.5 min-w-0 ${
+              className={`text-[10px] sm:text-xs font-bold w-full group-hover/team:text-secondary transition-colors flex flex-col items-center justify-center gap-0.5 min-w-0 ${
                 isPlaceholderTeam(match.home_team_name)
                   ? "text-secondary/80 italic font-medium"
                   : isHomeFavorite
@@ -185,8 +185,15 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
                     : "text-foreground"
               }`}
             >
-              {isHomeFavorite && <Heart size={9} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
-              <span className="truncate pr-1 min-w-0">{match.home_team_name}</span>
+              <div className="flex items-center justify-center gap-0.5 w-full min-w-0">
+                {isHomeFavorite && <Heart size={9} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
+                <span className="truncate pr-1 min-w-0">{match.home_team_name}</span>
+              </div>
+              {match.home_placeholder && (
+                <span className="text-[8px] opacity-40 font-mono tracking-tight block select-none uppercase mt-0.5">
+                  ({match.home_placeholder})
+                </span>
+              )}
             </span>
           </div>
 
@@ -239,7 +246,7 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
               )}
             </div>
             <span
-              className={`text-[10px] sm:text-xs font-bold w-full group-hover/team:text-secondary transition-colors flex items-center justify-center gap-0.5 min-w-0 ${
+              className={`text-[10px] sm:text-xs font-bold w-full group-hover/team:text-secondary transition-colors flex flex-col items-center justify-center gap-0.5 min-w-0 ${
                 isPlaceholderTeam(match.away_team_name)
                   ? "text-secondary/80 italic font-medium"
                   : isAwayFavorite
@@ -247,8 +254,15 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
                     : "text-foreground"
               }`}
             >
-              {isAwayFavorite && <Heart size={9} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
-              <span className="truncate pr-1 min-w-0">{match.away_team_name}</span>
+              <div className="flex items-center justify-center gap-0.5 w-full min-w-0">
+                {isAwayFavorite && <Heart size={9} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
+                <span className="truncate pr-1 min-w-0">{match.away_team_name}</span>
+              </div>
+              {match.away_placeholder && (
+                <span className="text-[8px] opacity-40 font-mono tracking-tight block select-none uppercase mt-0.5">
+                  ({match.away_placeholder})
+                </span>
+              )}
             </span>
           </div>
         </div>
@@ -295,8 +309,13 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
                   <Trophy size={20} className="text-secondary/55" />
                 )}
               </div>
-              <span className="text-xs sm:text-sm font-black truncate w-full text-foreground group-hover/modal-team:text-secondary transition-colors">
-                {match.home_team_name}
+              <span className="text-xs sm:text-sm font-black truncate w-full text-foreground group-hover/modal-team:text-secondary transition-colors flex flex-col items-center">
+                <span>{match.home_team_name}</span>
+                {match.home_placeholder && (
+                  <span className="text-[9px] opacity-45 font-mono uppercase font-medium mt-0.5">
+                    ({match.home_placeholder})
+                  </span>
+                )}
               </span>
             </div>
 
@@ -343,8 +362,13 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
                   <Trophy size={20} className="text-secondary/55" />
                 )}
               </div>
-              <span className="text-xs sm:text-sm font-black truncate w-full text-foreground group-hover/modal-team:text-secondary transition-colors">
-                {match.away_team_name}
+              <span className="text-xs sm:text-sm font-black truncate w-full text-foreground group-hover/modal-team:text-secondary transition-colors flex flex-col items-center">
+                <span>{match.away_team_name}</span>
+                {match.away_placeholder && (
+                  <span className="text-[9px] opacity-45 font-mono uppercase font-medium mt-0.5">
+                    ({match.away_placeholder})
+                  </span>
+                )}
               </span>
             </div>
           </div>
