@@ -158,7 +158,7 @@ export default function GroupStandings({ matches }: GroupStandingsProps) {
           <h3 className="text-md font-extrabold text-secondary flex items-center gap-2">📅 Trận Đấu</h3>
           <div className="space-y-3 overflow-y-auto max-h-[400px] pr-1">
             {selectedGroupFixtures.map((match) => (
-              <div key={match.match_id} className="h-[125px]">
+              <div key={match.match_id} className="h-[148px]">
                 <MatchCard match={match} showDateHeader={true} />
               </div>
             ))}
