@@ -17,8 +17,6 @@ import {
   Flame,
   Star,
   Users,
-  Sparkles,
-  Activity,
   ChevronDown,
 } from "lucide-react";
 import { useMatchStore } from "../hooks/useMatchStore";
@@ -46,8 +44,6 @@ export default function ScheduleDashboard() {
   const fetchMatches = useMatchStore((state) => state.fetchMatches);
   const matches = useMatchStore((state) => state.matches);
   const isLoadedMatches = useMatchStore((state) => state.isLoaded);
-  const isSimulated = useMatchStore((state) => state.isSimulated);
-  const toggleSimulation = useMatchStore((state) => state.toggleSimulation);
   const getGroupStandings = useMatchStore((state) => state.getGroupStandings);
 
   // Initialize Zustand global matches store on mount
@@ -354,46 +350,7 @@ export default function ScheduleDashboard() {
       {/* 1. Stunning Hero Section */}
       <HeroBanner matches={matches} favorites={favorites} myTeams={myTeams} />
 
-      {/* 1.5. Simulation Control Bar */}
-      <div className="w-full glass-panel border border-card-border rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg bg-card-bg/40 backdrop-blur-md transition-all duration-300">
-        <div className="flex items-center gap-3">
-          <div
-            className={`p-2.5 rounded-xl transition-all duration-300 ${
-              isSimulated
-                ? "bg-amber-500/10 text-amber-500 border border-amber-500/20"
-                : "bg-primary/10 text-primary border border-primary/20"
-            }`}
-          >
-            {isSimulated ? <Sparkles size={20} className="animate-pulse" /> : <Activity size={20} />}
-          </div>
-          <div className="text-left space-y-0.5">
-            <h4 className="text-sm font-black text-foreground flex items-center gap-1.5">
-              {isSimulated ? "Chế độ mô phỏng tỷ số" : "Dữ liệu lịch thi đấu thực tế"}
-              {isSimulated && (
-                <span className="inline-flex px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-                  Simulated
-                </span>
-              )}
-            </h4>
-            <p className="text-[11px] text-foreground/50 font-bold max-w-md leading-relaxed">
-              {isSimulated
-                ? "Đã mô phỏng tỷ số vòng bảng nhằm hiển thị điểm số, hiệu số, và xếp hạng của 12 bảng đấu."
-                : "Hiển thị dữ liệu thực tế từ VNExpress. Hiện tại các trận đấu chưa diễn ra (0-0)."}
-            </p>
-          </div>
-        </div>
 
-        <button
-          onClick={toggleSimulation}
-          className={`relative flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-300 hover:scale-102 active:scale-98 shadow-md border cursor-pointer ${
-            isSimulated
-              ? "bg-amber-500 hover:bg-amber-600 text-white border-amber-600/30 shadow-amber-500/20"
-              : "bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-foreground border-slate-200 dark:border-white/10"
-          }`}
-        >
-          {isSimulated ? "Reset Dữ liệu thực tế" : "Kích hoạt Mô phỏng"}
-        </button>
-      </div>
 
       {/* 2. Dedicated Tab Selectors Bar */}
       <div className="w-full">

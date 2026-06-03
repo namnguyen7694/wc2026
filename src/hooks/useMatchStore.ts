@@ -10,10 +10,8 @@ interface MatchState {
   groups: Record<string, Match[]>;
   matchesByTeam: Record<string, Match[]>;
   isLoaded: boolean;
-  isSimulated: boolean;
   setMatches: (matches: Match[]) => void;
   fetchMatches: () => Promise<void>;
-  toggleSimulation: () => Promise<void>;
   getGroupStandings: (group: string) => GroupTeamStanding[];
 }
 
@@ -24,7 +22,6 @@ export const useMatchStore = create<MatchState>((set, get) => ({
   groups: {},
   matchesByTeam: {},
   isLoaded: false,
-  isSimulated: false,
   setMatches: (matches: Match[]) => {
     const matchesByDay: Record<string, Match[]> = {};
     const groups: Record<string, Match[]> = {};
@@ -84,23 +81,6 @@ export const useMatchStore = create<MatchState>((set, get) => ({
     // Avoid double fetching if already successfully loaded
     if (get().isLoaded && get().matches.length > 0) return;
 
-    let initialSimulated = false;
-    if (typeof window !== "undefined") {
-      initialSimulated = localStorage.getItem("wc2026_simulated") === "true";
-    }
-
-    set({ isSimulated: initialSimulated });
-
-    if (initialSimulated) {
-      try {
-        const { FALLBACK_CSV_SIMULATED } = await import("../constants/fallbackDataSimulated");
-        get().setMatches(parseCSV(FALLBACK_CSV_SIMULATED));
-        return;
-      } catch (err) {
-        console.error("Failed to load simulated fallback data, falling back to live:", err);
-      }
-    }
-
     const url = "/api/matches";
     try {
       const res = await fetch(url);
@@ -122,41 +102,6 @@ export const useMatchStore = create<MatchState>((set, get) => ({
         error instanceof Error ? error.message : error
       );
       get().setMatches(parseCSV(FALLBACK_CSV));
-    }
-  },
-  toggleSimulation: async () => {
-    const nextSimulated = !get().isSimulated;
-    set({ isSimulated: nextSimulated, isLoaded: false });
-
-    if (typeof window !== "undefined") {
-      localStorage.setItem("wc2026_simulated", nextSimulated ? "true" : "false");
-    }
-
-    if (nextSimulated) {
-      try {
-        const { FALLBACK_CSV_SIMULATED } = await import("../constants/fallbackDataSimulated");
-        get().setMatches(parseCSV(FALLBACK_CSV_SIMULATED));
-      } catch (err) {
-        console.error("Failed to load simulated fallback data:", err);
-        set({ isLoaded: true });
-      }
-    } else {
-      const url = "/api/matches";
-      try {
-        const res = await fetch(url);
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        const text = await res.text();
-        if (text && text.trim().startsWith('"match_id"')) {
-          get().setMatches(parseCSV(text));
-        } else {
-          throw new Error("Invalid CSV format returned from live API");
-        }
-      } catch (error) {
-        console.warn("Unable to fetch live data, using offline fallback data:", error);
-        get().setMatches(parseCSV(FALLBACK_CSV));
-      }
     }
   },
   getGroupStandings: (group: string) => {

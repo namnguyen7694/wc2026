@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Match, GroupTeamStanding } from "../types/match";
+import { Match } from "../types/match";
 import MatchCard from "./MatchCard";
 
 import { useMatchStore } from "../hooks/useMatchStore";
