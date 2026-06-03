@@ -8,17 +8,28 @@ import MatchCard from "./MatchCard";
 import GroupStandings from "./GroupStandings";
 import KnockoutBracket from "./KnockoutBracket";
 import CalendarPicker from "./ui/CalendarPicker";
-import { Calendar, Trophy, Heart, Search, Grid, Flame, Star, Users, Sparkles, Activity, ChevronDown } from "lucide-react";
+import {
+  Calendar,
+  Trophy,
+  Heart,
+  Search,
+  Grid,
+  Flame,
+  Star,
+  Users,
+  Sparkles,
+  Activity,
+  ChevronDown,
+} from "lucide-react";
 import { useMatchStore } from "../hooks/useMatchStore";
 import HeroBanner from "./HeroBanner";
 import FavoriteTeamsTab from "./FavoriteTeamsTab";
 import { resolveTeam } from "../utils/matchUtils";
 import { downloadMatchesIcsFile } from "../utils/calendarUtils";
 
-
 const TABS = [
-  { id: "all", label: "Tất cả trận đấu", icon: Grid },
   { id: "date", label: "Lịch thi đấu theo ngày", icon: Calendar },
+  { id: "all", label: "Tất cả trận đấu", icon: Grid },
   { id: "group", label: "Bảng đấu & Xếp hạng", icon: Trophy },
   { id: "knockout", label: "Nhánh đấu Knockout", icon: Flame },
   { id: "favorites", label: "Trận yêu thích", icon: Heart },
@@ -27,7 +38,7 @@ const TABS = [
 
 export default function ScheduleDashboard() {
   const [activeTab, setActiveTab] = useState<"date" | "all" | "group" | "knockout" | "favorites" | "favorite_teams">(
-    "all",
+    "date",
   );
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -68,10 +79,29 @@ export default function ScheduleDashboard() {
     });
   }, [matches]);
 
-  // Initialise first date when mounted
+  // Initialise selected date to today or the closest match date when mounted
   useEffect(() => {
     if (sortedDates.length > 0 && !selectedDate) {
-      setSelectedDate(sortedDates[0]);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const todayTime = today.getTime();
+
+      let closestDate = sortedDates[0];
+      let minDiff = Infinity;
+
+      sortedDates.forEach((dateStr) => {
+        const [day, month, year] = dateStr.split("/").map(Number);
+        const date = new Date(year, month - 1, day);
+        date.setHours(0, 0, 0, 0);
+        const diff = Math.abs(date.getTime() - todayTime);
+
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestDate = dateStr;
+        }
+      });
+
+      setSelectedDate(closestDate);
     }
   }, [sortedDates, selectedDate]);
 
@@ -327,11 +357,13 @@ export default function ScheduleDashboard() {
       {/* 1.5. Simulation Control Bar */}
       <div className="w-full glass-panel border border-card-border rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg bg-card-bg/40 backdrop-blur-md transition-all duration-300">
         <div className="flex items-center gap-3">
-          <div className={`p-2.5 rounded-xl transition-all duration-300 ${
-            isSimulated 
-              ? "bg-amber-500/10 text-amber-500 border border-amber-500/20" 
-              : "bg-primary/10 text-primary border border-primary/20"
-          }`}>
+          <div
+            className={`p-2.5 rounded-xl transition-all duration-300 ${
+              isSimulated
+                ? "bg-amber-500/10 text-amber-500 border border-amber-500/20"
+                : "bg-primary/10 text-primary border border-primary/20"
+            }`}
+          >
             {isSimulated ? <Sparkles size={20} className="animate-pulse" /> : <Activity size={20} />}
           </div>
           <div className="text-left space-y-0.5">
@@ -344,8 +376,8 @@ export default function ScheduleDashboard() {
               )}
             </h4>
             <p className="text-[11px] text-foreground/50 font-bold max-w-md leading-relaxed">
-              {isSimulated 
-                ? "Đã mô phỏng tỷ số vòng bảng nhằm hiển thị điểm số, hiệu số, và xếp hạng của 12 bảng đấu." 
+              {isSimulated
+                ? "Đã mô phỏng tỷ số vòng bảng nhằm hiển thị điểm số, hiệu số, và xếp hạng của 12 bảng đấu."
                 : "Hiển thị dữ liệu thực tế từ VNExpress. Hiện tại các trận đấu chưa diễn ra (0-0)."}
             </p>
           </div>
@@ -365,7 +397,7 @@ export default function ScheduleDashboard() {
 
       {/* 2. Dedicated Tab Selectors Bar */}
       <div className="w-full">
-        <div className="flex bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl p-1 overflow-x-auto scrollbar-none">
+        <div className="flex bg-slate-100 gap-2 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl p-1 overflow-x-auto scrollbar-none">
           {TABS.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
