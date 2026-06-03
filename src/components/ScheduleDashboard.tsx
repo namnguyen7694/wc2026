@@ -8,11 +8,13 @@ import MatchCard from "./MatchCard";
 import GroupStandings from "./GroupStandings";
 import KnockoutBracket from "./KnockoutBracket";
 import CalendarPicker from "./ui/CalendarPicker";
-import { Calendar, Trophy, Heart, Search, Grid, Flame, Star, Users, Sparkles, Activity } from "lucide-react";
+import { Calendar, Trophy, Heart, Search, Grid, Flame, Star, Users, Sparkles, Activity, ChevronDown } from "lucide-react";
 import { useMatchStore } from "../hooks/useMatchStore";
 import HeroBanner from "./HeroBanner";
 import FavoriteTeamsTab from "./FavoriteTeamsTab";
 import { resolveTeam } from "../utils/matchUtils";
+import { downloadMatchesIcsFile } from "../utils/calendarUtils";
+
 
 const TABS = [
   { id: "all", label: "Tất cả trận đấu", icon: Grid },
@@ -447,9 +449,40 @@ export default function ScheduleDashboard() {
 
             {activeTab === "all" && (
               <div className="space-y-6 animate-slide-up">
-                <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/5 pb-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-white/5 pb-2">
                   <div className="flex items-center gap-1.5 text-sm font-extrabold text-secondary">
                     <Grid size={16} /> Tất Cả Trận Đấu ({allMatchesResolved.length} trận)
+                  </div>
+
+                  {/* Bulk Calendar Download Dropdown */}
+                  <div className="relative group">
+                    <button className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 text-foreground/80 hover:text-foreground font-black text-xs transition-all duration-300 cursor-pointer select-none">
+                      <Calendar size={13} className="text-secondary" />
+                      <span>Tải lịch thi đấu (.ics)</span>
+                      <ChevronDown size={12} className="opacity-60 transition-transform group-hover:rotate-180" />
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    <div className="absolute right-0 mt-1.5 w-48 rounded-xl border border-card-border bg-card-bg/95 backdrop-blur-md shadow-2xl py-1.5 z-30 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300">
+                      <button
+                        onClick={() => downloadMatchesIcsFile(matches, "all")}
+                        className="w-full text-left px-4 py-2 text-xs font-bold text-foreground/80 hover:text-foreground hover:bg-slate-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      >
+                        📅 Tất cả trận đấu
+                      </button>
+                      <button
+                        onClick={() => downloadMatchesIcsFile(matches, "group")}
+                        className="w-full text-left px-4 py-2 text-xs font-bold text-foreground/80 hover:text-foreground hover:bg-slate-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      >
+                        🏆 Vòng bảng
+                      </button>
+                      <button
+                        onClick={() => downloadMatchesIcsFile(matches, "knockout")}
+                        className="w-full text-left px-4 py-2 text-xs font-bold text-foreground/80 hover:text-foreground hover:bg-slate-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      >
+                        🔥 Vòng knockout
+                      </button>
+                    </div>
                   </div>
                 </div>
                 {groupedMatches.length > 0 ? (

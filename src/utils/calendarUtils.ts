@@ -94,13 +94,13 @@ export function downloadIcsFile(match: Match): void {
   const title = `🏆 ${match.stage_label}${match.group ? ` • Bảng ${match.group}` : ""}: ${match.home_team_name} vs ${match.away_team_name} | World Cup 2026`;
   const location = `${match.stadium_name}, ${match.stadium_city}, ${match.stadium_country}`;
   
-  let details = `Trận đấu thuộc ${match.stage_label}${match.group ? ` - Bảng ${match.group}` : ""}.\\n`;
-  details += `Mã trận đấu: #${match.match_id}\\n`;
+  let details = `Trận đấu thuộc ${match.stage_label}${match.group ? ` - Bảng ${match.group}` : ""}.\n`;
+  details += `Mã trận đấu: #${match.match_id}\n`;
   if (match.home_placeholder || match.away_placeholder) {
-    details += `Vị trí bốc thăm: ${match.home_placeholder || match.home_team_name} vs ${match.away_placeholder || match.away_team_name}\\n`;
+    details += `Vị trí bốc thăm: ${match.home_placeholder || match.home_team_name} vs ${match.away_placeholder || match.away_team_name}\n`;
   }
-  details += `Sân vận động: ${match.stadium_name} (${match.stadium_city}, ${match.stadium_country})\\n`;
-  details += `\\nTheo dõi và cập nhật kết quả tại Lịch thi đấu World Cup 2026 Dashboard!`;
+  details += `Sân vận động: ${match.stadium_name} (${match.stadium_city}, ${match.stadium_country})\n`;
+  details += `\nTheo dõi và cập nhật kết quả tại Lịch thi đấu World Cup 2026 Dashboard!`;
 
   const escapeIcs = (str: string) => {
     return str
@@ -139,3 +139,84 @@ export function downloadIcsFile(match: Match): void {
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 }
+
+/**
+ * Filters and downloads a bulk .ics file containing multiple matches.
+ */
+export function downloadMatchesIcsFile(matches: Match[], filterType: "all" | "group" | "knockout"): void {
+  try {
+    const filteredMatches = matches.filter((match) => {
+      if (filterType === "group") return match.phase === "group";
+      if (filterType === "knockout") return match.phase === "knockout";
+      return true;
+    });
+
+    if (filteredMatches.length === 0) return;
+
+    const formatUTC = (date: Date) => {
+      return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+    };
+
+    const escapeIcs = (str: string) => {
+      return str
+        .replace(/\\/g, "\\\\")
+        .replace(/,/g, "\\,")
+        .replace(/;/g, "\\;")
+        .replace(/\n/g, "\\n");
+    };
+
+    const icsLines = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//Antigravity WC2026//NONSGML v1.0//EN",
+      "CALSCALE:GREGORIAN",
+    ];
+
+    filteredMatches.forEach((match) => {
+      const start = getMatchDate(match.local_date, match.utc_offset);
+      const end = new Date(start.getTime() + 2 * 60 * 60 * 1000); // Standard match duration of 2 hours
+
+      const title = `🏆 ${match.stage_label}${match.group ? ` • Bảng ${match.group}` : ""}: ${match.home_team_name} vs ${match.away_team_name} | World Cup 2026`;
+      const location = `${match.stadium_name}, ${match.stadium_city}, ${match.stadium_country}`;
+
+      let details = `Trận đấu thuộc ${match.stage_label}${match.group ? ` - Bảng ${match.group}` : ""}.\n`;
+      details += `Mã trận đấu: #${match.match_id}\n`;
+      if (match.home_placeholder || match.away_placeholder) {
+        details += `Vị trí bốc thăm: ${match.home_placeholder || match.home_team_name} vs ${match.away_placeholder || match.away_team_name}\n`;
+      }
+      details += `Sân vận động: ${match.stadium_name} (${match.stadium_city}, ${match.stadium_country})\n`;
+      details += `\nTheo dõi và cập nhật kết quả tại Lịch thi đấu World Cup 2026 Dashboard!`;
+
+      icsLines.push("BEGIN:VEVENT");
+      icsLines.push(`UID:wc2026-match-${match.match_id}@wc2026.app`);
+      icsLines.push(`DTSTAMP:${formatUTC(new Date())}`);
+      icsLines.push(`DTSTART:${formatUTC(start)}`);
+      icsLines.push(`DTEND:${formatUTC(end)}`);
+      icsLines.push(`SUMMARY:${escapeIcs(title)}`);
+      icsLines.push(`DESCRIPTION:${escapeIcs(details)}`);
+      icsLines.push(`LOCATION:${escapeIcs(location)}`);
+      icsLines.push("END:VEVENT");
+    });
+
+    icsLines.push("END:VCALENDAR");
+
+    const icsContent = icsLines.join("\r\n");
+    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+
+    let fileName = "worldcup2026_lich_thi_dau_all.ics";
+    if (filterType === "group") fileName = "worldcup2026_lich_thi_dau_vong_bang.ics";
+    if (filterType === "knockout") fileName = "worldcup2026_lich_thi_dau_knockout.ics";
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error("Error generating bulk calendar file:", err);
+  }
+}
+
