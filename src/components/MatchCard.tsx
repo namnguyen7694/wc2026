@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Match } from "../types/match";
-import { Star, MapPin, Trophy, Clock, Heart } from "lucide-react";
+import { Star, MapPin, Trophy, Clock, Heart, Calendar, Download } from "lucide-react";
 import Modal from "./ui/Modal";
+import { getGoogleCalendarUrl, downloadIcsFile } from "../utils/calendarUtils";
 
 interface MatchCardProps {
   match: Match;
@@ -432,6 +433,35 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
                 </span>
               </div>
             </div>
+
+            {/* Calendar Integration Section */}
+            <div className="bg-slate-50 dark:bg-white/[0.01] border border-slate-200/50 dark:border-white/5 rounded-2xl p-4 space-y-3">
+              <h4 className="text-[10px] font-black text-secondary uppercase tracking-widest flex items-center gap-1.5 select-none">
+                <Calendar size={12} className="text-secondary" /> ĐỒNG BỘ LỊCH THI ĐẤU
+              </h4>
+              <p className="text-[11px] text-foreground/60 leading-relaxed font-medium">
+                Thêm trận đấu này vào Google Calendar hoặc tải file (.ics) cho Apple Calendar, Outlook để nhận nhắc hẹn và không bỏ lỡ trận cầu!
+              </p>
+              <div className="grid grid-cols-2 gap-3 pt-1">
+                <a
+                  href={getGoogleCalendarUrl(match)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl border border-blue-500/20 bg-blue-500/5 hover:bg-blue-500/10 text-blue-600 dark:text-blue-400 font-extrabold text-xs transition-all duration-300 cursor-pointer select-none"
+                >
+                  <Calendar size={14} />
+                  <span>Google Calendar</span>
+                </a>
+                <button
+                  onClick={() => downloadIcsFile(match)}
+                  className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl border border-emerald-500/20 bg-emerald-500/5 hover:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-extrabold text-xs cursor-pointer transition-all duration-300 select-none"
+                >
+                  <Download size={14} />
+                  <span>Apple / Outlook (.ics)</span>
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
       </Modal>
