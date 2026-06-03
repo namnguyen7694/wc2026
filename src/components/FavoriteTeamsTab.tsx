@@ -115,7 +115,7 @@ export default function FavoriteTeamsTab({
           {favoriteTeamsMatches.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {favoriteTeamsMatches.map((match) => (
-                <div key={match.match_id} className="h-[125px]">
+                <div key={match.match_id} className="h-[148px]">
                   <MatchCard match={match} />
                 </div>
               ))}

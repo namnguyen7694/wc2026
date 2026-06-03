@@ -198,7 +198,7 @@ export default function KnockoutBracket({ matches }: KnockoutBracketProps) {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
                   {value.matches.map((match) => (
-                    <div key={match.match_id} className="h-[125px]">
+                    <div key={match.match_id} className="h-[148px]">
                       <MatchCard
                         match={match}
                         showDateHeader={true}
@@ -213,32 +213,34 @@ export default function KnockoutBracket({ matches }: KnockoutBracketProps) {
       ) : (
         /* TREE BRACKET VIEW (Strict Mathematical Layout to ensure perfect horizontal alignment) */
         <div className="w-full overflow-x-auto pb-6 select-none scrollbar-thin animate-slide-up">
-          <div className="flex gap-12 min-w-[1400px] justify-between p-4 h-[2180px]">
+          <div className="flex gap-12 min-w-[1400px] justify-between p-4 h-[2880px]">
             {/* 1. Round of 32 (Column 1) */}
             <div className="flex flex-col w-64">
               <div className="text-center font-extrabold text-xs text-secondary border-b border-white/10 pb-2 mb-4 h-[24px]">
                 VÒNG 32 ĐỘI (1/16)
               </div>
-              <div className="flex flex-col h-[2088px] space-y-6">
+              <div className="flex flex-col h-[2784px] space-y-8">
                 {Array.from({ length: 8 }).map((_, pairIndex) => {
                   const m1 = rounds.round32.matches[pairIndex * 2];
                   const m2 = rounds.round32.matches[pairIndex * 2 + 1];
                   return (
-                    <div key={pairIndex} style={{ height: "240px" }} className="relative flex flex-col justify-between">
-                      <div className="h-[110px] relative">
+                    <div key={pairIndex} style={{ height: "320px" }} className="relative flex flex-col justify-between">
+                      <div className="h-[150px] relative">
                         <MatchCard
                           match={m1}
                           showDateHeader
+                          size="sm"
                         />
                       </div>
-                      <div className="h-[110px] relative">
+                      <div className="h-[150px] relative">
                         <MatchCard
                           match={m2}
                           showDateHeader
+                          size="sm"
                         />
                       </div>
                       {/* Tree Bracket Connector Lines */}
-                      <div className="absolute top-[55px] bottom-[55px] right-[-24px] w-[24px] border-y border-r border-slate-300 dark:border-white/15 rounded-r-lg pointer-events-none transition-all duration-300">
+                      <div className="absolute top-[75px] bottom-[75px] right-[-24px] w-[24px] border-y border-r border-slate-300 dark:border-white/15 rounded-r-lg pointer-events-none transition-all duration-300">
                         <div className="absolute top-1/2 right-[-24px] w-[24px] h-[1px] bg-slate-300 dark:bg-white/15" />
                       </div>
                     </div>
@@ -252,24 +254,26 @@ export default function KnockoutBracket({ matches }: KnockoutBracketProps) {
               <div className="text-center font-extrabold text-xs text-secondary border-b border-white/10 pb-2 mb-4 h-[24px]">
                 VÒNG 16 ĐỘI (1/8)
               </div>
-              <div className="flex flex-col h-[2088px] space-y-6">
+              <div className="flex flex-col h-[2784px] space-y-8">
                 {Array.from({ length: 4 }).map((_, pairIndex) => {
                   const m1 = rounds.round16.matches[pairIndex * 2];
                   const m2 = rounds.round16.matches[pairIndex * 2 + 1];
                   return (
-                    <div key={pairIndex} style={{ height: "504px" }} className="relative flex flex-col justify-between py-[65px]">
-                      <div className="h-[110px] relative">
+                    <div key={pairIndex} style={{ height: "672px" }} className="relative flex flex-col justify-between py-[85px]">
+                      <div className="h-[150px] relative">
                         <MatchCard
                           match={m1}
+                          size="sm"
                         />
                       </div>
-                      <div className="h-[110px] relative">
+                      <div className="h-[150px] relative">
                         <MatchCard
                           match={m2}
+                          size="sm"
                         />
                       </div>
                       {/* Tree Bracket Connector Lines */}
-                      <div className="absolute top-[120px] bottom-[120px] right-[-24px] w-[24px] border-y border-r border-slate-300 dark:border-white/15 rounded-r-lg pointer-events-none transition-all duration-300">
+                      <div className="absolute top-[160px] bottom-[160px] right-[-24px] w-[24px] border-y border-r border-slate-300 dark:border-white/15 rounded-r-lg pointer-events-none transition-all duration-300">
                         <div className="absolute top-1/2 right-[-24px] w-[24px] h-[1px] bg-slate-300 dark:bg-white/15" />
                       </div>
                     </div>
@@ -283,24 +287,26 @@ export default function KnockoutBracket({ matches }: KnockoutBracketProps) {
               <div className="text-center font-extrabold text-xs text-secondary border-b border-white/10 pb-2 mb-4 h-[24px]">
                 TỨ KẾT
               </div>
-              <div className="flex flex-col h-[2088px] space-y-6">
+              <div className="flex flex-col h-[2784px] space-y-8">
                 {Array.from({ length: 2 }).map((_, pairIndex) => {
                   const m1 = rounds.quarterfinal.matches[pairIndex * 2];
                   const m2 = rounds.quarterfinal.matches[pairIndex * 2 + 1];
                   return (
-                    <div key={pairIndex} style={{ height: "1032px" }} className="relative flex flex-col justify-between py-[197px]">
-                      <div className="h-[110px] relative">
+                    <div key={pairIndex} style={{ height: "1376px" }} className="relative flex flex-col justify-between py-[261px]">
+                      <div className="h-[150px] relative">
                         <MatchCard
                           match={m1}
+                          size="sm"
                         />
                       </div>
-                      <div className="h-[110px] relative">
+                      <div className="h-[150px] relative">
                         <MatchCard
                           match={m2}
+                          size="sm"
                         />
                       </div>
                       {/* Tree Bracket Connector Lines */}
-                      <div className="absolute top-[252px] bottom-[252px] right-[-24px] w-[24px] border-y border-r border-slate-300 dark:border-white/15 rounded-r-lg pointer-events-none transition-all duration-300">
+                      <div className="absolute top-[336px] bottom-[336px] right-[-24px] w-[24px] border-y border-r border-slate-300 dark:border-white/15 rounded-r-lg pointer-events-none transition-all duration-300">
                         <div className="absolute top-1/2 right-[-24px] w-[24px] h-[1px] bg-slate-300 dark:bg-white/15" />
                       </div>
                     </div>
@@ -314,20 +320,22 @@ export default function KnockoutBracket({ matches }: KnockoutBracketProps) {
               <div className="text-center font-extrabold text-xs text-secondary border-b border-white/10 pb-2 mb-4 h-[24px]">
                 BÁN KẾT
               </div>
-              <div className="flex flex-col h-[2088px]">
-                <div style={{ height: "2088px" }} className="relative flex flex-col justify-between py-[461px]">
-                  <div className="h-[110px] relative">
+              <div className="flex flex-col h-[2784px]">
+                <div style={{ height: "2784px" }} className="relative flex flex-col justify-between py-[613px]">
+                  <div className="h-[150px] relative">
                     <MatchCard
                       match={rounds.semifinal.matches[0]}
+                      size="sm"
                     />
                   </div>
-                  <div className="h-[110px] relative">
+                  <div className="h-[150px] relative">
                     <MatchCard
                       match={rounds.semifinal.matches[1]}
+                      size="sm"
                     />
                   </div>
                   {/* Tree Bracket Connector Lines */}
-                  <div className="absolute top-[516px] bottom-[516px] right-[-24px] w-[24px] border-y border-r border-slate-300 dark:border-white/15 rounded-r-lg pointer-events-none transition-all duration-300">
+                  <div className="absolute top-[688px] bottom-[688px] right-[-24px] w-[24px] border-y border-r border-slate-300 dark:border-white/15 rounded-r-lg pointer-events-none transition-all duration-300">
                     <div className="absolute top-1/2 right-[-24px] w-[24px] h-[1px] bg-slate-300 dark:bg-white/15" />
                   </div>
                 </div>
@@ -339,22 +347,23 @@ export default function KnockoutBracket({ matches }: KnockoutBracketProps) {
               <div className="text-center font-extrabold text-xs text-secondary border-b border-white/10 pb-2 mb-4 h-[24px]">
                 CHUNG KẾT & TRANH HẠNG BA
               </div>
-              <div className="relative h-[2088px]">
+              <div className="relative h-[2784px]">
                 {/* Final */}
                 {rounds.finals.matches
                   .filter((m) => m.stage_key === "final")
                   .map((match) => (
                     <div
                       key={match.match_id}
-                      style={{ top: "1044px", transform: "translateY(-50%)" }}
+                      style={{ top: "1392px", transform: "translateY(-50%)" }}
                       className="absolute left-0 right-0 space-y-2 border-2 border-secondary/20 rounded-2xl p-2 bg-secondary/5 animate-pulse-gold"
                     >
                       <div className="text-[10px] font-black text-secondary text-center uppercase tracking-wider flex items-center justify-center gap-1">
                         🏆 <Trophy size={10} /> Trận Chung Kết
                       </div>
-                      <div className="h-[110px]">
+                      <div className="h-[150px]">
                         <MatchCard
                           match={match}
+                          size="sm"
                         />
                       </div>
                     </div>
@@ -366,15 +375,16 @@ export default function KnockoutBracket({ matches }: KnockoutBracketProps) {
                   .map((match) => (
                     <div
                       key={match.match_id}
-                      style={{ top: "1280px" }}
+                      style={{ top: "1700px" }}
                       className="absolute left-0 right-0 space-y-2 border border-white/10 rounded-2xl p-2 bg-white/5"
                     >
                       <div className="text-[10px] font-bold text-foreground/50 text-center uppercase tracking-wider">
                         🥉 Trận Tranh Hạng Ba
                       </div>
-                      <div className="h-[110px]">
+                      <div className="h-[150px]">
                         <MatchCard
                           match={match}
+                          size="sm"
                         />
                       </div>
                     </div>

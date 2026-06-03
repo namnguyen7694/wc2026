@@ -466,7 +466,7 @@ export default function ScheduleDashboard() {
                 {filteredMatchesByDate.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {filteredMatchesByDate.map((match) => (
-                      <div key={match.match_id} className="h-[125px]">
+                      <div key={match.match_id} className="h-[148px]">
                         <MatchCard match={match} />
                       </div>
                     ))}
@@ -495,7 +495,7 @@ export default function ScheduleDashboard() {
                     </button>
 
                     {/* Dropdown Menu */}
-                    <div className="absolute right-0 mt-1.5 w-48 rounded-xl border border-card-border bg-card-bg/95 backdrop-blur-md shadow-2xl py-1.5 z-30 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300">
+                    <div className="absolute left-0 sm:left-auto sm:right-0 mt-1.5 w-48 rounded-xl border border-card-border bg-card-bg/95 backdrop-blur-md shadow-2xl py-1.5 z-30 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300">
                       <button
                         onClick={() => downloadMatchesIcsFile(matches, "all")}
                         className="w-full text-left px-4 py-2 text-xs font-bold text-foreground/80 hover:text-foreground hover:bg-slate-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
@@ -532,7 +532,7 @@ export default function ScheduleDashboard() {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                           {group.matches.map((match) => (
-                            <div key={match.match_id} className="h-[125px]">
+                            <div key={match.match_id} className="h-[148px]">
                               <MatchCard match={match} />
                             </div>
                           ))}
@@ -569,7 +569,7 @@ export default function ScheduleDashboard() {
                 {favoriteMatches.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {favoriteMatches.map((match) => (
-                      <div key={match.match_id} className="h-[125px]">
+                      <div key={match.match_id} className="h-[148px]">
                         <MatchCard match={match} />
                       </div>
                     ))}

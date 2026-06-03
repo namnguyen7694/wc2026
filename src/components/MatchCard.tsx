@@ -10,9 +10,10 @@ import { getGoogleCalendarUrl, downloadIcsFile } from "../utils/calendarUtils";
 interface MatchCardProps {
   match: Match;
   showDateHeader?: boolean;
+  size?: "sm" | "md";
 }
 
-export default React.memo(function MatchCard({ match, showDateHeader = false }: MatchCardProps) {
+export default React.memo(function MatchCard({ match, showDateHeader = false, size = "md" }: MatchCardProps) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -124,14 +125,35 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
     return !name || /^\d[A-L]$|^W\d+|^L\d+|^3[A-L]\//.test(name);
   };
 
+  const isSm = size === "sm";
+
+  // Size mapping variables
+  const cardPadding = isSm ? "p-2 sm:p-2.5" : "p-3.5 sm:p-4.5";
+  const metaText = isSm ? "text-[9px] sm:text-[10px]" : "text-xs sm:text-sm";
+  const metaMargin = isSm ? "mb-1 sm:mb-1.5" : "mb-2.5 sm:mb-3.5";
+  const flagWrapper = isSm ? "w-8 h-5 sm:w-10 sm:h-7 mb-1" : "w-12 h-8 sm:w-16 sm:h-10 mb-1.5 sm:mb-2";
+  const flagIconSize = isSm ? 12 : 18;
+  const teamText = isSm ? "text-[9px] sm:text-[10px]" : "text-xs sm:text-[13px] md:text-sm";
+  const placeholderText = isSm ? "text-[7px]" : "text-[8px] sm:text-[9px]";
+  const heartIconSize = isSm ? 8 : 10;
+  
+  const scorePadding = isSm ? "px-2 py-0.5 sm:px-2.5 sm:py-1" : "px-3.5 py-1.5 sm:px-5 sm:py-2.5";
+  const scoreText = isSm ? "text-xs sm:text-sm md:text-base" : "text-base sm:text-lg md:text-xl";
+  const scoreColonText = isSm ? "text-[10px]" : "text-xs";
+  const timeText = isSm ? "text-[7px] sm:text-[8px]" : "text-[9px] sm:text-[10px]";
+  
+  const footerMargin = isSm ? "mt-1 sm:mt-1.5 pt-1" : "mt-2.5 sm:mt-3.5 pt-2";
+  const footerText = isSm ? "text-[8px] sm:text-[9px]" : "text-[10px] sm:text-xs";
+  const mapPinSize = isSm ? 9 : 11;
+
   return (
     <>
       <div
         onClick={() => setIsModalOpen(true)}
-        className="glass-panel glass-panel-hover rounded-2xl overflow-hidden p-2.5 sm:p-3.5 relative flex flex-col justify-between h-full group text-foreground transition-all duration-300 cursor-pointer select-none border border-card-border"
+        className={`glass-panel glass-panel-hover rounded-2xl overflow-hidden ${cardPadding} relative flex flex-col justify-between h-full group text-foreground transition-all duration-300 cursor-pointer select-none border border-card-border`}
       >
         {/* Top Meta info */}
-        <div className="flex items-center justify-between mb-1.5 sm:mb-2.5 text-[10px] sm:text-xs">
+        <div className={`flex items-center justify-between ${metaMargin} ${metaText}`}>
           <span className="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200/50 dark:border-white/5 text-foreground/70 font-bold tracking-tight">
             {showDateHeader
               ? match.local_date.split(" ")[0]
@@ -146,7 +168,7 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
               className="text-foreground/40 hover:text-amber-400 p-1 rounded-lg transition-colors cursor-pointer"
               aria-label={isFavorite ? "Bỏ yêu thích" : "Yêu thích"}
             >
-              <Star size={14} className={isFavorite ? "fill-amber-400 text-amber-400" : ""} />
+              <Star size={isSm ? 12 : 14} className={isFavorite ? "fill-amber-400 text-amber-400" : ""} />
             </button>
           </div>
         </div>
@@ -162,7 +184,7 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
                 : ""
             }`}
           >
-            <div className="relative w-9 h-6 sm:w-11 sm:h-8 rounded shadow-sm overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-1 sm:mb-2 group-hover/team:border-secondary transition-colors">
+            <div className={`relative ${flagWrapper} rounded shadow-sm overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover/team:border-secondary transition-colors`}>
               {getFlagUrl(match.home_team_iso2) ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -174,11 +196,11 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
                   }}
                 />
               ) : (
-                <Trophy size={14} className="text-secondary/55" />
+                <Trophy size={flagIconSize} className="text-secondary/55" />
               )}
             </div>
             <span
-              className={`text-[10px] sm:text-xs font-bold w-full group-hover/team:text-secondary transition-colors flex flex-col items-center justify-center gap-0.5 min-w-0 ${
+              className={`font-bold w-full group-hover/team:text-secondary transition-colors flex flex-col items-center justify-center gap-0.5 min-w-0 ${teamText} ${
                 isPlaceholderTeam(match.home_team_name)
                   ? "text-secondary/80 italic font-medium"
                   : isHomeFavorite
@@ -187,11 +209,11 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
               }`}
             >
               <div className="flex items-center justify-center gap-0.5 w-full min-w-0">
-                {isHomeFavorite && <Heart size={9} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
+                {isHomeFavorite && <Heart size={heartIconSize} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
                 <span className="truncate pr-1 min-w-0">{match.home_team_name}</span>
               </div>
               {match.home_placeholder && (
-                <span className="text-[8px] opacity-40 font-mono tracking-tight block select-none uppercase mt-0.5">
+                <span className={`opacity-40 font-mono tracking-tight block select-none uppercase mt-0.5 ${placeholderText}`}>
                   ({match.home_placeholder})
                 </span>
               )}
@@ -199,24 +221,24 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
           </div>
 
           {/* Center Score / State Indicator */}
-          <div className="flex flex-col items-center px-2.5 py-1 sm:px-4 sm:py-2 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 select-none">
+          <div className={`flex flex-col items-center ${scorePadding} rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 select-none`}>
             {match.status === "notstarted" ? (
-              <span className="text-xs sm:text-sm font-black text-foreground/44 tracking-widest py-0.5 sm:py-1 block">
+              <span className={`font-black text-foreground/44 tracking-widest py-0.5 sm:py-1 block ${scoreText}`}>
                 - - -
               </span>
             ) : (
-              <div className="flex items-center gap-1 text-sm sm:text-base md:text-lg font-black tracking-wider text-foreground">
+              <div className={`flex items-center gap-1 font-black tracking-wider text-foreground ${scoreText}`}>
                 <span>{homeScore}</span>
-                <span className="text-foreground/45 font-medium text-xs">:</span>
+                <span className={`text-foreground/45 font-medium ${scoreColonText}`}>:</span>
                 <span>{awayScore}</span>
               </div>
             )}
             {match.status === "notstarted" ? (
-              <span className="text-[8px] sm:text-[9px] text-secondary font-extrabold mt-0.5">
+              <span className={`text-secondary font-extrabold mt-0.5 ${timeText}`}>
                 {match.local_date.split(" ")[1]}
               </span>
             ) : (
-              <span className="text-[8px] sm:text-[9px] text-emerald-500 dark:text-emerald-400 font-extrabold mt-0.5 uppercase tracking-tighter">
+              <span className={`text-emerald-500 dark:text-emerald-400 font-extrabold mt-0.5 uppercase tracking-tighter ${timeText}`}>
                 {match.status === "finished" ? "Xong" : "Live"}
               </span>
             )}
@@ -231,7 +253,7 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
                 : ""
             }`}
           >
-            <div className="relative w-9 h-6 sm:w-11 sm:h-8 rounded shadow-sm overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-1 sm:mb-2 group-hover/team:border-secondary transition-colors">
+            <div className={`relative ${flagWrapper} rounded shadow-sm overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover/team:border-secondary transition-colors`}>
               {getFlagUrl(match.away_team_iso2) ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -243,11 +265,11 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
                   }}
                 />
               ) : (
-                <Trophy size={14} className="text-secondary/55" />
+                <Trophy size={flagIconSize} className="text-secondary/55" />
               )}
             </div>
             <span
-              className={`text-[10px] sm:text-xs font-bold w-full group-hover/team:text-secondary transition-colors flex flex-col items-center justify-center gap-0.5 min-w-0 ${
+              className={`font-bold w-full group-hover/team:text-secondary transition-colors flex flex-col items-center justify-center gap-0.5 min-w-0 ${teamText} ${
                 isPlaceholderTeam(match.away_team_name)
                   ? "text-secondary/80 italic font-medium"
                   : isAwayFavorite
@@ -256,11 +278,11 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
               }`}
             >
               <div className="flex items-center justify-center gap-0.5 w-full min-w-0">
-                {isAwayFavorite && <Heart size={9} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
+                {isAwayFavorite && <Heart size={heartIconSize} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
                 <span className="truncate pr-1 min-w-0">{match.away_team_name}</span>
               </div>
               {match.away_placeholder && (
-                <span className="text-[8px] opacity-40 font-mono tracking-tight block select-none uppercase mt-0.5">
+                <span className={`opacity-40 font-mono tracking-tight block select-none uppercase mt-0.5 ${placeholderText}`}>
                   ({match.away_placeholder})
                 </span>
               )}
@@ -269,8 +291,8 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
         </div>
 
         {/* Stadium / Location footer */}
-        <div className="mt-1.5 sm:mt-2.5 pt-1.5 border-t border-slate-200/60 dark:border-white/5 flex items-center gap-1.5 text-[9px] sm:text-[10px] text-foreground/50">
-          <MapPin size={10} className="text-secondary" />
+        <div className={`${footerMargin} border-t border-slate-200/60 dark:border-white/5 flex items-center gap-1.5 text-foreground/50 ${footerText}`}>
+          <MapPin size={mapPinSize} className="text-secondary" />
           <span className="truncate flex-1 font-bold">{match.stadium_city}</span>
           {!showDateHeader && (
             <span className="text-right whitespace-nowrap opacity-85">
@@ -442,7 +464,7 @@ export default React.memo(function MatchCard({ match, showDateHeader = false }: 
               <p className="text-[11px] text-foreground/60 leading-relaxed font-medium">
                 Thêm trận đấu này vào Google Calendar hoặc tải file (.ics) cho Apple Calendar, Outlook để nhận nhắc hẹn và không bỏ lỡ trận cầu!
               </p>
-              <div className="grid grid-cols-2 gap-3 pt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 <a
                   href={getGoogleCalendarUrl(match)}
                   target="_blank"
