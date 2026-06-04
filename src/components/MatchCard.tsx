@@ -11,9 +11,15 @@ interface MatchCardProps {
   match: Match;
   showDateHeader?: boolean;
   size?: "sm" | "md";
+  variant?: "card" | "row";
 }
 
-export default React.memo(function MatchCard({ match, showDateHeader = false, size = "md" }: MatchCardProps) {
+export default React.memo(function MatchCard({
+  match,
+  showDateHeader = false,
+  size = "md",
+  variant = "card",
+}: MatchCardProps) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -136,18 +142,18 @@ export default React.memo(function MatchCard({ match, showDateHeader = false, si
   const teamText = isSm ? "text-[9px] sm:text-[10px]" : "text-xs sm:text-[13px] md:text-sm";
   const placeholderText = isSm ? "text-[7px]" : "text-[8px] sm:text-[9px]";
   const heartIconSize = isSm ? 8 : 10;
-  
+
   const scorePadding = isSm ? "px-2 py-0.5 sm:px-2.5 sm:py-1" : "px-3.5 py-1.5 sm:px-5 sm:py-2.5";
   const scoreText = isSm ? "text-xs sm:text-sm md:text-base" : "text-base sm:text-lg md:text-xl";
   const scoreColonText = isSm ? "text-[10px]" : "text-xs";
   const timeText = isSm ? "text-[7px] sm:text-[8px]" : "text-[9px] sm:text-[10px]";
-  
+
   const footerMargin = isSm ? "mt-1 sm:mt-1.5 pt-1" : "mt-2.5 sm:mt-3.5 pt-2";
   const footerText = isSm ? "text-[8px] sm:text-[9px]" : "text-[10px] sm:text-xs";
   const mapPinSize = isSm ? 9 : 11;
 
-  return (
-    <>
+  const renderCard = () => {
+    return (
       <div
         onClick={() => setIsModalOpen(true)}
         className={`glass-panel glass-panel-hover rounded-2xl overflow-hidden ${cardPadding} relative flex flex-col justify-between ${isSm ? "h-full" : "h-[200px]"} group text-foreground transition-all duration-300 cursor-pointer select-none border border-card-border`}
@@ -192,7 +198,9 @@ export default React.memo(function MatchCard({ match, showDateHeader = false, si
                 : ""
             }`}
           >
-            <div className={`relative ${flagWrapper} rounded shadow-sm overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover/team:border-secondary transition-colors`}>
+            <div
+              className={`relative ${flagWrapper} rounded shadow-sm overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover/team:border-secondary transition-colors`}
+            >
               {getFlagUrl(match.home_team_iso2) ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -221,7 +229,9 @@ export default React.memo(function MatchCard({ match, showDateHeader = false, si
                 <span className="truncate pr-1 min-w-0">{match.home_team_name}</span>
               </div>
               {match.home_placeholder && (
-                <span className={`opacity-40 font-mono tracking-tight block select-none uppercase mt-0.5 ${placeholderText}`}>
+                <span
+                  className={`opacity-40 font-mono tracking-tight block select-none uppercase mt-0.5 ${placeholderText}`}
+                >
                   ({match.home_placeholder})
                 </span>
               )}
@@ -229,7 +239,9 @@ export default React.memo(function MatchCard({ match, showDateHeader = false, si
           </div>
 
           {/* Center Score / State Indicator */}
-          <div className={`flex flex-col items-center ${scorePadding} rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 select-none`}>
+          <div
+            className={`flex flex-col items-center ${scorePadding} rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 select-none`}
+          >
             {match.status === "notstarted" ? (
               <span className={`font-black text-foreground/44 tracking-widest py-0.5 sm:py-1 block ${scoreText}`}>
                 - - -
@@ -246,7 +258,9 @@ export default React.memo(function MatchCard({ match, showDateHeader = false, si
                 {match.local_date.split(" ")[1]}
               </span>
             ) : (
-              <span className={`text-emerald-500 dark:text-emerald-400 font-extrabold mt-0.5 uppercase tracking-tighter ${timeText}`}>
+              <span
+                className={`text-emerald-500 dark:text-emerald-400 font-extrabold mt-0.5 uppercase tracking-tighter ${timeText}`}
+              >
                 {match.status === "finished" ? "Xong" : "Live"}
               </span>
             )}
@@ -261,7 +275,9 @@ export default React.memo(function MatchCard({ match, showDateHeader = false, si
                 : ""
             }`}
           >
-            <div className={`relative ${flagWrapper} rounded shadow-sm overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover/team:border-secondary transition-colors`}>
+            <div
+              className={`relative ${flagWrapper} rounded shadow-sm overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover/team:border-secondary transition-colors`}
+            >
               {getFlagUrl(match.away_team_iso2) ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -290,7 +306,9 @@ export default React.memo(function MatchCard({ match, showDateHeader = false, si
                 <span className="truncate pr-1 min-w-0">{match.away_team_name}</span>
               </div>
               {match.away_placeholder && (
-                <span className={`opacity-40 font-mono tracking-tight block select-none uppercase mt-0.5 ${placeholderText}`}>
+                <span
+                  className={`opacity-40 font-mono tracking-tight block select-none uppercase mt-0.5 ${placeholderText}`}
+                >
                   ({match.away_placeholder})
                 </span>
               )}
@@ -299,13 +317,15 @@ export default React.memo(function MatchCard({ match, showDateHeader = false, si
         </div>
 
         {/* Stadium / Location footer */}
-        <div className={`${footerMargin} border-t border-slate-200/60 dark:border-white/5 flex items-center justify-between gap-1.5 text-foreground/50 ${footerText} relative`}>
+        <div
+          className={`${footerMargin} border-t border-slate-200/60 dark:border-white/5 flex items-center justify-between gap-1.5 text-foreground/50 ${footerText} relative`}
+        >
           <div className="flex items-center gap-1.5 min-w-0 flex-1 pr-6">
             <MapPin size={mapPinSize} className="text-secondary flex-shrink-0" />
             <span className="truncate font-bold">{match.stadium_city}</span>
           </div>
 
-          <div className="absolute left-1/2 -translate-x-1/2 select-none font-mono">
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none font-mono">
             <span className="text-[9px] font-black text-foreground/40 bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded border border-slate-200/50 dark:border-white/5">
               #{match.match_id}
             </span>
@@ -320,6 +340,163 @@ export default React.memo(function MatchCard({ match, showDateHeader = false, si
           </div>
         </div>
       </div>
+    );
+  };
+
+  const renderRow = () => {
+    return (
+      <tr
+        onClick={() => setIsModalOpen(true)}
+        className="border-b border-slate-200/60 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/[0.02] cursor-pointer transition-colors text-xs sm:text-sm font-medium"
+      >
+        {/* Match ID */}
+        <td className="px-4 py-3 select-none font-mono text-[10px] font-black text-foreground/45">
+          <span className="bg-slate-100/80 dark:bg-white/5 px-1.5 py-0.5 rounded border border-slate-200/40 dark:border-white/5">
+            {match.match_id}
+          </span>
+        </td>
+
+        {/* Date & Time */}
+        <td className="px-4 py-3 whitespace-nowrap text-foreground/80 font-bold">
+          <div className="flex flex-col">
+            <span>{match.local_date.split(" ")[0]}</span>
+            <span className="text-[10px] text-foreground/40 font-normal">{match.local_date.split(" ")[1]}</span>
+          </div>
+        </td>
+
+        {/* Stage / Group */}
+        <td className="px-4 py-3 whitespace-nowrap hidden md:table-cell text-foreground/60 text-xs">
+          <span className="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200/50 dark:border-white/5 font-semibold">
+            {match.stage_label}
+            {match.group ? ` • ${match.group}` : ""}
+          </span>
+        </td>
+
+        {/* Home Team */}
+        <td className="px-4 py-3 text-right font-bold w-1/4 min-w-[120px]">
+          <div
+            onClick={(e) => handleTeamClick(e, match.home_team_iso2)}
+            className={`inline-flex items-center gap-2 justify-end ${
+              match.home_team_iso2 && !isPlaceholderTeam(match.home_team_name)
+                ? "cursor-pointer group/team hover:scale-102 transition-transform"
+                : ""
+            }`}
+          >
+            <span
+              className={`truncate flex items-center gap-1 ${
+                isPlaceholderTeam(match.home_team_name)
+                  ? "text-secondary/80 italic font-medium text-xs sm:text-sm"
+                  : isHomeFavorite
+                    ? "text-rose-600 dark:text-rose-400 font-extrabold"
+                    : "text-foreground group-hover/team:text-secondary transition-colors"
+              }`}
+            >
+              {isHomeFavorite && <Heart size={heartIconSize} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
+              {match.home_team_name}
+            </span>
+            <div className="w-6 h-4 rounded overflow-hidden shadow-sm bg-slate-100 dark:bg-white/5 border border-slate-200/50 flex items-center justify-center flex-shrink-0 group-hover/team:border-secondary transition-colors">
+              {getFlagUrl(match.home_team_iso2) ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={getFlagUrl(match.home_team_iso2)!}
+                  alt={match.home_team_name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = "none";
+                  }}
+                />
+              ) : (
+                <Trophy size={8} className="text-secondary/55" />
+              )}
+            </div>
+          </div>
+        </td>
+
+        {/* Score / VS */}
+        <td className="px-2 py-3 text-center whitespace-nowrap font-black">
+          {match.status === "notstarted" ? (
+            <span className="text-foreground/40 text-xs font-mono">vs</span>
+          ) : (
+            <span className="px-2 py-1 bg-slate-100 dark:bg-white/5 rounded-lg border border-slate-200/50 text-foreground text-xs sm:text-sm font-black">
+              {match.home_score} - {match.away_score}
+            </span>
+          )}
+        </td>
+
+        {/* Away Team */}
+        <td className="px-4 py-3 text-left font-bold w-1/4 min-w-[120px]">
+          <div
+            onClick={(e) => handleTeamClick(e, match.away_team_iso2)}
+            className={`inline-flex items-center gap-2 justify-start ${
+              match.away_team_iso2 && !isPlaceholderTeam(match.away_team_name)
+                ? "cursor-pointer group/team hover:scale-102 transition-transform"
+                : ""
+            }`}
+          >
+            <div className="w-6 h-4 rounded overflow-hidden shadow-sm bg-slate-100 dark:bg-white/5 border border-slate-200/50 flex items-center justify-center flex-shrink-0 group-hover/team:border-secondary transition-colors">
+              {getFlagUrl(match.away_team_iso2) ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={getFlagUrl(match.away_team_iso2)!}
+                  alt={match.away_team_name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = "none";
+                  }}
+                />
+              ) : (
+                <Trophy size={8} className="text-secondary/55" />
+              )}
+            </div>
+            <span
+              className={`truncate flex items-center gap-1 ${
+                isPlaceholderTeam(match.away_team_name)
+                  ? "text-secondary/80 italic font-medium text-xs sm:text-sm"
+                  : isAwayFavorite
+                    ? "text-rose-600 dark:text-rose-400 font-extrabold"
+                    : "text-foreground group-hover/team:text-secondary transition-colors"
+              }`}
+            >
+              {match.away_team_name}
+              {isAwayFavorite && <Heart size={heartIconSize} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
+            </span>
+          </div>
+        </td>
+
+        {/* Stadium / City */}
+        <td className="px-4 py-3 hidden lg:table-cell text-foreground/50 text-xs truncate max-w-[120px]">
+          {match.stadium_city}
+        </td>
+
+        {/* Actions */}
+        <td className="px-4 py-3 text-right whitespace-nowrap">
+          <div className="flex items-center justify-end gap-1.5">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                downloadIcsFile(match);
+              }}
+              className="text-foreground/40 hover:text-emerald-500 p-1 rounded-lg transition-colors cursor-pointer"
+              title="Tải lịch thi đấu (.ics)"
+            >
+              <Download size={14} />
+            </button>
+            <button
+              onClick={handleToggleFavoriteInternal}
+              className="text-foreground/40 hover:text-amber-400 p-1 rounded-lg transition-colors cursor-pointer"
+              title={isFavorite ? "Bỏ yêu thích" : "Yêu thích"}
+            >
+              <Star size={14} className={isFavorite ? "fill-amber-400 text-amber-400" : ""} />
+            </button>
+          </div>
+        </td>
+      </tr>
+    );
+  };
+
+  return (
+    <>
+      {variant === "row" ? renderRow() : renderCard()}
 
       {/* Match Detail Modal Dialog */}
       <Modal
@@ -481,7 +658,8 @@ export default React.memo(function MatchCard({ match, showDateHeader = false, si
                 <Calendar size={12} className="text-secondary" /> ĐỒNG BỘ LỊCH THI ĐẤU
               </h4>
               <p className="text-[11px] text-foreground/60 leading-relaxed font-medium">
-                Thêm trận đấu này vào Google Calendar hoặc tải file (.ics) cho Apple Calendar, Outlook để nhận nhắc hẹn và không bỏ lỡ trận cầu!
+                Thêm trận đấu này vào Google Calendar hoặc tải file (.ics) cho Apple Calendar, Outlook để nhận nhắc hẹn
+                và không bỏ lỡ trận cầu!
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 <a
@@ -502,7 +680,6 @@ export default React.memo(function MatchCard({ match, showDateHeader = false, si
                 </button>
               </div>
             </div>
-
           </div>
         </div>
       </Modal>
