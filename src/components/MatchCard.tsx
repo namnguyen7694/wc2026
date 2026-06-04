@@ -159,10 +159,18 @@ export default React.memo(function MatchCard({ match, showDateHeader = false, si
               ? match.local_date.split(" ")[0]
               : `${match.stage_label}${match.group ? ` • Bảng ${match.group}` : ""}`}
           </span>
-          <div className="flex items-center gap-1.5">
-            <span className="text-[9px] font-black text-foreground/40 bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded border border-slate-200/50 dark:border-white/5 select-none font-mono">
-              #{match.match_id}
-            </span>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                downloadIcsFile(match);
+              }}
+              className="text-foreground/40 hover:text-emerald-500 p-1 rounded-lg transition-colors cursor-pointer"
+              aria-label="Tải lịch thi đấu (.ics)"
+              title="Tải lịch thi đấu (.ics)"
+            >
+              <Download size={isSm ? 12 : 14} />
+            </button>
             <button
               onClick={handleToggleFavoriteInternal}
               className="text-foreground/40 hover:text-amber-400 p-1 rounded-lg transition-colors cursor-pointer"
@@ -291,14 +299,25 @@ export default React.memo(function MatchCard({ match, showDateHeader = false, si
         </div>
 
         {/* Stadium / Location footer */}
-        <div className={`${footerMargin} border-t border-slate-200/60 dark:border-white/5 flex items-center gap-1.5 text-foreground/50 ${footerText}`}>
-          <MapPin size={mapPinSize} className="text-secondary" />
-          <span className="truncate flex-1 font-bold">{match.stadium_city}</span>
-          {!showDateHeader && (
-            <span className="text-right whitespace-nowrap opacity-85">
-              {match.local_date.split(" ")[0].slice(0, 5)}
+        <div className={`${footerMargin} border-t border-slate-200/60 dark:border-white/5 flex items-center justify-between gap-1.5 text-foreground/50 ${footerText} relative`}>
+          <div className="flex items-center gap-1.5 min-w-0 flex-1 pr-6">
+            <MapPin size={mapPinSize} className="text-secondary flex-shrink-0" />
+            <span className="truncate font-bold">{match.stadium_city}</span>
+          </div>
+
+          <div className="absolute left-1/2 -translate-x-1/2 select-none font-mono">
+            <span className="text-[9px] font-black text-foreground/40 bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded border border-slate-200/50 dark:border-white/5">
+              #{match.match_id}
             </span>
-          )}
+          </div>
+
+          <div className="flex-shrink-0 pl-6">
+            {!showDateHeader && (
+              <span className="text-right whitespace-nowrap opacity-85">
+                {match.local_date.split(" ")[0].slice(0, 5)}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
