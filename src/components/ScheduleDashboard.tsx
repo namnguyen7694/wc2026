@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { Match } from "../types/match";
 import { usePersistentState } from "../hooks/usePersistentState";
 import PremiumToggle from "./ui/PremiumToggle";
@@ -8,17 +8,7 @@ import MatchCard from "./MatchCard";
 import GroupStandings from "./GroupStandings";
 import KnockoutBracket from "./KnockoutBracket";
 import CalendarPicker from "./ui/CalendarPicker";
-import {
-  Calendar,
-  Trophy,
-  Heart,
-  Search,
-  Grid,
-  Flame,
-  Star,
-  Users,
-  ChevronDown,
-} from "lucide-react";
+import { Calendar, Trophy, Heart, Search, Grid, Flame, Star, Users, ChevronDown } from "lucide-react";
 import { useMatchStore } from "../hooks/useMatchStore";
 import HeroBanner from "./HeroBanner";
 import FavoriteTeamsTab from "./FavoriteTeamsTab";
@@ -40,6 +30,28 @@ export default function ScheduleDashboard() {
   );
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [canHover, setCanHover] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCanHover(window.matchMedia("(hover: hover)").matches);
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const fetchMatches = useMatchStore((state) => state.fetchMatches);
   const matches = useMatchStore((state) => state.matches);
@@ -350,8 +362,6 @@ export default function ScheduleDashboard() {
       {/* 1. Stunning Hero Section */}
       <HeroBanner matches={matches} favorites={favorites} myTeams={myTeams} />
 
-
-
       {/* 2. Dedicated Tab Selectors Bar */}
       <div className="w-full">
         <div className="flex bg-slate-100 gap-2 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl p-1 overflow-x-auto scrollbar-none">
@@ -442,32 +452,57 @@ export default function ScheduleDashboard() {
                   </div>
 
                   {/* Bulk Calendar Download Dropdown */}
-                  <div className="relative group">
-                    <button className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 text-foreground/80 hover:text-foreground font-black text-xs transition-all duration-300 cursor-pointer select-none">
+                  <div className="relative group" ref={dropdownRef}>
+                    <button
+                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                      className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 text-foreground/80 hover:text-foreground font-black text-xs transition-all duration-300 cursor-pointer select-none"
+                    >
                       <Calendar size={13} className="text-secondary" />
                       <span>Tải lịch thi đấu (.ics)</span>
-                      <ChevronDown size={12} className="opacity-60 transition-transform group-hover:rotate-180" />
+                      <ChevronDown
+                        size={12}
+                        className={`opacity-60 transition-transform ${
+                          isDropdownOpen ? "rotate-180" : canHover ? "group-hover:rotate-180" : ""
+                        }`}
+                      />
                     </button>
 
                     {/* Dropdown Menu */}
-                    <div className="absolute left-0 sm:left-auto sm:right-0 mt-1.5 w-48 rounded-xl border border-card-border bg-card-bg/95 backdrop-blur-md shadow-2xl py-1.5 z-30 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300">
+                    <div
+                      className={`absolute left-0 sm:left-auto sm:right-0 mt-1.5 w-48 rounded-xl border border-card-border bg-card-bg/95 backdrop-blur-md shadow-2xl py-1.5 z-30 transition-all duration-300 ${
+                        isDropdownOpen
+                          ? "opacity-100 visible translate-y-0"
+                          : `opacity-0 invisible translate-y-1 ${
+                              canHover ? "group-hover:opacity-100 group-hover:visible group-hover:translate-y-0" : ""
+                            }`
+                      }`}
+                    >
                       <button
-                        onClick={() => downloadMatchesIcsFile(matches, "all")}
+                        onClick={() => {
+                          downloadMatchesIcsFile(matches, "all");
+                          setIsDropdownOpen(false);
+                        }}
                         className="w-full text-left px-4 py-2 text-xs font-bold text-foreground/80 hover:text-foreground hover:bg-slate-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
                       >
-                        📅 Tất cả trận đấu
+                        📅 <span className="ml-2">Tất cả trận đấu</span>
                       </button>
                       <button
-                        onClick={() => downloadMatchesIcsFile(matches, "group")}
+                        onClick={() => {
+                          downloadMatchesIcsFile(matches, "group");
+                          setIsDropdownOpen(false);
+                        }}
                         className="w-full text-left px-4 py-2 text-xs font-bold text-foreground/80 hover:text-foreground hover:bg-slate-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
                       >
-                        🏆 Vòng bảng
+                        🏆 <span className="ml-2">Vòng bảng</span>
                       </button>
                       <button
-                        onClick={() => downloadMatchesIcsFile(matches, "knockout")}
+                        onClick={() => {
+                          downloadMatchesIcsFile(matches, "knockout");
+                          setIsDropdownOpen(false);
+                        }}
                         className="w-full text-left px-4 py-2 text-xs font-bold text-foreground/80 hover:text-foreground hover:bg-slate-50 dark:hover:bg-white/5 transition-colors cursor-pointer"
                       >
-                        🔥 Vòng knockout
+                        🔥 <span className="ml-2"> </span>Vòng knockout
                       </button>
                     </div>
                   </div>
