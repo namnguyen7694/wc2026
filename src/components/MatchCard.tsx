@@ -150,7 +150,7 @@ export default React.memo(function MatchCard({ match, showDateHeader = false, si
     <>
       <div
         onClick={() => setIsModalOpen(true)}
-        className={`glass-panel glass-panel-hover rounded-2xl overflow-hidden ${cardPadding} relative flex flex-col justify-between h-full group text-foreground transition-all duration-300 cursor-pointer select-none border border-card-border`}
+        className={`glass-panel glass-panel-hover rounded-2xl overflow-hidden ${cardPadding} relative flex flex-col justify-between ${isSm ? "h-full" : "h-[200px]"} group text-foreground transition-all duration-300 cursor-pointer select-none border border-card-border`}
       >
         {/* Top Meta info */}
         <div className={`flex items-center justify-between ${metaMargin} ${metaText}`}>

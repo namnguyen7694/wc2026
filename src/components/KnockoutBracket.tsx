@@ -198,12 +198,11 @@ export default function KnockoutBracket({ matches }: KnockoutBracketProps) {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
                   {value.matches.map((match) => (
-                    <div key={match.match_id} className="h-[148px]">
-                      <MatchCard
-                        match={match}
-                        showDateHeader={true}
-                      />
-                    </div>
+                    <MatchCard
+                      key={match.match_id}
+                      match={match}
+                      showDateHeader={true}
+                    />
                   ))}
                 </div>
               </div>

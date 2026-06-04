@@ -423,9 +423,7 @@ export default function ScheduleDashboard() {
                 {filteredMatchesByDate.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {filteredMatchesByDate.map((match) => (
-                      <div key={match.match_id} className="h-[148px]">
-                        <MatchCard match={match} />
-                      </div>
+                      <MatchCard key={match.match_id} match={match} />
                     ))}
                   </div>
                 ) : (
@@ -489,9 +487,7 @@ export default function ScheduleDashboard() {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                           {group.matches.map((match) => (
-                            <div key={match.match_id} className="h-[148px]">
-                              <MatchCard match={match} />
-                            </div>
+                            <MatchCard key={match.match_id} match={match} />
                           ))}
                         </div>
                       </div>
@@ -526,9 +522,7 @@ export default function ScheduleDashboard() {
                 {favoriteMatches.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {favoriteMatches.map((match) => (
-                      <div key={match.match_id} className="h-[148px]">
-                        <MatchCard match={match} />
-                      </div>
+                      <MatchCard key={match.match_id} match={match} />
                     ))}
                   </div>
                 ) : (
