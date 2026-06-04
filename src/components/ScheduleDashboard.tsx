@@ -24,12 +24,55 @@ const TABS = [
   { id: "favorite_teams", label: "Đội yêu thích", icon: Users },
 ] as const;
 
+export type TabId = (typeof TABS)[number]["id"];
+
+const VALID_TABS = TABS.map((tab) => tab.id) as readonly TabId[];
+
+// Helper function to extract and sort unique dates (defined at module level to satisfy React Compiler purity checks)
+function getSortedDates(matches: Match[]): string[] {
+  const allDates = matches.map((m) => m.local_date.split(" ")[0]);
+  const uniqueDates = Array.from(new Set(allDates));
+
+  return uniqueDates.sort((a, b) => {
+    const [dayA, monthA, yearA] = a.split("/").map(Number);
+    const [dayB, monthB, yearB] = b.split("/").map(Number);
+    if (yearA !== yearB) return yearA - yearB;
+    if (monthA !== monthB) return monthA - monthB;
+    return dayA - dayB;
+  });
+}
+
+// Helper function to find the match date closest to today (defined at module level to satisfy React Compiler purity checks)
+function getClosestDate(sortedDates: string[]): string {
+  if (sortedDates.length === 0) return "";
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const todayTime = today.getTime();
+
+  let closestDate = sortedDates[0];
+  let minDiff = Infinity;
+
+  sortedDates.forEach((dateStr) => {
+    const [day, month, year] = dateStr.split("/").map(Number);
+    const date = new Date(year, month - 1, day);
+    date.setHours(0, 0, 0, 0);
+    const diff = Math.abs(date.getTime() - todayTime);
+
+    if (diff < minDiff) {
+      minDiff = diff;
+      closestDate = dateStr;
+    }
+  });
+
+  return closestDate;
+}
+
 export default function ScheduleDashboard() {
-  const [activeTab, setActiveTab] = useState<"date" | "all" | "group" | "knockout" | "favorites" | "favorite_teams">(
-    "date",
-  );
+  const [activeTab, setActiveTab] = useState<TabId>("date");
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [canHover, setCanHover] = useState(false);
@@ -77,41 +120,88 @@ export default function ScheduleDashboard() {
   }, [matches]);
 
   // Extract and sort unique dates from all matches (both group and knockout stage)
-  const sortedDates = useMemo(() => {
-    const allDates = matches.map((m) => m.local_date.split(" ")[0]);
+  const sortedDates = useMemo(() => getSortedDates(matches), [matches]);
 
-    return Array.from(new Set(allDates)).sort((a, b) => {
-      const [dayA, monthA, yearA] = a.split("/").map(Number);
-      const [dayB, monthB, yearB] = b.split("/").map(Number);
-      return new Date(yearA, monthA - 1, dayA).getTime() - new Date(yearB, monthB - 1, dayB).getTime();
-    });
-  }, [matches]);
+  const handleTabChange = (tabId: TabId) => {
+    setActiveTab(tabId);
+  };
 
-  // Initialise selected date to today or the closest match date when mounted
+  // Sync tab with URL search parameters
   useEffect(() => {
-    if (sortedDates.length > 0 && !selectedDate) {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const todayTime = today.getTime();
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get("tab") as TabId | null;
 
-      let closestDate = sortedDates[0];
-      let minDiff = Infinity;
+      let nextTab: TabId = "date";
+      if (tabParam && (VALID_TABS as readonly string[]).includes(tabParam)) {
+        nextTab = tabParam;
+      }
+      setActiveTab(nextTab);
+    };
 
-      sortedDates.forEach((dateStr) => {
-        const [day, month, year] = dateStr.split("/").map(Number);
-        const date = new Date(year, month - 1, day);
-        date.setHours(0, 0, 0, 0);
-        const diff = Math.abs(date.getTime() - todayTime);
+    // Run once on mount to restore state
+    handlePopState();
 
-        if (diff < minDiff) {
-          minDiff = diff;
-          closestDate = dateStr;
-        }
-      });
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
-      setSelectedDate(closestDate);
+  // Synchronize activeTab changes to URL search parameters
+  useEffect(() => {
+    if (typeof window === "undefined" || !isLoadedMatches) return;
+
+    const url = new URL(window.location.href);
+    const currentTab = url.searchParams.get("tab");
+
+    let changed = false;
+
+    // Synchronize tab: default tab "date" remains clean (no ?tab=date)
+    if (activeTab === "date") {
+      if (url.searchParams.has("tab")) {
+        url.searchParams.delete("tab");
+        changed = true;
+      }
+    } else {
+      if (currentTab !== activeTab) {
+        url.searchParams.set("tab", activeTab);
+        changed = true;
+      }
     }
-  }, [sortedDates, selectedDate]);
+
+    if (changed) {
+      window.history.pushState({}, "", url.pathname + url.search);
+    }
+  }, [activeTab, isLoadedMatches]);
+
+  // Save selectedDate to localStorage when changed
+  useEffect(() => {
+    if (typeof window !== "undefined" && selectedDate) {
+      localStorage.setItem("wc2026_selected_date", selectedDate);
+    }
+  }, [selectedDate]);
+
+  // Initialise selected date to localStorage, today, or the closest match date when mounted
+  useEffect(() => {
+    if (isLoadedMatches && sortedDates.length > 0 && !selectedDate) {
+      let initialDate = "";
+      if (typeof window !== "undefined") {
+        try {
+          const savedDate = localStorage.getItem("wc2026_selected_date");
+          if (savedDate && sortedDates.includes(savedDate)) {
+            initialDate = savedDate;
+          }
+        } catch {}
+      }
+
+      if (initialDate) {
+        setSelectedDate(initialDate);
+      } else {
+        setSelectedDate(getClosestDate(sortedDates));
+      }
+    }
+  }, [isLoadedMatches, sortedDates, selectedDate]);
 
   // Sync favorites when changed in child MatchCards via CustomEvent
   useEffect(() => {
@@ -371,7 +461,7 @@ export default function ScheduleDashboard() {
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => handleTabChange(tab.id)}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap ${
                   isActive
                     ? "bg-primary text-white scale-100"
