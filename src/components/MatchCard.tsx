@@ -12,6 +12,8 @@ interface MatchCardProps {
   showDateHeader?: boolean;
   size?: "sm" | "md";
   variant?: "card" | "row";
+  showDate?: boolean;
+  dateRowSpan?: number;
 }
 
 export default React.memo(function MatchCard({
@@ -19,6 +21,8 @@ export default React.memo(function MatchCard({
   showDateHeader = false,
   size = "md",
   variant = "card",
+  showDate = true,
+  dateRowSpan,
 }: MatchCardProps) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -356,11 +360,26 @@ export default React.memo(function MatchCard({
           </span>
         </td>
 
-        {/* Date & Time */}
-        <td className="px-4 py-3 whitespace-nowrap text-foreground/80 font-bold">
-          <div className="flex flex-col">
-            <span>{match.local_date.split(" ")[0]}</span>
-            <span className="text-[10px] text-foreground/40 font-normal">{match.local_date.split(" ")[1]}</span>
+        {/* Date (Merged) */}
+        {showDate && (
+          <td
+            rowSpan={dateRowSpan}
+            onClick={(e) => e.stopPropagation()}
+            className="px-4 py-3 text-center align-middle whitespace-nowrap text-foreground/80 font-bold border-r border-slate-200/60 dark:border-white/5 bg-slate-50/[0.015] dark:bg-white/[0.005] select-none"
+          >
+            <div className="flex flex-col items-center justify-center">
+              <span className="text-xs sm:text-sm font-black text-primary dark:text-rose-400 bg-primary/15 border border-primary/25 dark:border-rose-500/25 px-2.5 py-1 rounded-xl whitespace-nowrap shadow-sm">
+                {match.local_date.split(" ")[0].slice(0, 5)}
+              </span>
+            </div>
+          </td>
+        )}
+
+        {/* Time */}
+        <td className="px-4 py-3 whitespace-nowrap text-foreground/80 font-bold align-middle">
+          <div className="flex items-center gap-1.5 text-xs font-extrabold text-foreground/70">
+            <Clock size={13} className="text-secondary/70" />
+            <span>{match.local_date.split(" ")[1]}</span>
           </div>
         </td>
 

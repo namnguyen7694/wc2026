@@ -444,6 +444,33 @@ export default function ScheduleDashboard() {
     return groupedMatches.flatMap((group) => group.matches);
   }, [groupedMatches]);
 
+  // Precompute row span and show date flag info for the table view
+  const tableRowConfig = useMemo(() => {
+    const configs: { [matchId: string]: { showDate: boolean; rowSpan: number } } = {};
+    let lastDate = "";
+
+    allMatchesSortedByDate.forEach((match, index) => {
+      const currentDate = match.local_date.split(" ")[0];
+      if (currentDate !== lastDate) {
+        lastDate = currentDate;
+        // Count how many matches share this date
+        let count = 0;
+        for (let i = index; i < allMatchesSortedByDate.length; i++) {
+          if (allMatchesSortedByDate[i].local_date.split(" ")[0] === currentDate) {
+            count++;
+          } else {
+            break;
+          }
+        }
+        configs[match.match_id] = { showDate: true, rowSpan: count };
+      } else {
+        configs[match.match_id] = { showDate: false, rowSpan: 0 };
+      }
+    });
+
+    return configs;
+  }, [allMatchesSortedByDate]);
+
   // Format date display (e.g. "12/06/2026" -> "Ngày 12/06")
   const formatDateDisplay = (dateStr: string) => {
     if (!dateStr) return "";
@@ -639,7 +666,8 @@ export default function ScheduleDashboard() {
                         <thead className="bg-slate-50 dark:bg-white/[0.02] text-xs font-black text-foreground/50 uppercase tracking-wider border-b border-slate-200 dark:border-white/5 select-none">
                           <tr>
                             <th className="px-4 py-3 w-[60px]">ID</th>
-                            <th className="px-4 py-3 w-[130px]">Thời gian</th>
+                            <th className="px-4 py-3 w-[100px] text-center">Ngày</th>
+                            <th className="px-4 py-3 w-[80px]">Giờ</th>
                             <th className="px-4 py-3 hidden md:table-cell w-[180px]">Vòng đấu</th>
                             <th className="px-4 py-3 text-right">Đội 1</th>
                             <th className="px-2 py-3 text-center w-[90px]">Tỉ số</th>
@@ -649,9 +677,18 @@ export default function ScheduleDashboard() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-200/60 dark:divide-white/5">
-                          {allMatchesSortedByDate.map((match) => (
-                            <MatchCard key={match.match_id} match={match} variant="row" />
-                          ))}
+                          {allMatchesSortedByDate.map((match) => {
+                            const config = tableRowConfig[match.match_id] || { showDate: true, rowSpan: 1 };
+                            return (
+                              <MatchCard
+                                key={match.match_id}
+                                match={match}
+                                variant="row"
+                                showDate={config.showDate}
+                                dateRowSpan={config.rowSpan}
+                              />
+                            );
+                          })}
                         </tbody>
                       </table>
                     </div>
