@@ -11,7 +11,7 @@ interface MatchCardProps {
   match: Match;
   showDateHeader?: boolean;
   size?: "sm" | "md";
-  variant?: "card" | "row";
+  variant?: "card" | "row" | "mobile-row";
   showDate?: boolean;
   dateRowSpan?: number;
 }
@@ -482,11 +482,6 @@ export default React.memo(function MatchCard({
           </div>
         </td>
 
-        {/* Stadium / City */}
-        <td className="px-4 py-3 hidden lg:table-cell text-foreground/50 text-xs truncate max-w-[120px]">
-          {match.stadium_city}
-        </td>
-
         {/* Actions */}
         <td className="px-4 py-3 text-right whitespace-nowrap">
           <div className="flex items-center justify-end gap-1.5">
@@ -513,9 +508,106 @@ export default React.memo(function MatchCard({
     );
   };
 
+  const renderMobileRow = () => {
+    return (
+      <div
+        onClick={() => setIsModalOpen(true)}
+        className="flex items-center justify-between gap-2 p-3 bg-card-bg/60 border border-card-border hover:bg-slate-50 dark:hover:bg-white/[0.02] cursor-pointer rounded-xl transition-all duration-300 select-none animate-fade-in"
+      >
+        {/* Left: ID & Time */}
+        <div className="flex flex-col flex-shrink-0 items-start justify-center w-[50px]">
+          <div className="flex items-center gap-0.5 text-xs font-black text-secondary">
+            <span>{match.local_date.split(" ")[1]}</span>
+          </div>
+        </div>
+
+        {/* Center: Home - Score - Away */}
+        <div className="flex items-center justify-between flex-1 min-w-0 px-2 border-l border-r border-slate-200/60 dark:border-white/5">
+          {/* Home Team */}
+          <div className="flex items-center gap-1.5 justify-end flex-1 min-w-0 text-right">
+            <span
+              className={`text-xs font-bold truncate ${
+                isPlaceholderTeam(match.home_team_name)
+                  ? "text-secondary/70 italic font-medium"
+                  : isHomeFavorite
+                    ? "text-rose-600 dark:text-rose-400 font-extrabold"
+                    : "text-foreground"
+              }`}
+            >
+              {match.home_team_name}
+            </span>
+            <div className="w-5 h-3.5 rounded-sm overflow-hidden shadow-sm bg-slate-100 dark:bg-white/5 border border-slate-200/50 flex items-center justify-center flex-shrink-0">
+              {getFlagUrl(match.home_team_iso2) ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={getFlagUrl(match.home_team_iso2)!}
+                  alt={match.home_team_name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <Trophy size={6} className="text-secondary/55" />
+              )}
+            </div>
+          </div>
+
+          {/* Score or VS badge */}
+          <div className="flex-shrink-0 mx-2 min-w-[50px] text-center">
+            {match.status === "notstarted" ? (
+              <span className="text-[9px] font-black text-foreground/40 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-md border border-slate-200/40 dark:border-white/5 uppercase select-none">
+                vs
+              </span>
+            ) : (
+              <span className="px-2 py-0.5 bg-primary/10 border border-primary/20 text-primary dark:text-rose-400 rounded-md text-[11px] font-black tracking-tight select-none">
+                {match.home_score} - {match.away_score}
+              </span>
+            )}
+          </div>
+
+          {/* Away Team */}
+          <div className="flex items-center gap-1.5 justify-start flex-1 min-w-0 text-left">
+            <div className="w-5 h-3.5 rounded-sm overflow-hidden shadow-sm bg-slate-100 dark:bg-white/5 border border-slate-200/50 flex items-center justify-center flex-shrink-0">
+              {getFlagUrl(match.away_team_iso2) ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={getFlagUrl(match.away_team_iso2)!}
+                  alt={match.away_team_name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <Trophy size={6} className="text-secondary/55" />
+              )}
+            </div>
+            <span
+              className={`text-xs font-bold truncate ${
+                isPlaceholderTeam(match.away_team_name)
+                  ? "text-secondary/70 italic font-medium"
+                  : isAwayFavorite
+                    ? "text-rose-600 dark:text-rose-400 font-extrabold"
+                    : "text-foreground"
+              }`}
+            >
+              {match.away_team_name}
+            </span>
+          </div>
+        </div>
+
+        {/* Right: Actions */}
+        <div className="flex items-center justify-end flex-shrink-0 pl-0.5">
+          <button
+            onClick={handleToggleFavoriteInternal}
+            className="text-foreground/45 hover:text-amber-400 p-1 rounded-lg transition-colors cursor-pointer"
+            title={isFavorite ? "Bỏ yêu thích" : "Yêu thích"}
+          >
+            <Star size={13} className={isFavorite ? "fill-amber-400 text-amber-400" : ""} />
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
-      {variant === "row" ? renderRow() : renderCard()}
+      {variant === "row" ? renderRow() : variant === "mobile-row" ? renderMobileRow() : renderCard()}
 
       {/* Match Detail Modal Dialog */}
       <Modal

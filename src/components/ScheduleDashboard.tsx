@@ -661,37 +661,61 @@ export default function ScheduleDashboard() {
 
                 {viewMode === "table" ? (
                   allMatchesSortedByDate.length > 0 ? (
-                    <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-white/5 bg-card-bg shadow-sm scrollbar-thin animate-fade-in">
-                      <table className="w-full border-collapse text-left text-sm text-foreground">
-                        <thead className="bg-slate-50 dark:bg-white/[0.02] text-xs font-black text-foreground/50 uppercase tracking-wider border-b border-slate-200 dark:border-white/5 select-none">
-                          <tr>
-                            <th className="px-4 py-3 w-[60px]">ID</th>
-                            <th className="px-4 py-3 w-[100px] text-center">Ngày</th>
-                            <th className="px-4 py-3 w-[80px]">Giờ</th>
-                            <th className="px-4 py-3 hidden md:table-cell w-[180px]">Vòng đấu</th>
-                            <th className="px-4 py-3 text-right">Đội 1</th>
-                            <th className="px-2 py-3 text-center w-[90px]">Tỉ số</th>
-                            <th className="px-4 py-3 text-left">Đội 2</th>
-                            <th className="px-4 py-3 hidden lg:table-cell">Sân vận động</th>
-                            <th className="px-4 py-3 text-right w-[100px]">Thao tác</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-200/60 dark:divide-white/5">
-                          {allMatchesSortedByDate.map((match) => {
-                            const config = tableRowConfig[match.match_id] || { showDate: true, rowSpan: 1 };
-                            return (
-                              <MatchCard
-                                key={match.match_id}
-                                match={match}
-                                variant="row"
-                                showDate={config.showDate}
-                                dateRowSpan={config.rowSpan}
-                              />
-                            );
-                          })}
-                        </tbody>
-                      </table>
-                    </div>
+                    <>
+                      {/* Desktop Table View */}
+                      <div className="hidden md:block overflow-x-auto rounded-2xl border border-slate-200 dark:border-white/5 bg-card-bg shadow-sm scrollbar-thin animate-fade-in">
+                        <table className="w-full border-collapse text-left text-sm text-foreground">
+                          <thead className="bg-slate-50 dark:bg-white/[0.02] text-xs font-black text-foreground/50 uppercase tracking-wider border-b border-slate-200 dark:border-white/5 select-none">
+                            <tr>
+                              <th className="px-4 py-3 w-[60px]">ID</th>
+                              <th className="px-4 py-3 w-[100px] text-center">Ngày</th>
+                              <th className="px-4 py-3 w-[80px]">Giờ</th>
+                              <th className="px-4 py-3 hidden md:table-cell w-[180px]">Vòng đấu</th>
+                              <th className="px-4 py-3 text-right">Đội 1</th>
+                              <th className="px-2 py-3 text-center w-[90px]">Tỉ số</th>
+                              <th className="px-4 py-3 text-left">Đội 2</th>
+                              <th className="px-4 py-3 text-right w-[100px]">Thao tác</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-200/60 dark:divide-white/5">
+                            {allMatchesSortedByDate.map((match) => {
+                              const config = tableRowConfig[match.match_id] || { showDate: true, rowSpan: 1 };
+                              return (
+                                <MatchCard
+                                  key={match.match_id}
+                                  match={match}
+                                  variant="row"
+                                  showDate={config.showDate}
+                                  dateRowSpan={config.rowSpan}
+                                />
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      {/* Mobile Row View (Grouped by Date for compactness) */}
+                      <div className="block md:hidden space-y-5 animate-fade-in">
+                        {groupedMatches.map((group) => (
+                          <div key={group.dateStr} className="space-y-2">
+                            {/* Section Date Header */}
+                            <div className="flex items-center justify-between text-xs font-black text-primary border-b border-slate-200 dark:border-white/5 pb-1 select-none">
+                              <span className="bg-primary/10 border border-primary/20 text-primary dark:text-rose-400 px-2.5 py-0.5 rounded-lg font-bold">
+                                {formatDateDisplay(group.dateStr)}
+                              </span>
+                              <span className="text-[10px] text-foreground/40 font-bold uppercase">
+                                {group.matches.length} trận
+                              </span>
+                            </div>
+                            <div className="space-y-2">
+                              {group.matches.map((match) => (
+                                <MatchCard key={match.match_id} match={match} variant="mobile-row" />
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </>
                   ) : (
                     <div className="text-center py-20 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/5 text-sm text-foreground/50">
                       Không tìm thấy trận đấu nào phù hợp.
