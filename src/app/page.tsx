@@ -2,7 +2,7 @@ import ScheduleDashboard from "../components/ScheduleDashboard";
 
 export default function Home() {
   return (
-    <main className="flex-1 w-full min-h-screen py-6 bg-background text-foreground transition-colors duration-300 selection:bg-secondary/35 selection:text-white">
+    <main className="flex-1 w-full min-h-screen bg-background text-foreground transition-colors duration-300 selection:bg-secondary/35 selection:text-white">
       {/* Dynamic Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[10%] left-[20%] w-[30vw] h-[30vw] rounded-full bg-primary/10 blur-[120px] animate-pulse" />
