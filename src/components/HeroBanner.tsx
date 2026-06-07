@@ -106,25 +106,25 @@ export default function HeroBanner({ matches, myTeams }: HeroBannerProps) {
   }, []);
 
   return (
-    <section className="relative overflow-hidden rounded-[32px] border border-card-border bg-slate-900 text-white p-6 sm:p-10 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black select-none">
+    <section className="relative overflow-hidden rounded-[32px] border border-card-border bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white p-6 sm:p-10 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white via-slate-50 to-slate-200/60 dark:from-slate-900 dark:via-slate-950 dark:to-black select-none">
       {/* Abstract football field pitch lines (pure CSS art) */}
       <div className="absolute inset-0 opacity-[0.04] pointer-events-none select-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] h-[160%] border-[2px] border-white rounded-full" />
-        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[1.5px] bg-white" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border-[2px] border-white rounded-full" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] h-[160%] border-[2px] border-slate-850 dark:border-white rounded-full" />
+        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[1.5px] bg-slate-850 dark:bg-white" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border-[2px] border-slate-850 dark:border-white rounded-full" />
       </div>
 
       {/* Ambient glowing accent light overlays */}
-      <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-primary/20 blur-[120px] pointer-events-none" />
-      <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-secondary/20 blur-[120px] pointer-events-none" />
+      <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-primary/10 dark:bg-primary/20 blur-[120px] pointer-events-none" />
+      <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-secondary/10 dark:bg-secondary/20 blur-[120px] pointer-events-none" />
 
       {/* Left Side: Branding and Title */}
       <div className="relative z-10 space-y-6 max-w-xl text-left">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-rose-400 font-extrabold text-[10px] sm:text-xs uppercase tracking-wider animate-pulse-slow">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 dark:bg-primary/20 border border-primary/20 dark:border-primary/30 text-rose-700 dark:text-rose-400 font-extrabold text-[10px] sm:text-xs uppercase tracking-wider animate-pulse-slow">
             🏆 FIFA WORLD CUP 2026
           </span>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-slate-300 font-extrabold text-[10px] sm:text-xs uppercase tracking-wider">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-200/50 dark:bg-white/5 border border-slate-300/50 dark:border-white/10 text-slate-600 dark:text-slate-300 font-extrabold text-[10px] sm:text-xs uppercase tracking-wider">
             🇺🇸 Mỹ • 🇨🇦 Canada • 🇲🇽 Mexico
           </span>
         </div>
@@ -136,7 +136,7 @@ export default function HeroBanner({ matches, myTeams }: HeroBannerProps) {
               Chinh Phục Cúp Vàng
             </span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-300 font-medium leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
             Trải nghiệm lịch thi đấu bóng đá World Cup 2026 đẳng cấp. Theo dõi sát sao 104 trận cầu đỉnh cao từ vòng
             bảng đến chung kết loại trực tiếp được đồng bộ tự động trực tiếp từ nguồn tin cậy **VNExpress**.
           </p>
@@ -146,10 +146,10 @@ export default function HeroBanner({ matches, myTeams }: HeroBannerProps) {
       {/* Right Side: Big Premium Dynamic Hero Match Card */}
       <div className="relative z-10 w-full md:w-auto flex flex-col items-center gap-4">
         <div
-          className={`relative p-6 sm:p-8 rounded-[24px] border bg-white/5 backdrop-blur-md shadow-2xl flex flex-col items-center justify-center min-w-[280px] sm:min-w-[320px] text-center overflow-hidden group hover:border-white/20 transition-all duration-500 select-none ${
+          className={`relative p-6 sm:p-8 rounded-[24px] border backdrop-blur-md shadow-2xl flex flex-col items-center justify-center min-w-[280px] sm:min-w-[320px] text-center overflow-hidden group transition-all duration-500 select-none ${
             heroTabIndex === 2 && myTeamMatch
-              ? "border-rose-500/30 shadow-[0_0_25px_rgba(244,63,94,0.15)] bg-rose-500/[0.02]"
-              : "border-white/10"
+              ? "border-rose-500/20 dark:border-rose-500/30 shadow-[0_0_25px_rgba(244,63,94,0.08)] dark:shadow-[0_0_25px_rgba(244,63,94,0.15)] bg-rose-500/[0.02] dark:bg-rose-500/[0.02]"
+              : "bg-white/70 dark:bg-white/5 border-slate-200/80 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20"
           }`}
         >
           {/* Ambient glowing overlays */}
@@ -161,7 +161,7 @@ export default function HeroBanner({ matches, myTeams }: HeroBannerProps) {
 
           <span
             className={`text-[10px] font-black uppercase tracking-widest mb-4 block ${
-              heroTabIndex === 0 ? "text-amber-400" : heroTabIndex === 1 ? "text-sky-400" : "text-rose-400"
+              heroTabIndex === 0 ? "text-amber-600 dark:text-amber-400" : heroTabIndex === 1 ? "text-sky-600 dark:text-sky-400" : "text-rose-600 dark:text-rose-400"
             }`}
           >
             {heroTabIndex === 0 && "🔥 TRẬN ĐẤU HOT NHẤT 🔥"}
@@ -172,23 +172,23 @@ export default function HeroBanner({ matches, myTeams }: HeroBannerProps) {
           {activeHeroMatch ? (
             <div className="w-full space-y-4 relative z-10">
               <div className="space-y-1">
-                <div className="text-xl sm:text-2xl font-black text-white">
+                <div className="text-xl sm:text-2xl font-black text-slate-800 dark:text-white">
                   {activeHeroMatch.local_date.split(" ")[0]}
                 </div>
-                <p className="text-[10px] text-slate-400 font-extrabold flex items-center justify-center gap-1">
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 font-extrabold flex items-center justify-center gap-1">
                   <Clock size={10} className="text-secondary" /> {activeHeroMatch.local_date.split(" ")[1]}
                 </p>
-                <p className="text-[10px] text-slate-400 font-bold truncate max-w-[250px] mx-auto">
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 font-bold truncate max-w-[250px] mx-auto">
                   {activeHeroMatch.stadium_name}
                 </p>
               </div>
 
-              <div className="w-16 h-[1.5px] bg-white/15 mx-auto" />
+              <div className="w-16 h-[1.5px] bg-slate-200 dark:bg-white/15 mx-auto" />
 
               <div className="flex items-center justify-between gap-3 px-2">
                 {/* Home Team */}
                 <div className="flex flex-col items-center flex-1 min-w-0">
-                  <div className="relative w-12 h-8 rounded shadow-md overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center mb-2">
+                  <div className="relative w-12 h-8 rounded shadow-md overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-2">
                     {getFlagUrl(activeHeroMatch.home_team_iso2) ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -200,15 +200,15 @@ export default function HeroBanner({ matches, myTeams }: HeroBannerProps) {
                       <Trophy size={14} className="text-secondary/55" />
                     )}
                   </div>
-                  <span className="text-[11px] sm:text-xs font-black text-white truncate w-full">
+                  <span className="text-[11px] sm:text-xs font-black text-slate-800 dark:text-white truncate w-full">
                     {activeHeroMatch.home_team_name}
                   </span>
                 </div>
 
                 {/* VS */}
                 <span
-                  className={`text-xs font-black px-2.5 py-1.5 rounded-xl bg-white/5 border border-white/10 ${
-                    heroTabIndex === 0 ? "text-amber-400" : heroTabIndex === 1 ? "text-sky-400" : "text-rose-400"
+                  className={`text-xs font-black px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 ${
+                    heroTabIndex === 0 ? "text-amber-600 dark:text-amber-400" : heroTabIndex === 1 ? "text-sky-600 dark:text-sky-400" : "text-rose-600 dark:text-rose-400"
                   }`}
                 >
                   VS
@@ -216,7 +216,7 @@ export default function HeroBanner({ matches, myTeams }: HeroBannerProps) {
 
                 {/* Away Team */}
                 <div className="flex flex-col items-center flex-1 min-w-0">
-                  <div className="relative w-12 h-8 rounded shadow-md overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center mb-2">
+                  <div className="relative w-12 h-8 rounded shadow-md overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-2">
                     {getFlagUrl(activeHeroMatch.away_team_iso2) ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -228,19 +228,19 @@ export default function HeroBanner({ matches, myTeams }: HeroBannerProps) {
                       <Trophy size={14} className="text-secondary/55" />
                     )}
                   </div>
-                  <span className="text-[11px] sm:text-xs font-black text-white truncate w-full">
+                  <span className="text-[11px] sm:text-xs font-black text-slate-800 dark:text-white truncate w-full">
                     {activeHeroMatch.away_team_name}
                   </span>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="text-xs text-slate-400 font-bold py-6">Đang cập nhật lịch thi đấu...</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400 font-bold py-6">Đang cập nhật lịch thi đấu...</div>
           )}
         </div>
 
         {/* Interactive Dynamic Tabs Indicators */}
-        <div className="flex items-center gap-1.5 bg-white/5 backdrop-blur-md border border-white/10 rounded-full p-1 shadow-md">
+        <div className="flex items-center gap-1.5 bg-white/80 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-full p-1 shadow-md">
           {[
             { id: 0, label: "Hot nhất" },
             { id: 1, label: "Cận kề" },
@@ -258,7 +258,7 @@ export default function HeroBanner({ matches, myTeams }: HeroBannerProps) {
                       : item.id === 1
                         ? "bg-sky-500 text-slate-950 shadow-lg shadow-sky-500/20"
                         : "bg-rose-500 text-white shadow-lg shadow-rose-500/20"
-                    : "text-slate-400 hover:text-white"
+                    : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white"
                 }`}
               >
                 {item.label}

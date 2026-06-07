@@ -162,6 +162,13 @@ export default React.memo(function MatchCard({
         onClick={() => setIsModalOpen(true)}
         className={`glass-panel glass-panel-hover rounded-2xl overflow-hidden ${cardPadding} relative flex flex-col justify-between ${isSm ? "h-full" : "h-[200px]"} group text-foreground transition-all duration-300 cursor-pointer select-none border border-card-border`}
       >
+        {/* Match ID absolute top-right badge */}
+        <div className="absolute top-0 right-0 font-mono select-none z-10">
+          <span className="text-[9px] font-black text-foreground/40 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-tr-2xl rounded-bl-xl border-l border-b border-slate-200/50 dark:border-white/5 block">
+            #{match.match_id}
+          </span>
+        </div>
+
         {/* Top Meta info */}
         <div className={`flex items-center justify-between ${metaMargin} ${metaText}`}>
           <span className="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200/50 dark:border-white/5 text-foreground/70 font-bold tracking-tight">
@@ -170,17 +177,19 @@ export default React.memo(function MatchCard({
               : `${match.stage_label}${match.group ? ` • Bảng ${match.group}` : ""}`}
           </span>
           <div className="flex items-center gap-1">
-            <button
+            <a
+              href={getGoogleCalendarUrl(match)}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={(e) => {
                 e.stopPropagation();
-                downloadIcsFile(match);
               }}
-              className="text-foreground/40 hover:text-emerald-500 p-1 rounded-lg transition-colors cursor-pointer"
-              aria-label="Tải lịch thi đấu (.ics)"
-              title="Tải lịch thi đấu (.ics)"
+              className="text-foreground/40 hover:text-blue-500 p-1 rounded-lg transition-colors cursor-pointer"
+              aria-label="Lưu vào Google Calendar"
+              title="Lưu vào Google Calendar"
             >
-              <Download size={isSm ? 12 : 14} />
-            </button>
+              <Calendar size={isSm ? 12 : 14} />
+            </a>
             <button
               onClick={handleToggleFavoriteInternal}
               className="text-foreground/40 hover:text-amber-400 p-1 rounded-lg transition-colors cursor-pointer"
@@ -324,18 +333,12 @@ export default React.memo(function MatchCard({
         <div
           className={`${footerMargin} border-t border-slate-200/60 dark:border-white/5 flex items-center justify-between gap-1.5 text-foreground/50 ${footerText} relative`}
         >
-          <div className="flex items-center gap-1.5 min-w-0 flex-1 pr-6">
+          <div className="flex items-center gap-1.5 min-w-0 flex-1">
             <MapPin size={mapPinSize} className="text-secondary flex-shrink-0" />
             <span className="truncate font-bold">{match.stadium_city}</span>
           </div>
 
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none font-mono">
-            <span className="text-[9px] font-black text-foreground/40 bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded border border-slate-200/50 dark:border-white/5">
-              #{match.match_id}
-            </span>
-          </div>
-
-          <div className="flex-shrink-0 pl-6">
+          <div className="flex-shrink-0">
             {!showDateHeader && (
               <span className="text-right whitespace-nowrap opacity-85">
                 {match.local_date.split(" ")[0].slice(0, 5)}
@@ -485,16 +488,18 @@ export default React.memo(function MatchCard({
         {/* Actions */}
         <td className="px-4 py-3 text-right whitespace-nowrap">
           <div className="flex items-center justify-end gap-1.5">
-            <button
+            <a
+              href={getGoogleCalendarUrl(match)}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={(e) => {
                 e.stopPropagation();
-                downloadIcsFile(match);
               }}
-              className="text-foreground/40 hover:text-emerald-500 p-1 rounded-lg transition-colors cursor-pointer"
-              title="Tải lịch thi đấu (.ics)"
+              className="text-foreground/40 hover:text-blue-500 p-1 rounded-lg transition-colors cursor-pointer"
+              title="Lưu vào Google Calendar"
             >
-              <Download size={14} />
-            </button>
+              <Calendar size={14} />
+            </a>
             <button
               onClick={handleToggleFavoriteInternal}
               className="text-foreground/40 hover:text-amber-400 p-1 rounded-lg transition-colors cursor-pointer"

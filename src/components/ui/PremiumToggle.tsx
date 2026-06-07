@@ -12,13 +12,29 @@ export default function PremiumToggle() {
   }, []);
 
   const toggleTheme = () => {
-    if (theme === "dark") {
-      document.documentElement.classList.remove("dark");
-      setTheme("light");
-    } else {
+    document.documentElement.classList.add("disable-transitions");
+
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    if (nextTheme === "dark") {
       document.documentElement.classList.add("dark");
-      setTheme("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
     }
+    setTheme(nextTheme);
+
+    try {
+      sessionStorage.setItem("wc2026_theme", nextTheme);
+    } catch (e) {
+      console.error(e);
+    }
+
+    // Force reflow/repaint
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    window.getComputedStyle(document.body).opacity;
+
+    requestAnimationFrame(() => {
+      document.documentElement.classList.remove("disable-transitions");
+    });
   };
 
   return (

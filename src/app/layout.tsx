@@ -27,8 +27,35 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={`${outfit.variable} h-full antialiased dark`}>
-      <body className="min-h-full flex flex-col transition-colors duration-300">
+    <html lang="vi" className={`${outfit.variable} h-full antialiased dark`} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var storedTheme = sessionStorage.getItem('wc2026_theme');
+                  if (storedTheme) {
+                    if (storedTheme === 'dark') {
+                      document.documentElement.classList.add('dark');
+                    } else {
+                      document.documentElement.classList.remove('dark');
+                    }
+                  } else {
+                    var hour = new Date().getHours();
+                    if (hour >= 21 || hour < 5) {
+                      document.documentElement.classList.add('dark');
+                    } else {
+                      document.documentElement.classList.remove('dark');
+                    }
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col">
         {children}
         <Analytics />
       </body>
