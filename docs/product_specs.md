@@ -19,8 +19,8 @@ Bản đặc tả sản phẩm này tổng hợp chi tiết các tính năng, gi
 ## 🌟 Tổng hợp các Tính năng chính đã Thực hiện
 
 ### 1. Giải pháp Máy chủ API Proxy & Đồng bộ Dữ liệu (CORS Bypass Server Proxy)
-*   **API Route Proxy (`/api/matches`):** Xây dựng một Next.js API Route ở phía server để trung chuyển (proxy) các cuộc gọi API lấy dữ liệu trận đấu của VNExpress. Giải pháp này giúp loại bỏ 100% lỗi chặn CORS từ trình duyệt khi client-side truy cập chéo tên miền.
-*   **Cơ chế Cache tối ưu:** Thiết lập revalidate cache 60 giây (`s-maxage=60`) phía server để tăng tốc độ tải trang và tránh làm quá tải máy chủ VNExpress.
+*   **API Route Proxy (`/api/matches`):** Xây dựng một Next.js API Route ở phía server để trung chuyển (proxy) các cuộc gọi API lấy dữ liệu trận đấu. Giải pháp này giúp loại bỏ 100% lỗi chặn CORS từ trình duyệt khi client-side truy cập chéo tên miền.
+*   **Cơ chế Cache tối ưu:** Thiết lập revalidate cache 60 giây (`s-maxage=60`) phía server để tăng tốc độ tải trang và tránh làm quá tải máy chủ cung cấp dữ liệu.
 *   **Bộ Parser hiệu năng cao:** Phân tích dữ liệu CSV thô thành cấu trúc bản ghi `Match` chuẩn hóa, tự động làm sạch các dấu ngoặc kép dư thừa.
 *   **Bản dịch Tiếng Việt chuẩn:** Tự động chuyển đổi các nhãn vòng đấu viết tắt (ví dụ: `round32` thành `Vòng 32 Đội`, `semifinal` thành `Bán Kết`).
 *   **Chế độ Ngoại tuyến (Offline Fallback):** Chứa sẵn chuỗi CSV tĩnh 104 trận đấu dự phòng an toàn để ứng dụng luôn tải được ngay cả khi API máy chủ gặp sự cố.
@@ -53,7 +53,7 @@ Bản đặc tả sản phẩm này tổng hợp chi tiết các tính năng, gi
 *   **Sơ đồ Cây Nhánh (Tree View) Pixel-Perfect:**
     *   **Giải pháp hình học tĩnh:** Thiết lập chiều cao cột cố định **`2088px`** và tính toán các khoảng đệm margin `py-[65px]`, `py-[197px]`, `py-[461px]` hoàn toàn chính xác theo toán học.
     *   **Đường nối nhánh thẳng tắp:** Các đường nối vuông góc (Bracket Lines) nối giữa các vòng đấu chạy **hoàn toàn song song, nằm ngang phẳng tắp**, không bị lệch dù chỉ `0.5px`, tạo nên cấu trúc đối xứng hoàn mỹ như sơ đồ vẽ CAD.
-    *   **Đồng bộ tên đội hạt giống:** Giải mã khóa trận đấu VNExpress (sử dụng khóa số chuỗi nguyên gốc) để tự động hiển thị tên đội hạt giống chiến thắng thực tế hoặc placeholder động (ví dụ: `Thắng Trận 74`, `2A`, `1B`).
+    *   **Đồng bộ tên đội hạt giống:** Giải mã khóa trận đấu của nguồn dữ liệu (sử dụng khóa số chuỗi nguyên gốc) để tự động hiển thị tên đội hạt giống chiến thắng thực tế hoặc placeholder động (ví dụ: `Thắng Trận 74`, `2A`, `1B`).
 
 ### 6. Thẻ trận đấu MatchCard & Popup chi tiết Portal Modal
 *   **Thẻ MatchCard Premium:** Hiển thị mã số trận monospaced nhỏ `#id` (ví dụ: `#73`), cờ quốc gia, giờ thi đấu Việt Nam, địa điểm sân vận động và tỷ số placeholder `- - -` cho trận chưa bắt đầu.

@@ -342,7 +342,7 @@ export default function TeamProfilePage({ params }: PageProps) {
 
                   <div className="pt-2">
                     <div className="bg-slate-100/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/5 rounded-xl p-3.5 text-[11px] text-foreground/50 leading-relaxed font-bold">
-                      ⚠️ <span className="text-secondary">Lưu ý:</span> Hồ sơ của các quốc gia được lấy từ dữ liệu VNExpress API khi giải đấu khởi tranh, kết hợp mô phỏng để cung cấp trải nghiệm tuyệt vời nhất.
+                      ⚠️ <span className="text-secondary">Lưu ý:</span> Hồ sơ của các quốc gia được lấy từ dữ liệu hệ thống khi giải đấu khởi tranh để cung cấp trải nghiệm tuyệt vời nhất.
                     </div>
                   </div>
                 </div>

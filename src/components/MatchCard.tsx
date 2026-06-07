@@ -407,7 +407,7 @@ export default React.memo(function MatchCard({
             <span
               className={`truncate flex items-center gap-1 ${
                 isPlaceholderTeam(match.home_team_name)
-                  ? "text-secondary/80 italic font-medium text-xs sm:text-sm"
+                  ? "text-secondary/80 italic font-medium text-xs sm:text-sm px-1"
                   : isHomeFavorite
                     ? "text-rose-600 dark:text-rose-400 font-extrabold"
                     : "text-foreground group-hover/team:text-secondary transition-colors"
@@ -473,7 +473,7 @@ export default React.memo(function MatchCard({
             <span
               className={`truncate flex items-center gap-1 ${
                 isPlaceholderTeam(match.away_team_name)
-                  ? "text-secondary/80 italic font-medium text-xs sm:text-sm"
+                  ? "text-secondary/80 italic font-medium text-xs sm:text-sm px-1"
                   : isAwayFavorite
                     ? "text-rose-600 dark:text-rose-400 font-extrabold"
                     : "text-foreground group-hover/team:text-secondary transition-colors"

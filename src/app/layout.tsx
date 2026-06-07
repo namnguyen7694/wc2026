@@ -16,9 +16,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Lịch Thi Đấu World Cup 2026 | Bảng Điểm & Giả Lập Tỉ Số Tự Động",
+  title: "Lịch Thi Đấu World Cup 2026 | Bảng Xếp Hạng & Sơ Đồ Nhánh",
   description:
-    "Trực quan hóa lịch thi đấu FIFA World Cup 2026, cập nhật từ VNExpress. Hỗ trợ giả lập tỷ số, tự động tính toán bảng xếp hạng 12 bảng đấu và vẽ sơ đồ nhánh loại trực tiếp (knockout) thời gian thực.",
+    "Trực quan hóa lịch thi đấu FIFA World Cup 2026. Tự động tính toán bảng xếp hạng 12 bảng đấu và vẽ sơ đồ nhánh loại trực tiếp (knockout) thời gian thực.",
 };
 
 export default function RootLayout({

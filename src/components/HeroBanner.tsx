@@ -138,7 +138,7 @@ export default function HeroBanner({ matches, myTeams }: HeroBannerProps) {
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
             Trải nghiệm lịch thi đấu bóng đá World Cup 2026 đẳng cấp. Theo dõi sát sao 104 trận cầu đỉnh cao từ vòng
-            bảng đến chung kết loại trực tiếp được đồng bộ tự động trực tiếp từ nguồn tin cậy **VNExpress**.
+            bảng đến chung kết loại trực tiếp được đồng bộ tự động trực tiếp.
           </p>
         </div>
       </div>

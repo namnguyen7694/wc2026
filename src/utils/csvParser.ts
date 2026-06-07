@@ -23,7 +23,7 @@ function translateStageLabel(label: string): string {
 }
 
 /**
- * Parses VNExpress CSV data format into Match objects.
+ * Parses CSV data format into Match objects.
  * All fields are wrapped in double quotes and separated by commas, e.g.:
  * "1","group","group","Vong bang","A","1","12/06/2026 02:00",...
  */
@@ -41,7 +41,7 @@ export function parseCSV(csvText: string): Match[] {
     const line = lines[i].trim();
     if (!line) continue;
 
-    // Splitting by "," is highly reliable as VNExpress wraps every single cell in quotes.
+    // Splitting by "," is highly reliable as the data source wraps every single cell in quotes.
     // e.g. "value1","value2","value3"
     // By slicing off the first and last quote, we can split perfectly by `","`
     const fields = line.slice(1, -1).split('","');

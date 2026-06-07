@@ -91,14 +91,14 @@ export const useMatchStore = create<MatchState>((set, get) => ({
 
       const text = await res.text();
       if (text && text.trim().startsWith('"match_id"')) {
-        console.log("Successfully fetched live World Cup 2026 schedule from VNExpress via store!");
+        console.log("Successfully fetched live World Cup 2026 schedule from live system via store!");
         get().setMatches(parseCSV(text));
       } else {
         throw new Error("Invalid CSV format returned from live API");
       }
     } catch (error) {
       console.warn(
-        "Unable to fetch live World Cup 2026 data from VNExpress (Using offline fallback data):",
+        "Unable to fetch live World Cup 2026 data from live system (Using offline fallback data):",
         error instanceof Error ? error.message : error
       );
       get().setMatches(parseCSV(FALLBACK_CSV));

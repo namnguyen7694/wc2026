@@ -14,7 +14,7 @@ export async function GET() {
     });
 
     if (!res.ok) {
-      return NextResponse.json({ error: `Failed to fetch from VNExpress: ${res.status}` }, { status: res.status });
+      return NextResponse.json({ error: `Failed to fetch live matches: ${res.status}` }, { status: res.status });
     }
 
     const csvText = await res.text();

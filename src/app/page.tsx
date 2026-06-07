@@ -15,11 +15,8 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="relative z-10 w-full text-center py-8 mt-12 border-t border-white/5 text-[11px] text-slate-500/70 font-semibold tracking-wide uppercase">
-        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© 2026 FIFA WORLD CUP SCHEDULE SIMULATOR</p>
-          <p>
-            Nguồn dữ liệu: <a href="https://vnexpress.net/the-thao/world-cup-2026/lich-thi-dau" target="_blank" rel="noopener noreferrer" className="text-secondary/80 hover:text-secondary hover:underline">VNExpress</a>
-          </p>
+        <div className="max-w-6xl mx-auto px-4 flex items-center justify-center">
+          <p>© 2026 FIFA WORLD CUP SCHEDULE DASHBOARD</p>
         </div>
       </footer>
     </main>
