@@ -1,234 +1,118 @@
 {
   "Group A": {
     "Mexico": {
-      "status": "preliminary",
+      "status": "final",
       "squad": {
         "Goalkeepers": [
           {
-            "name": "Alex Padilla",
-            "club": "Athletic Club"
-          },
-          {
-            "name": "Antonio Rodríguez",
-            "club": "Tijuana"
+            "name": "Raul Rangel",
+            "club": "Chivas"
           },
           {
             "name": "Carlos Acevedo",
             "club": "Santos Laguna"
           },
           {
-            "name": "Carlos Moreno",
-            "club": "Pachuca"
-          },
-          {
             "name": "Guillermo Ochoa",
             "club": "AEL Limassol"
-          },
-          {
-            "name": "Raúl Rangel",
-            "club": "Chivas"
           }
         ],
         "Defenders": [
           {
-            "name": "Bryan González",
-            "club": "Chivas"
-          },
-          {
-            "name": "César Montes",
-            "club": "Lokomotiv Moscow"
-          },
-          {
-            "name": "Edson Álvarez",
-            "club": "Fenerbahçe"
-          },
-          {
-            "name": "Eduardo Águila",
-            "club": "Atlético de San Luis"
-          },
-          {
-            "name": "Everardo López",
-            "club": "Toluca"
-          },
-          {
             "name": "Israel Reyes",
-            "club": "América"
-          },
-          {
-            "name": "Jesús Angulo",
-            "club": "Tigres"
+            "club": "Club América"
           },
           {
             "name": "Jesús Gallardo",
             "club": "Toluca"
           },
           {
-            "name": "Jesús Gómez",
-            "club": "Tijuana"
+            "name": "Jorge Sánchez",
+            "club": "PAOK"
+          },
+          {
+            "name": "César Montes",
+            "club": "Lokomotiv Moscow"
           },
           {
             "name": "Johan Vásquez",
             "club": "Genoa"
           },
           {
-            "name": "Jorge Sánchez",
-            "club": "PAOK"
-          },
-          {
-            "name": "Julián Araujo",
-            "club": "Celtic"
-          },
-          {
-            "name": "Luis Rey",
-            "club": "Puebla"
-          },
-          {
             "name": "Mateo Chávez",
-            "club": "AZ Alkmaar"
-          },
-          {
-            "name": "Ramón Juárez",
-            "club": "América"
-          },
-          {
-            "name": "Richard Ledezma",
-            "club": "Chivas"
-          },
-          {
-            "name": "Víctor Guzmán",
-            "club": "Monterrey"
+            "club": "PSV"
           }
         ],
         "Midfielders": [
           {
-            "name": "Alexei Domínguez",
-            "club": "Pachuca"
-          },
-          {
-            "name": "Alexis Gutiérrez",
-            "club": "America"
-          },
-          {
-            "name": "Alvaro Fidalgo",
-            "club": "Real Betis"
-          },
-          {
-            "name": "Brian Gutiérrez",
-            "club": "Chivas"
-          },
-          {
-            "name": "Carlos Rodríguez",
-            "club": "Cruz Azul"
-          },
-          {
-            "name": "Denzell Garcia",
-            "club": "FC Juarez"
-          },
-          {
-            "name": "Diego Lainez",
-            "club": "Tigres"
-          },
-          {
-            "name": "Efrain Álvarez",
-            "club": "Chivas"
-          },
-          {
-            "name": "Elias Montiel",
-            "club": "Pachuca"
-          },
-          {
-            "name": "Erick Sánchez",
-            "club": "America"
-          },
-          {
             "name": "Erik Lira",
             "club": "Cruz Azul"
-          },
-          {
-            "name": "Gilberto Mora",
-            "club": "Tijuana"
-          },
-          {
-            "name": "Isaías Violante",
-            "club": "America"
-          },
-          {
-            "name": "Jeremy Márquez",
-            "club": "Cruz Azul"
-          },
-          {
-            "name": "Jordan Carrillo",
-            "club": "Pumas"
-          },
-          {
-            "name": "Jorge Ruvalcaba",
-            "club": "NY Red Bulls"
-          },
-          {
-            "name": "Kevin Castañeda",
-            "club": "Tijuana"
-          },
-          {
-            "name": "Luis Chávez",
-            "club": "Dinamo Moscu"
           },
           {
             "name": "Luis Romo",
             "club": "Chivas"
           },
           {
-            "name": "Marcel Ruiz",
-            "club": "Toluca"
-          },
-          {
             "name": "Obed Vargas",
-            "club": "Atlético de Madrid"
+            "club": "Atlético Madrid"
           },
           {
-            "name": "Orbelin Pineda",
-            "club": "AEK"
-          },
-          {
-            "name": "Jesús Angulo",
-            "club": "Toluca"
-          }
-        ],
-        "Forwards": [
-          {
-            "name": "Alexis Vega",
-            "club": "Toluca"
-          },
-          {
-            "name": "Armando González",
+            "name": "Brian Gutiérrez",
             "club": "Chivas"
+          },
+          {
+            "name": "Orbelín Pineda",
+            "club": "AEK Athens"
+          },
+          {
+            "name": "Edson Álvarez",
+            "club": "Fenerbahçe"
+          },
+          {
+            "name": "Gilberto Mora",
+            "club": "Club Tijuana"
           },
           {
             "name": "César Huerta",
             "club": "Anderlecht"
           },
           {
-            "name": "Germán Berterame",
-            "club": "Inter Miami"
+            "name": "Álvaro Fidalgo",
+            "club": "Real Betis"
+          },
+          {
+            "name": "Luis Chávez",
+            "club": "Dynamo Moscow"
+          }
+        ],
+        "Forwards": [
+          {
+            "name": "Roberto Alvarado",
+            "club": "Chivas"
+          },
+          {
+            "name": "Alexis Vega",
+            "club": "Toluca"
+          },
+          {
+            "name": "Julián Quiñones",
+            "club": "Al-Qadsiah"
+          },
+          {
+            "name": "Santiago Gimenez",
+            "club": "AC Milan"
           },
           {
             "name": "Guillermo Martínez",
             "club": "Pumas"
           },
           {
-            "name": "Julián Quiñones",
-            "club": "Al-Qadisiyah"
+            "name": "Armando González",
+            "club": "Chivas"
           },
           {
             "name": "Raúl Jiménez",
             "club": "Fulham"
-          },
-          {
-            "name": "Roberto Alvarado",
-            "club": "Chivas"
-          },
-          {
-            "name": "Santiago Giménez",
-            "club": "Milan"
           }
         ]
       }
@@ -405,8 +289,8 @@
             "club": "Crvena Zvezda"
           },
           {
-            "name": "Cho Yumin",
-            "club": "Sharjah"
+            "name": "Cho Wije (Jeonbuk)\\",
+            "club": "Đang cập nhật"
           }
         ],
         "Midfielders": [
@@ -461,19 +345,19 @@
             "club": "LAFC"
           },
           {
-            "name": "Oh Hyeongyu",
-            "club": "Besiktas"
+            "name": "Oh Hyeongyu (Besiktas) *\\*Cho Wije was called up on 2 June as an injury replacement for Cho Yumin.",
+            "club": "Đang cập nhật"
           }
         ]
       }
     },
     "Czechia": {
-      "status": "provisional",
+      "status": "final",
       "squad": {
         "Goalkeepers": [
           {
             "name": "Lukáš Horníček",
-            "club": "Braga SC"
+            "club": "Braga"
           },
           {
             "name": "Matěj Kovář",
@@ -481,83 +365,75 @@
           },
           {
             "name": "Jindřich Staněk",
-            "club": "SK Slavia Praha"
+            "club": "Slavia Prague"
           }
         ],
         "Defenders": [
           {
             "name": "Vladimír Coufal",
-            "club": "TSG Hoffenheim"
+            "club": "Hoffenheim"
           },
           {
             "name": "David Douděra",
-            "club": "SK Slavia Praha"
+            "club": "Slavia Prague"
           },
           {
             "name": "Tomáš Holeš",
-            "club": "SK Slavia Praha"
+            "club": "Slavia Prague"
           },
           {
             "name": "Robin Hranáč",
-            "club": "TSG Hoffenheim"
+            "club": "Hoffenheim"
           },
           {
             "name": "Štěpán Chaloupek",
-            "club": "SK Slavia Praha"
+            "club": "Slavia Prague"
           },
           {
             "name": "David Jurásek",
-            "club": "SK Slavia Praha"
+            "club": "Slavia Prague"
           },
           {
             "name": "Ladislav Krejčí",
-            "club": "Wolverhampton Wanderers FC"
+            "club": "Wolves"
           },
           {
             "name": "Jaroslav Zelený",
-            "club": "AC Sparta Praha"
+            "club": "Sparta Prague"
           },
           {
             "name": "David Zima",
-            "club": "SK Slavia Praha"
+            "club": "Slavia Prague"
           }
         ],
         "Midfielders": [
           {
-            "name": "Pavel Bucha",
-            "club": "Cincinnati FC"
-          },
-          {
             "name": "Lukáš Červ",
-            "club": "FC Viktoria Plzeň"
+            "club": "Viktoria Plzen"
           },
           {
             "name": "Vladimír Darida",
-            "club": "FC Hradec Králové"
-          },
-          {
-            "name": "Tomáš Ladra",
-            "club": "FC Viktoria Plzeň"
+            "club": "Hradec Kralove"
           },
           {
             "name": "Lukáš Provod",
-            "club": "SK Slavia Praha"
+            "club": "Slavia Prague"
           },
           {
             "name": "Michal Sadílek",
-            "club": "SK Slavia Praha"
+            "club": "Slavia Prague"
           },
           {
             "name": "Hugo Sochůrek",
-            "club": "AC Sparta Praha"
+            "club": "Sparta Prague"
           },
           {
             "name": "Alexandr Sojka",
-            "club": "FC Viktoria Plzeň"
+            "club": "Viktoria Plzen"
           },
           {
             "name": "Tomáš Souček",
-            "club": "West Ham United"
+            "club": "West Ham"
           },
           {
             "name": "Pavel Šulc",
@@ -565,33 +441,29 @@
           },
           {
             "name": "Denis Višinský",
-            "club": "FC Viktoria Plzeň"
+            "club": "Viktoria Plzen"
           }
         ],
         "Forwards": [
           {
             "name": "Adam Hložek",
-            "club": "TSG Hoffenheim 1899"
+            "club": "Hoffenheim"
           },
           {
             "name": "Tomáš Chorý",
-            "club": "SK Slavia Praha"
+            "club": "Slavia Prague"
           },
           {
             "name": "Mojmír Chytil",
-            "club": "SK Slavia Praha"
-          },
-          {
-            "name": "Christophe Kabongo",
-            "club": "FK Mladá Boleslav"
+            "club": "Slavia Prague"
           },
           {
             "name": "Jan Kuchta",
-            "club": "AC Sparta Praha"
+            "club": "Sparta Prague"
           },
           {
             "name": "Patrik Schick",
-            "club": "Bayer 04 Leverkusen"
+            "club": "Bayer Leverkusen"
           }
         ]
       }
@@ -599,12 +471,120 @@
   },
   "Group B": {
     "Canada": {
-      "status": "announced",
+      "status": "final",
       "squad": {
-        "Goalkeepers": [],
-        "Defenders": [],
-        "Midfielders": [],
-        "Forwards": []
+        "Goalkeepers": [
+          {
+            "name": "Dayne St. Clair",
+            "club": "Inter Miami"
+          },
+          {
+            "name": "Maxime Crépeau",
+            "club": "Orlando City"
+          },
+          {
+            "name": "Owen Goodman",
+            "club": "Crystal Palace"
+          }
+        ],
+        "Defenders": [
+          {
+            "name": "Alistair Johnson",
+            "club": "Celtic"
+          },
+          {
+            "name": "Derek Cornelius",
+            "club": "Marseille"
+          },
+          {
+            "name": "Richie Laryea",
+            "club": "Toronto"
+          },
+          {
+            "name": "Niko Sigur",
+            "club": "Hajduk Split"
+          },
+          {
+            "name": "Joel Waterman",
+            "club": "Chicago Fire"
+          },
+          {
+            "name": "Luc De Fougerolles",
+            "club": "Fulham"
+          },
+          {
+            "name": "Moïse Bombito",
+            "club": "Nice"
+          },
+          {
+            "name": "Alphonso Davies",
+            "club": "Bayern Munich"
+          },
+          {
+            "name": "Alfie Jones",
+            "club": "Middlesbrough"
+          }
+        ],
+        "Midfielders": [
+          {
+            "name": "Stephen Eustáquio",
+            "club": "Porto"
+          },
+          {
+            "name": "Ismaël Koné",
+            "club": "Sassuolo Calcio"
+          },
+          {
+            "name": "Tajon Buchanan",
+            "club": "Villarreal"
+          },
+          {
+            "name": "Mathieu Choinière",
+            "club": "Los Angeles FC"
+          },
+          {
+            "name": "Ali Ahmed",
+            "club": "Norwich City"
+          },
+          {
+            "name": "Nathan Saliba",
+            "club": "Anderlecht"
+          },
+          {
+            "name": "Liam Miller",
+            "club": "Hull City"
+          },
+          {
+            "name": "Marcelo Flores",
+            "club": "Tigres UANL"
+          },
+          {
+            "name": "Jacob Shaffelburg",
+            "club": "Toronto"
+          },
+          {
+            "name": "Jonathan Osario",
+            "club": "Toronto"
+          }
+        ],
+        "Forwards": [
+          {
+            "name": "Jonathan David",
+            "club": "Juventus"
+          },
+          {
+            "name": "Cyle Larin",
+            "club": "Southampton"
+          },
+          {
+            "name": "Tani Oluwaseyi",
+            "club": "Villarreal"
+          },
+          {
+            "name": "Promise David",
+            "club": "Royale Union Saint-Gilloise"
+          }
+        ]
       }
     },
     "Bosnia and Herzegovina": {
@@ -725,156 +705,124 @@
       }
     },
     "Qatar": {
-      "status": "preliminary",
+      "status": "final",
       "squad": {
         "Goalkeepers": [
           {
-            "name": "Shehab Elleithy",
-            "club": "Al-Shahania SC"
-          },
-          {
             "name": "Salah Zakaria",
-            "club": "Al-Duhail SC"
-          },
-          {
-            "name": "Meshaal Barsham",
-            "club": "Al-Sadd SC"
+            "club": "Al-Duhail"
           },
           {
             "name": "Mahmoud Abunada",
-            "club": "Al-Rayyan SC"
+            "club": "Al Rayyan"
+          },
+          {
+            "name": "Meshaal Barsham",
+            "club": "Al-Sadd"
           }
         ],
         "Defenders": [
           {
+            "name": "Hashmi Hussein",
+            "club": "Al Arabi"
+          },
+          {
+            "name": "Ayoub Alawi",
+            "club": "Al Gharafa"
+          },
+          {
             "name": "Boualem Khoukhi",
-            "club": "Al-Sadd SC"
+            "club": "Al-Sadd"
           },
           {
             "name": "Pedro Miguel",
             "club": "Al-Sadd"
           },
           {
-            "name": "Sultan Al Brake",
-            "club": "Al-Duhail SC"
-          },
-          {
-            "name": "Tarek Salman",
-            "club": "Al-Sadd SC"
-          },
-          {
-            "name": "Al-Hashmi Al-Hussain",
-            "club": "Al-Arabi SC"
-          },
-          {
-            "name": "Ayoub Al-Alawi",
-            "club": "Al-Gharafa"
-          },
-          {
-            "name": "Bassam Al-Rawi",
-            "club": "Al-Duhail SC"
-          },
-          {
-            "name": "Rayyan Al-Ali",
-            "club": "Al-Gharafa"
-          },
-          {
-            "name": "Issa Laye",
-            "club": "Al-Arabi SC"
+            "name": "Issa Laaye",
+            "club": "Al Arabi"
           },
           {
             "name": "Lucas Mendes",
-            "club": "Al-Wakrah SC"
+            "club": "Al-Wakrah"
           },
           {
-            "name": "Mohammed Waad",
-            "club": "Al-Shamal SC"
-          },
-          {
-            "name": "Niall Mason",
-            "club": "Qatar SC"
-          }
-        ],
-        "Midfielders": [
-          {
-            "name": "Ahmed Fathi",
-            "club": "Al-Arabi SC"
-          },
-          {
-            "name": "Jassim Gaber",
-            "club": "Al-Rayyan SC"
-          },
-          {
-            "name": "Assim Madibo",
-            "club": "Al-Wakrah SC"
-          },
-          {
-            "name": "Abdulaziz Hatem",
-            "club": "Al-Rayyan SC"
-          },
-          {
-            "name": "Karim Boudiaf",
-            "club": "Al-Duhail SC"
-          },
-          {
-            "name": "Mohammed Mannai",
-            "club": "Al-Shamal SC"
+            "name": "Sultan Al-Brake",
+            "club": "Al-Duhail"
           },
           {
             "name": "Homam Al-Amin",
             "club": "Cultural Leonesa"
           }
         ],
+        "Midfielders": [
+          {
+            "name": "Mohammed Al-Manai",
+            "club": "Al Shamal"
+          },
+          {
+            "name": "Jassem Jaber",
+            "club": "Al Arabi"
+          },
+          {
+            "name": "Karim Boudiaf",
+            "club": "Al-Duhail"
+          },
+          {
+            "name": "Ahmed Fathi",
+            "club": "Al Arabi"
+          },
+          {
+            "name": "Abdulaziz Hatem",
+            "club": "Al Rayyan"
+          },
+          {
+            "name": "Assim Madibo",
+            "club": "Al-Wakrah"
+          }
+        ],
         "Forwards": [
           {
+            "name": "Tahseen Mohammed",
+            "club": "Al-Duhail"
+          },
+          {
+            "name": "Edmilson Junior",
+            "club": "Al-Duhail"
+          },
+          {
             "name": "Almoez Ali",
-            "club": "Al-Duhail SC"
+            "club": "Al-Duhail"
           },
           {
             "name": "Akram Afif",
-            "club": "Al-Sadd SC"
-          },
-          {
-            "name": "Tahsin Mohammed",
-            "club": "Al-Duhail SC"
-          },
-          {
-            "name": "Edmílson Junior",
-            "club": "Al-Duhail SC"
-          },
-          {
-            "name": "Ahmed Al-Ganehi",
-            "club": "Al-Gharafa"
-          },
-          {
-            "name": "Ahmed Alaa",
-            "club": "Al-Rayyan SC"
-          },
-          {
-            "name": "Sebastián Soria",
-            "club": "Qatar SC"
-          },
-          {
-            "name": "Hassan Al-Haydos",
-            "club": "Al-Sadd SC"
-          },
-          {
-            "name": "Mubarak Shannan",
-            "club": "Al-Duhail SC"
+            "club": "Al-Sadd"
           },
           {
             "name": "Mohammed Muntari",
-            "club": "Al-Gharafa SC"
+            "club": "Al Gharafa"
           },
           {
-            "name": "Yusuf Abdurisag",
-            "club": "Al-Wakrah SC"
+            "name": "Youssef Abdulrazzaq",
+            "club": "Al-Wakrah"
+          },
+          {
+            "name": "Ahmed Alaa",
+            "club": "Al Rayyan"
+          },
+          {
+            "name": "Hassan Al-Haydos",
+            "club": "Al-Sadd"
+          },
+          {
+            "name": "Ahmed Al-Janahi",
+            "club": "Al Gharafa"
           }
         ]
       }
     },
     "Switzerland": {
-      "status": "announced",
+      "status": "final",
       "squad": {
         "Goalkeepers": [
           {
@@ -993,7 +941,7 @@
   },
   "Group C": {
     "Brazil": {
-      "status": "announced",
+      "status": "final",
       "squad": {
         "Goalkeepers": [
           {
@@ -1011,8 +959,8 @@
         ],
         "Defenders": [
           {
-            "name": "Wesley",
-            "club": "Roma"
+            "name": "Éderson (Atalanta)\\",
+            "club": "Đang cập nhật"
           },
           {
             "name": "Douglas Santos",
@@ -1103,8 +1051,12 @@
             "club": "Lyon"
           },
           {
-            "name": "Rayan",
-            "club": "Bournemouth"
+            "name": "Rayan (Bournemouth) *\\*Éderson was a late call-up to the squad to replace Wesley",
+            "club": "Đang cập nhật"
+          },
+          {
+            "name": "who withdrew with injury on 7 June",
+            "club": "Đang cập nhật"
           }
         ]
       }
@@ -1420,8 +1372,8 @@
             "club": "Bournemouth"
           },
           {
-            "name": "Billy Gilmour",
-            "club": "Napoli"
+            "name": "Tyler Fletcher (Manchester United)\\",
+            "club": "Đang cập nhật"
           },
           {
             "name": "John McGinn",
@@ -1454,8 +1406,16 @@
             "club": "Hearts"
           },
           {
-            "name": "Ross Stewart",
-            "club": "Southampton"
+            "name": "Ross Stewart (Southampton) *\\*Tyler Fletcher replaced Billy Gilmour",
+            "club": "Đang cập nhật"
+          },
+          {
+            "name": "who withdrew through injury",
+            "club": "Đang cập nhật"
+          },
+          {
+            "name": "on 31 May",
+            "club": "Đang cập nhật"
           }
         ]
       }
@@ -1573,32 +1533,248 @@
             "club": "Coventry City"
           },
           {
-            "name": "Alejandro Zendejas",
+            "name": "Alejandro Zendejas",
             "club": "Club América"
           }
         ]
       }
     },
     "Paraguay": {
-      "status": "announced",
+      "status": "final",
       "squad": {
-        "Goalkeepers": [],
-        "Defenders": [],
-        "Midfielders": [],
-        "Forwards": []
+        "Goalkeepers": [
+          {
+            "name": "Gatito Fernández",
+            "club": "Cerro Porteño"
+          },
+          {
+            "name": "Orlando Gill",
+            "club": "San Lorenzo"
+          },
+          {
+            "name": "Gastón Olveira",
+            "club": "Olimpia"
+          }
+        ],
+        "Defenders": [
+          {
+            "name": "Gustavo Gómez",
+            "club": "Palmeiras"
+          },
+          {
+            "name": "Júnior Alonso",
+            "club": "Atlético Mineiro"
+          },
+          {
+            "name": "Fabián Balbuena",
+            "club": "Grêmio"
+          },
+          {
+            "name": "Omar Alderete",
+            "club": "Sunderland"
+          },
+          {
+            "name": "Juan José Cáceres",
+            "club": "Dynamo Moscow"
+          },
+          {
+            "name": "Gustavo Velázquez",
+            "club": "Cerro Porteño"
+          },
+          {
+            "name": "José Canale",
+            "club": "Lanus"
+          },
+          {
+            "name": "Alexandro Maidana",
+            "club": "Talleres"
+          }
+        ],
+        "Midfielders": [
+          {
+            "name": "Miguel Almirón",
+            "club": "Atlanta United"
+          },
+          {
+            "name": "Kaku",
+            "club": "Al-Ain"
+          },
+          {
+            "name": "Andrés Cubas",
+            "club": "Vancouver Whitecaps"
+          },
+          {
+            "name": "Ramón Sosa",
+            "club": "Palmeiras"
+          },
+          {
+            "name": "Diego Gómez",
+            "club": "Brighton"
+          },
+          {
+            "name": "Damián Bobadilla",
+            "club": "Sao Paulo"
+          },
+          {
+            "name": "Braian Ojeda",
+            "club": "Orlando City"
+          },
+          {
+            "name": "Matías Galarza",
+            "club": "Atlanta United"
+          },
+          {
+            "name": "Maurício",
+            "club": "Palmeiras"
+          }
+        ],
+        "Forwards": [
+          {
+            "name": "Antonio Sanabria",
+            "club": "Cremonese"
+          },
+          {
+            "name": "Julio Enciso",
+            "club": "Strasbourg"
+          },
+          {
+            "name": "Gabriel Ávalos",
+            "club": "Independiente"
+          },
+          {
+            "name": "Álex Arce",
+            "club": "Independiente Rivadavia"
+          },
+          {
+            "name": "Isidro Pitta",
+            "club": "Red Bull Bragantino"
+          },
+          {
+            "name": "Gustavo Caballero",
+            "club": "Portsmouth"
+          }
+        ]
       }
     },
     "Australia": {
-      "status": "announced",
+      "status": "final",
       "squad": {
-        "Goalkeepers": [],
-        "Defenders": [],
-        "Midfielders": [],
-        "Forwards": []
+        "Goalkeepers": [
+          {
+            "name": "Ryan",
+            "club": "Levante"
+          },
+          {
+            "name": "Izzo",
+            "club": "Randers"
+          },
+          {
+            "name": "Beach (Melbourne City).",
+            "club": "Đang cập nhật"
+          }
+        ],
+        "Defenders": [
+          {
+            "name": "Behich",
+            "club": "Melbourne City"
+          },
+          {
+            "name": "Bos",
+            "club": "Feynoord"
+          },
+          {
+            "name": "Burgess",
+            "club": "Swansea City"
+          },
+          {
+            "name": "Circati",
+            "club": "Parma"
+          },
+          {
+            "name": "Degenek",
+            "club": "APOEL"
+          },
+          {
+            "name": "Geria",
+            "club": "Albirex Niigata"
+          },
+          {
+            "name": "Herrington",
+            "club": "Colorado Rapids"
+          },
+          {
+            "name": "Italiano",
+            "club": "Grazer"
+          },
+          {
+            "name": "Souttar",
+            "club": "Leicester City"
+          },
+          {
+            "name": "Trewin (New York City).",
+            "club": "Đang cập nhật"
+          }
+        ],
+        "Midfielders": [
+          {
+            "name": "Devlin",
+            "club": "Heart of Midlothian"
+          },
+          {
+            "name": "Hrustic",
+            "club": "Heracles Almelo"
+          },
+          {
+            "name": "Irvine",
+            "club": "St Pauli"
+          },
+          {
+            "name": "Metcalfe",
+            "club": "St Pauli"
+          },
+          {
+            "name": "Okon-Englster",
+            "club": "Sydney"
+          },
+          {
+            "name": "O'Neill (New York City).",
+            "club": "Đang cập nhật"
+          }
+        ],
+        "Forwards": [
+          {
+            "name": "Irankunda",
+            "club": "Watford"
+          },
+          {
+            "name": "Leckie",
+            "club": "Melbourne City"
+          },
+          {
+            "name": "Mabil",
+            "club": "Castellon"
+          },
+          {
+            "name": "Toure",
+            "club": "Norwich City"
+          },
+          {
+            "name": "Velupilly",
+            "club": "Melbourne City"
+          },
+          {
+            "name": "Volpato",
+            "club": "Sassuolo"
+          },
+          {
+            "name": "Yengi (Livingston/Machida Zelvia).",
+            "club": "Đang cập nhật"
+          }
+        ]
       }
     },
     "Türkiye": {
-      "status": "provisional",
+      "status": "final",
       "squad": {
         "Goalkeepers": [
           {
@@ -1606,16 +1782,8 @@
             "club": "Manchester United"
           },
           {
-            "name": "Ersin Destanoğlu",
-            "club": "Beşiktaş A.Ş."
-          },
-          {
             "name": "Mert Günok",
             "club": "Fenerbahçe A.Ş."
-          },
-          {
-            "name": "Muhammed Şengezer",
-            "club": "Rams Başakşehir FK"
           },
           {
             "name": "Uğurcan Çakır",
@@ -1626,10 +1794,6 @@
           {
             "name": "Abdülkerim Bardakcı",
             "club": "Galatasaray A.Ş."
-          },
-          {
-            "name": "Ahmetcan Kaplan",
-            "club": "NEC Nijmegen"
           },
           {
             "name": "Çağlar Söyüncü",
@@ -1652,10 +1816,6 @@
             "club": "Fenerbahçe A.Ş."
           },
           {
-            "name": "Mustafa Eskihellaç",
-            "club": "Trabzonspor A.Ş."
-          },
-          {
             "name": "Ozan Kabak",
             "club": "TSG 1899 Hoffenheim"
           },
@@ -1664,23 +1824,11 @@
             "club": "Çaykur Rizespor A.Ş."
           },
           {
-            "name": "Yusuf Akçiçek",
-            "club": "Al-Hilal"
-          },
-          {
             "name": "Zeki Çelik",
             "club": "AS Roma"
           }
         ],
         "Midfielders": [
-          {
-            "name": "Atakan Karazor",
-            "club": "VfB Stuttgart"
-          },
-          {
-            "name": "Demir Ege Tıknaz",
-            "club": "SC Braga"
-          },
           {
             "name": "Hakan Çalhanoğlu",
             "club": "Internazionale"
@@ -1703,10 +1851,6 @@
           }
         ],
         "Forwards": [
-          {
-            "name": "Aral Şimşir",
-            "club": "FC Midtjylland"
-          },
           {
             "name": "Arda Güler",
             "club": "Real Madrid"
@@ -1742,10 +1886,6 @@
           {
             "name": "Yunus Akgün",
             "club": "Galatasaray A.Ş."
-          },
-          {
-            "name": "Yusuf Sarı",
-            "club": "Rams Başakşehir FK"
           }
         ]
       }
@@ -1765,8 +1905,8 @@
             "club": "Bayern Munich"
           },
           {
-            "name": "Alexander Nubel",
-            "club": "Monaco"
+            "name": "Alexander Nübel",
+            "club": "VfB Stuttgart"
           }
         ],
         "Defenders": [
@@ -1780,11 +1920,7 @@
           },
           {
             "name": "Joshua Kimmich",
-            "club": "Bayern Munich"
-          },
-          {
-            "name": "captain)",
-            "club": ""
+            "club": "Bayern Munich, captain"
           },
           {
             "name": "David Raum",
@@ -1792,11 +1928,7 @@
           },
           {
             "name": "Antonio Rudiger",
-            "club": "Real Madrid"
-          },
-          {
-            "name": "vice-captain)",
-            "club": ""
+            "club": "Real Madrid, vice-captain"
           },
           {
             "name": "Nico Schlotterbeck",
@@ -1829,8 +1961,8 @@
             "club": "Stuttgart"
           },
           {
-            "name": "Lennart Karl",
-            "club": "Bayern Munich"
+            "name": "Assan Ouédraogo (RB Leipzig)\\",
+            "club": "Đang cập nhật"
           },
           {
             "name": "Jamal Musiala",
@@ -1871,8 +2003,12 @@
             "club": "Stuttgart"
           },
           {
-            "name": "Nick Woltemade",
-            "club": "Newcastle"
+            "name": "Nick Woltemade (Newcastle) \\**Assan Ouédraogo replaced Lennart Karl",
+            "club": "Đang cập nhật"
+          },
+          {
+            "name": "who withdrew from the squad due to injury on 6 June",
+            "club": "Đang cập nhật"
           }
         ]
       }
@@ -2112,12 +2248,120 @@
       }
     },
     "Ecuador": {
-      "status": "announced",
+      "status": "final",
       "squad": {
-        "Goalkeepers": [],
-        "Defenders": [],
-        "Midfielders": [],
-        "Forwards": []
+        "Goalkeepers": [
+          {
+            "name": "Hernán Galíndez",
+            "club": "Huracán"
+          },
+          {
+            "name": "Moisés Ramírez",
+            "club": "AE Kifisias"
+          },
+          {
+            "name": "Gonzalo Valle",
+            "club": "LDU Quito"
+          }
+        ],
+        "Defenders": [
+          {
+            "name": "Willian Pacho",
+            "club": "PSG"
+          },
+          {
+            "name": "Piero Hincapié",
+            "club": "Arsenal"
+          },
+          {
+            "name": "Joel Ordóñez",
+            "club": "Club Brugge"
+          },
+          {
+            "name": "Félix Torres",
+            "club": "Internacional"
+          },
+          {
+            "name": "Pervis Estupiñán",
+            "club": "AC Milan"
+          },
+          {
+            "name": "Ángelo Preciado",
+            "club": "Atlético Mineiro"
+          },
+          {
+            "name": "Jackson Porozo",
+            "club": "Club Tijuana"
+          }
+        ],
+        "Midfielders": [
+          {
+            "name": "Moisés Caicedo",
+            "club": "Chelsea"
+          },
+          {
+            "name": "Jordy Alcívar",
+            "club": "Independiente"
+          },
+          {
+            "name": "Denil Castillo",
+            "club": "Midtjylland"
+          },
+          {
+            "name": "Alan Franco",
+            "club": "Atlético Mineiro"
+          },
+          {
+            "name": "Pedro Vite",
+            "club": "Pumas UNAM"
+          },
+          {
+            "name": "Kendry Páez",
+            "club": "River Plate"
+          },
+          {
+            "name": "Yaimar Medina",
+            "club": "KRC Genk"
+          }
+        ],
+        "Forwards": [
+          {
+            "name": "Kevin Rodríguez",
+            "club": "Union Saint-Gilloise"
+          },
+          {
+            "name": "Anthony Valencia",
+            "club": "Royal Antwerp"
+          },
+          {
+            "name": "Enner Valencia",
+            "club": "Pachuca"
+          },
+          {
+            "name": "Jordy Caicedo",
+            "club": "Huracán"
+          },
+          {
+            "name": "Jeremy Arévalo",
+            "club": "Stuttgart"
+          },
+          {
+            "name": "Gonzalo Plata",
+            "club": "Flamengo"
+          },
+          {
+            "name": "Alan Minda",
+            "club": "Atlético Mineiro"
+          },
+          {
+            "name": "John Yeboah",
+            "club": "Venezia"
+          },
+          {
+            "name": "Nilson Angulo",
+            "club": "Sunderland"
+          }
+        ]
       }
     }
   },
@@ -2153,8 +2397,8 @@
             "club": "Chelsea"
           },
           {
-            "name": "Jurriën Timber",
-            "club": "Arsenal"
+            "name": "Lutsharel Geertruida (Sunderland)\\",
+            "club": "Đang cập nhật"
           },
           {
             "name": "Micky van de Ven",
@@ -2225,10 +2469,6 @@
             "club": "Galatasaray"
           },
           {
-            "name": "on loan from Napoli)",
-            "club": ""
-          },
-          {
             "name": "Donyell Malen",
             "club": "Roma"
           },
@@ -2237,14 +2477,22 @@
             "club": "West Ham"
           },
           {
-            "name": "Wout Weghorst",
-            "club": "Ajax"
+            "name": "Wout Weghorst (Ajax) *\\*Lutsharel Geertruida replaced Jurriën Timber",
+            "club": "Đang cập nhật"
+          },
+          {
+            "name": "who withdrew from the squad due to injury",
+            "club": "Đang cập nhật"
+          },
+          {
+            "name": "on 8 June",
+            "club": "Đang cập nhật"
           }
         ]
       }
     },
     "Japan": {
-      "status": "announced",
+      "status": "final",
       "squad": {
         "Goalkeepers": [
           {
@@ -2294,11 +2542,12 @@
             "club": "Le Havre"
           },
           {
-            "name": "Sugawara Yukinari",
-            "club": "Werder Bremen"
+            "name": "Sugawara Yukinari (Werder Bremen) **Midfielders &",
+            "club": "Đang cập nhật"
           }
         ],
-        "Midfielders": [
+        "Midfielders": [],
+        "Forwards": [
           {
             "name": "Kamada Daichi",
             "club": "Crystal Palace"
@@ -2355,8 +2604,7 @@
             "name": "Goto Keisuke",
             "club": "Sint-Truiden"
           }
-        ],
-        "Forwards": []
+        ]
       }
     },
     "Sweden": {
@@ -2390,10 +2638,6 @@
             "club": "Atalanta"
           },
           {
-            "name": "Emil Holm",
-            "club": "Juventus"
-          },
-          {
             "name": "Gustaf Lagerbielke",
             "club": "SC Braga"
           },
@@ -2406,12 +2650,8 @@
             "club": "St Pauli"
           },
           {
-            "name": "Carl Starfelt",
-            "club": "Celta de Vigo"
-          },
-          {
-            "name": "Elliot Stroud Mjallby)",
-            "club": ""
+            "name": "Carl Starfelt (Celta de Vigo), Elliot Stroud Mjallby)",
+            "club": "Đang cập nhật"
           },
           {
             "name": "Daniel Svensson",
@@ -2438,6 +2678,10 @@
           {
             "name": "Besfort Zeneli",
             "club": "Saint-Gilloise"
+          },
+          {
+            "name": "Herman Johansson",
+            "club": "FC Dallas"
           }
         ],
         "Forwards": [
@@ -2563,7 +2807,7 @@
         ],
         "Forwards": [
           {
-            "name": "Elias Achouri",
+            "name": "Elias Achouri",
             "club": "FC Copenhagen"
           },
           {
@@ -2630,7 +2874,7 @@
             "club": "AC Milan"
           },
           {
-            "name": "Brandon Mechele",
+            "name": "Brandon Mechele",
             "club": "Club Brugge"
           },
           {
@@ -2713,7 +2957,7 @@
       }
     },
     "Egypt": {
-      "status": "preliminary",
+      "status": "final",
       "squad": {
         "Goalkeepers": [
           {
@@ -2723,10 +2967,6 @@
           {
             "name": "Mostafa Shobeir",
             "club": "Al Ahly"
-          },
-          {
-            "name": "El-Mahdi Soliman",
-            "club": "Zamalek"
           },
           {
             "name": "Mohamed Alaa",
@@ -2834,7 +3074,7 @@
       }
     },
     "Islamic Republic of Iran": {
-      "status": "preliminary",
+      "status": "final",
       "squad": {
         "Goalkeepers": [
           {
@@ -2844,10 +3084,6 @@
           {
             "name": "Seyed Hossein Hosseini",
             "club": "Sepahan"
-          },
-          {
-            "name": "Mohammad Khalifeh",
-            "club": "Aluminium Arak"
           },
           {
             "name": "Payam Niazmand",
@@ -2940,24 +3176,16 @@
             "club": "Standard Liege"
           },
           {
-            "name": "Hadi Habibinejad",
-            "club": "Chadormalou"
-          },
-          {
             "name": "Amirhossein Hosseinzadeh",
             "club": "Tractor"
           },
           {
-            "name": "Amirhossein Mahmoudi",
-            "club": "Persepolis"
-          },
-          {
-            "name": "Kasra Taheri",
-            "club": "Paykan"
-          },
-          {
             "name": "Mehdi Taremi",
             "club": "Olympiacos"
+          },
+          {
+            "name": "Shahriyar Moghanlou",
+            "club": "Kalba"
           }
         ]
       }
@@ -3155,11 +3383,11 @@
           },
           {
             "name": "Álex Baena",
-            "club": "Atlético Madrid"
+            "club": "Atlético de Madrid"
           },
           {
             "name": "Mikel Merino",
-            "club": "Spain"
+            "club": "Arsenal"
           }
         ],
         "Forwards": [
@@ -3316,27 +3544,243 @@
       }
     },
     "Saudi Arabia": {
-      "status": "announced",
+      "status": "final",
       "squad": {
-        "Goalkeepers": [],
-        "Defenders": [],
-        "Midfielders": [],
-        "Forwards": []
+        "Goalkeepers": [
+          {
+            "name": "Nawaf Al Aqidi",
+            "club": "Al-Nassr"
+          },
+          {
+            "name": "Mohamed Al Owais",
+            "club": "Al-Ula"
+          },
+          {
+            "name": "​Ahmed Alkassar",
+            "club": "Al-Qadsiah"
+          }
+        ],
+        "Defenders": [
+          {
+            "name": "Saud Abdulhamid",
+            "club": "Lens"
+          },
+          {
+            "name": "Jehad Thakri",
+            "club": "Al-Qadsiah"
+          },
+          {
+            "name": "Abdulelah Al Amri",
+            "club": "Al-Nassr"
+          },
+          {
+            "name": "​Hassan Tambakti",
+            "club": "Al-Hilal"
+          },
+          {
+            "name": "⁠Ali Lajami",
+            "club": "Al-Hilal"
+          },
+          {
+            "name": "Hassan Kadesh",
+            "club": "Al-Ittihad"
+          },
+          {
+            "name": "Moteb Al Harbi",
+            "club": "Al-Hilal"
+          },
+          {
+            "name": "Nawaf Boushal",
+            "club": "Al-Nassr"
+          },
+          {
+            "name": "Ali Majrashi",
+            "club": "Al-Ahli"
+          },
+          {
+            "name": "Mohammed Abu Alshamat",
+            "club": "Al-Qadsiah"
+          }
+        ],
+        "Midfielders": [
+          {
+            "name": "Ziyad Al Johani",
+            "club": "Al-Ahli"
+          },
+          {
+            "name": "Nasser Al Dawsari",
+            "club": "Al-Hilal"
+          },
+          {
+            "name": "Mohamed Kanno",
+            "club": "Al-Hilal"
+          },
+          {
+            "name": "Abdullah Al Khaibari",
+            "club": "Al-Nassr"
+          },
+          {
+            "name": "Alaa ⁠Al ​Hejji",
+            "club": "Neom"
+          },
+          {
+            "name": "Musab Al Juwayr",
+            "club": "Al-Qadsiah"
+          },
+          {
+            "name": "Sultan Mandash",
+            "club": "Al-Hilal"
+          },
+          {
+            "name": "Ayman ​Yahya",
+            "club": "Al-Nassr"
+          },
+          {
+            "name": "Khalid Al Ghannam",
+            "club": "Al-Ettifaq"
+          }
+        ],
+        "Forwards": [
+          {
+            "name": "Salem Al Dawsari",
+            "club": "Al-Hilal"
+          },
+          {
+            "name": "Abdullah Al Hamdan",
+            "club": "Al-Nassr"
+          },
+          {
+            "name": "Feras Al Brikan",
+            "club": "Al-Ahli"
+          },
+          {
+            "name": "Saleh Al Shehri",
+            "club": "Al-Ittihad"
+          }
+        ]
       }
     },
     "Uruguay": {
-      "status": "announced",
+      "status": "final",
       "squad": {
-        "Goalkeepers": [],
-        "Defenders": [],
-        "Midfielders": [],
-        "Forwards": []
+        "Goalkeepers": [
+          {
+            "name": "Sergio Rochet",
+            "club": "Internacional"
+          },
+          {
+            "name": "Fernando Muslera",
+            "club": "Estudiantes"
+          },
+          {
+            "name": "Santiago Mele",
+            "club": "Monterrey"
+          }
+        ],
+        "Defenders": [
+          {
+            "name": "Guillermo Varela",
+            "club": "Flamengo"
+          },
+          {
+            "name": "Ronald Araujo",
+            "club": "Barcelona"
+          },
+          {
+            "name": "José María Giménez",
+            "club": "Atlético de Madrid"
+          },
+          {
+            "name": "Santiago Bueno",
+            "club": "Wolves"
+          },
+          {
+            "name": "Sebastián Cáceres",
+            "club": "CF América"
+          },
+          {
+            "name": "Mathías Olivera",
+            "club": "Napoli"
+          },
+          {
+            "name": "Joaquín Piquerez",
+            "club": "Palmeiras"
+          },
+          {
+            "name": "Matías Viña",
+            "club": "River Plate"
+          }
+        ],
+        "Midfielders": [
+          {
+            "name": "Manuel Ugarte",
+            "club": "Manchester United"
+          },
+          {
+            "name": "Emiliano Martínez",
+            "club": "Palmeiras"
+          },
+          {
+            "name": "Rodrigo Bentancur",
+            "club": "Tottenham Hotspur"
+          },
+          {
+            "name": "Federico Valverde",
+            "club": "Real Madrid"
+          },
+          {
+            "name": "Agustín Canobbio",
+            "club": "Fluminense"
+          },
+          {
+            "name": "Juan Manuel Sanabria",
+            "club": "Real Salt Lake City"
+          },
+          {
+            "name": "Giorgan de Arrascaeta",
+            "club": "Flamengo"
+          },
+          {
+            "name": "Nicolás de la Cruz",
+            "club": "Flamengo"
+          },
+          {
+            "name": "Rodrigo Zalazar",
+            "club": "Braga"
+          },
+          {
+            "name": "Facundo Pellistri",
+            "club": "Panathinaikos"
+          },
+          {
+            "name": "Maximiliano Araújo",
+            "club": "Sporting"
+          },
+          {
+            "name": "Brian Rodríguez",
+            "club": "CF América"
+          }
+        ],
+        "Forwards": [
+          {
+            "name": "Rodrigo Aguirre",
+            "club": "Tigres"
+          },
+          {
+            "name": "Federico Viñas",
+            "club": "Real Oviedo"
+          },
+          {
+            "name": "Darwin Núñez",
+            "club": "Al-Hilal"
+          }
+        ]
       }
     }
   },
   "Group I": {
     "France": {
-      "status": "full",
+      "status": "final",
       "squad": {
         "Goalkeepers": [
           {
@@ -3358,7 +3802,7 @@
             "club": "Bayern Munich"
           },
           {
-            "name": "William Saliba",
+            "name": "William Saliba",
             "club": "Arsenal"
           },
           {
@@ -3393,7 +3837,7 @@
         "Midfielders": [
           {
             "name": "N'Golo Kanté",
-            "club": "Fenerbahce"
+            "club": "Fenerbahçe"
           },
           {
             "name": "Adrien Rabiot",
@@ -3453,7 +3897,7 @@
       }
     },
     "Senegal": {
-      "status": "announced",
+      "status": "final",
       "squad": {
         "Goalkeepers": [
           {
@@ -3495,20 +3939,12 @@
             "club": "Lyon"
           },
           {
-            "name": "Moustapha Mbow",
-            "club": "Paris FC"
-          },
-          {
             "name": "Abdoulaye Seck",
             "club": "Maccabi Haifa"
           },
           {
             "name": "Ismaïl Jakobs",
             "club": "Galatasaray SK"
-          },
-          {
-            "name": "Ilay Camara",
-            "club": "Anderlecht"
           }
         ],
         "Midfielders": [
@@ -3578,12 +4014,120 @@
       }
     },
     "Iraq": {
-      "status": "announced",
+      "status": "final",
       "squad": {
-        "Goalkeepers": [],
-        "Defenders": [],
-        "Midfielders": [],
-        "Forwards": []
+        "Goalkeepers": [
+          {
+            "name": "Fahad Talib",
+            "club": "Al Talaba"
+          },
+          {
+            "name": "Jalal Hassan",
+            "club": "Al-Zawraa"
+          },
+          {
+            "name": "Ahmed Basil",
+            "club": "Al-Shorta"
+          }
+        ],
+        "Defenders": [
+          {
+            "name": "Hussein Ali",
+            "club": "Pogoń Szczecin"
+          },
+          {
+            "name": "Manaf Younis",
+            "club": "Al-Shorta"
+          },
+          {
+            "name": "Zaid Tahseen",
+            "club": "Pakhtakor"
+          },
+          {
+            "name": "​Rebin Sulaka",
+            "club": "Port"
+          },
+          {
+            "name": "Akam Hashem",
+            "club": "Al-Zawraa"
+          },
+          {
+            "name": "Merchas Doski",
+            "club": "Viktoria Plzeň"
+          },
+          {
+            "name": "Ahmed Yahya",
+            "club": "Al-Shorta"
+          },
+          {
+            "name": "​Zaid ⁠Ismail",
+            "club": "Al-Talaba"
+          },
+          {
+            "name": "Frans Putros",
+            "club": "Persib Bandung"
+          },
+          {
+            "name": "Mustafa Saadoon",
+            "club": "Al-Shorta"
+          }
+        ],
+        "Midfielders": [
+          {
+            "name": "Amir Al-Ammari",
+            "club": "Cracovia"
+          },
+          {
+            "name": "Kevin Yakob",
+            "club": "AGF"
+          },
+          {
+            "name": "Zidane Iqbal",
+            "club": "Utrecht"
+          },
+          {
+            "name": "Aimar Sher",
+            "club": "Sarpsborg"
+          },
+          {
+            "name": "Ibrahim Bayesh",
+            "club": "Al-Dhafra"
+          },
+          {
+            "name": "Ahmed Qasem",
+            "club": "Nashville SC"
+          },
+          {
+            "name": "Youssef Amyn",
+            "club": "AEK Larnaca"
+          },
+          {
+            "name": "Marko ⁠Farji",
+            "club": "Venezia"
+          }
+        ],
+        "Forwards": [
+          {
+            "name": "Ali Jassim",
+            "club": "Como"
+          },
+          {
+            "name": "Ali Al-Hamadi",
+            "club": "Ipswich Town"
+          },
+          {
+            "name": "Ali Youssef",
+            "club": "Apollon Limassol"
+          },
+          {
+            "name": "​Aymen Hussein",
+            "club": "Al-Karma"
+          },
+          {
+            "name": "Mohanad Ali",
+            "club": "Dibba"
+          }
+        ]
       }
     },
     "Norway": {
@@ -3686,7 +4230,7 @@
           },
           {
             "name": "Alexander Sørloth",
-            "club": "Atlético Madrid"
+            "club": "Atlético de Madrid"
           },
           {
             "name": "Jørgen Strand Larsen",
@@ -3706,7 +4250,7 @@
   },
   "Group J": {
     "Argentina": {
-      "status": "preliminary",
+      "status": "final",
       "squad": {
         "Goalkeepers": [
           {
@@ -3720,25 +4264,9 @@
           {
             "name": "Juan Musso",
             "club": "Atlético de Madrid"
-          },
-          {
-            "name": "Walter Benítez",
-            "club": "Crystal Palace FC"
-          },
-          {
-            "name": "Facundo Cambeses",
-            "club": "Racing Club"
-          },
-          {
-            "name": "Santiago Beltrán",
-            "club": "River Plate"
           }
         ],
         "Defenders": [
-          {
-            "name": "Agustín Giay",
-            "club": "Palmeiras"
-          },
           {
             "name": "Gonzalo Montiel",
             "club": "River Plate"
@@ -3746,22 +4274,6 @@
           {
             "name": "Nahuel Molina",
             "club": "Atlético de Madrid"
-          },
-          {
-            "name": "Nicolás Capaldo",
-            "club": "Hamburger SV"
-          },
-          {
-            "name": "Kevin Mac Allister",
-            "club": "Union Saint Gilloise"
-          },
-          {
-            "name": "Lucas Martínez Quarta",
-            "club": "River Plate"
-          },
-          {
-            "name": "Marcos Senesi",
-            "club": "Bournemouth"
           },
           {
             "name": "Lisandro Martínez",
@@ -3772,10 +4284,6 @@
             "club": "SL Benfica"
           },
           {
-            "name": "Germán Pezzella",
-            "club": "River Plate"
-          },
-          {
             "name": "Leonardo Balerdi",
             "club": "Olympique de Marseille"
           },
@@ -3784,58 +4292,18 @@
             "club": "Tottenham Hotspur"
           },
           {
-            "name": "Lautaro Di Lollo",
-            "club": "Boca Juniors"
-          },
-          {
-            "name": "Zaid Romero",
-            "club": "Getafe CF"
-          },
-          {
             "name": "Facundo Medina",
             "club": "Olympique de Marseille"
           },
           {
-            "name": "Marcos Acuña",
-            "club": "River Plate"
-          },
-          {
             "name": "Nicolás Tagliafico",
             "club": "Olympique Lyonnais"
-          },
-          {
-            "name": "Gabriel Rojas",
-            "club": "Racing Club"
           }
         ],
         "Midfielders": [
           {
-            "name": "Máximo Perrone",
-            "club": "Como 1907"
-          },
-          {
             "name": "Leandro Paredes",
             "club": "Boca Juniors"
-          },
-          {
-            "name": "Guido Rodríguez",
-            "club": "Valencia CF"
-          },
-          {
-            "name": "Aníbal Moreno",
-            "club": "River Plate"
-          },
-          {
-            "name": "Milton Delgado",
-            "club": "Boca Juniors"
-          },
-          {
-            "name": "Alan Varela",
-            "club": "FC Porto"
-          },
-          {
-            "name": "(Ezequiel Fernández (Bayer Leverkusen)",
-            "club": ""
           },
           {
             "name": "Rodrigo De Paul",
@@ -3858,14 +4326,6 @@
             "club": "Real Betis"
           },
           {
-            "name": "Nicolás Domínguez",
-            "club": "Nottingham Forest"
-          },
-          {
-            "name": "Emiliano Buendía",
-            "club": "Aston Villa"
-          },
-          {
             "name": "Valentín Barco",
             "club": "RC Strasbourg"
           }
@@ -3880,44 +4340,16 @@
             "club": "Como 1907"
           },
           {
-            "name": "Franco Mastantuono",
-            "club": "Real Madrid"
-          },
-          {
             "name": "Thiago Almada",
             "club": "Atlético de Madrid"
-          },
-          {
-            "name": "Tomás Aranda",
-            "club": "Boca Juniors"
           },
           {
             "name": "Nicolás González",
             "club": "Atlético de Madrid"
           },
           {
-            "name": "Alejandro Garnacho",
-            "club": "Chelsea"
-          },
-          {
             "name": "Giuliano Simeone",
             "club": "Atlético de Madrid"
-          },
-          {
-            "name": "Matías Soulé",
-            "club": "AS Roma"
-          },
-          {
-            "name": "Claudio Echeverri",
-            "club": "Girona FC"
-          },
-          {
-            "name": "Gianluca Prestianni",
-            "club": "SL Benfica"
-          },
-          {
-            "name": "Santiago Castro",
-            "club": "Bologna FC"
           },
           {
             "name": "Lautaro Martínez",
@@ -3930,21 +4362,125 @@
           {
             "name": "Julián Álvarez",
             "club": "Atlético de Madrid"
-          },
-          {
-            "name": "Mateo Pellegrino",
-            "club": "Parma Calcio"
           }
         ]
       }
     },
     "Algeria": {
-      "status": "announced",
+      "status": "final",
       "squad": {
-        "Goalkeepers": [],
-        "Defenders": [],
-        "Midfielders": [],
-        "Forwards": []
+        "Goalkeepers": [
+          {
+            "name": "Luca Zidane",
+            "club": "Granada"
+          },
+          {
+            "name": "Oussama Benbot",
+            "club": "Alger"
+          },
+          {
+            "name": "Melvin Mastil",
+            "club": "Stade Nyonnais"
+          }
+        ],
+        "Defenders": [
+          {
+            "name": "Rafik Belghali",
+            "club": "Hellas Verona"
+          },
+          {
+            "name": "Samir Chergui",
+            "club": "Paris FC"
+          },
+          {
+            "name": "Rayan Aït-Nouri",
+            "club": "Manchester City"
+          },
+          {
+            "name": "Jaouen Hadjam",
+            "club": "BSC Young Boys"
+          },
+          {
+            "name": "Aïssa Mandi",
+            "club": "Lille"
+          },
+          {
+            "name": "Ramy Bensebaïni",
+            "club": "Borussia Dortmund"
+          },
+          {
+            "name": "Zinedine Belaïd",
+            "club": "Kabylie"
+          },
+          {
+            "name": "Mohamed Amine Tougaï",
+            "club": "Espérance de Tunis"
+          },
+          {
+            "name": "Achraf Abada",
+            "club": "USM Alger"
+          }
+        ],
+        "Midfielders": [
+          {
+            "name": "Nabil Bentaleb",
+            "club": "Lille"
+          },
+          {
+            "name": "Hicham Boudaoui",
+            "club": "OGC Nice"
+          },
+          {
+            "name": "Houssem Aouar",
+            "club": "Al-Ittihad"
+          },
+          {
+            "name": "Farès Chaïbi",
+            "club": "Eintracht Frankfurt"
+          },
+          {
+            "name": "Ibrahim Maza",
+            "club": "Bayer Leverkusen"
+          },
+          {
+            "name": "Yacine Titraoui",
+            "club": "Royal Charleroi"
+          },
+          {
+            "name": "Ramiz Zerrouki",
+            "club": "Twente"
+          }
+        ],
+        "Forwards": [
+          {
+            "name": "Mohamed Amine Amoura",
+            "club": "VfL Wolfsburg"
+          },
+          {
+            "name": "Nadhir Benbouali",
+            "club": "ETO"
+          },
+          {
+            "name": "Adil Boulbina",
+            "club": "Al-Duhail"
+          },
+          {
+            "name": "Farès Ghedjemis",
+            "club": "Frosinone"
+          },
+          {
+            "name": "Amine Gouiri",
+            "club": "Olympique Marseilla"
+          },
+          {
+            "name": "Anis Hadj Moussa",
+            "club": "Feyenoord"
+          },
+          {
+            "name": "Riyad Mahrez",
+            "club": "Al-Ahli"
+          }
+        ]
       }
     },
     "Austria": {
@@ -4065,7 +4601,7 @@
       }
     },
     "Jordan": {
-      "status": "preliminary",
+      "status": "final",
       "squad": {
         "Goalkeepers": [
           {
@@ -4077,10 +4613,6 @@
             "club": "Al-Wehdat"
           },
           {
-            "name": "Mohamed Al-Emwasi",
-            "club": "Al-Najaf"
-          },
-          {
             "name": "Nour Bani Attiah",
             "club": "Al-Faisaly"
           }
@@ -4089,10 +4621,6 @@
           {
             "name": "Mohammad Abualnadi",
             "club": "Selangor"
-          },
-          {
-            "name": "Yousef Abu Al Jazar",
-            "club": "Al-Hussein"
           },
           {
             "name": "Husam Abu Dahab",
@@ -4113,6 +4641,22 @@
           {
             "name": "Saleem Obaid",
             "club": "Al-Hussein"
+          },
+          {
+            "name": "Ehsan Haddad",
+            "club": "Đang cập nhật"
+          },
+          {
+            "name": "Saed Al-Rosan",
+            "club": "Đang cập nhật"
+          },
+          {
+            "name": "Anas Banawi",
+            "club": "Al-Faisaly"
+          },
+          {
+            "name": "Mohannad Abu Taha",
+            "club": "Al-Quwa Al-Jawiya"
           }
         ],
         "Midfielders": [
@@ -4137,33 +4681,33 @@
             "club": "Al-Zawraa"
           },
           {
-            "name": "Yousef Qashi",
-            "club": ""
-          },
-          {
             "name": "Ibrahim Sadeh",
             "club": "Al-Karma"
+          },
+          {
+            "name": "Mahmoud Al-Mardi (Al-Hussein).",
+            "club": "Đang cập nhật"
           }
         ],
         "Forwards": [
-          {
-            "name": "Mahmoud Al-Mardi",
-            "club": "Al-Hussein"
-          },
-          {
-            "name": "Mohannad Abu Taha",
-            "club": "Al-Quwa"
-          },
-          {
-            "name": "Yazan Al-Naimat",
-            "club": "Al-Arabi"
-          },
           {
             "name": "Mousa Al Tamari",
             "club": "Rennes"
           },
           {
-            "name": "Ali Olwan",
+            "name": "Odeh Al-Fakhouri",
+            "club": "Pyramids"
+          },
+          {
+            "name": "Mohammad Abu Zrayq",
+            "club": "Raja Casablanca"
+          },
+          {
+            "name": "Ali Azaizeh",
+            "club": "Al-Shabab"
+          },
+          {
+            "name": "Ali Olwan",
             "club": "Al-Sailiya"
           },
           {
@@ -4176,7 +4720,7 @@
   },
   "Group K": {
     "Portugal": {
-      "status": "provisional",
+      "status": "final",
       "squad": {
         "Goalkeepers": [
           {
@@ -4190,20 +4734,12 @@
           {
             "name": "Rui Silva",
             "club": "Sporting CP"
-          },
-          {
-            "name": "Ricardo Velho",
-            "club": "Gençlerbirliği Ankara"
           }
         ],
         "Defenders": [
           {
-            "name": "Diogo Dalot",
-            "club": "Manchester United"
-          },
-          {
-            "name": "Matheus Nunes",
-            "club": "Manchester City"
+            "name": "Diogo Dalot (Manchester United); Matheus Nunes (Manchester City)",
+            "club": "Đang cập nhật"
           },
           {
             "name": "Nélson Semedo",
@@ -4222,16 +4758,8 @@
             "club": "Sporting CP"
           },
           {
-            "name": "Renato Veiga",
-            "club": "Villarreal"
-          },
-          {
-            "name": "Rúben Dias",
-            "club": "Manchester City"
-          },
-          {
-            "name": "Tomás Araújo",
-            "club": "SL Benfica"
+            "name": "Renato Veiga (Villarreal); Rúben Dias (Manchester City); Tomás Araújo (SL Benfica)",
+            "club": "Đang cập nhật"
           }
         ],
         "Midfielders": [
@@ -4286,18 +4814,14 @@
             "club": "Real Sociedad"
           },
           {
-            "name": "Gonçalo Ramos",
-            "club": "PSG"
-          },
-          {
-            "name": "Cristiano Ronaldo",
-            "club": "Al Nassr"
+            "name": "Gonçalo Ramos (PSG); Cristiano Ronaldo (Al Nassr)",
+            "club": "Đang cập nhật"
           }
         ]
       }
     },
     "Democratic Republic of the Congo": {
-      "status": "full",
+      "status": "final",
       "squad": {
         "Goalkeepers": [
           {
@@ -4414,16 +4938,124 @@
       }
     },
     "Uzbekistan": {
-      "status": "announced",
+      "status": "final",
       "squad": {
-        "Goalkeepers": [],
-        "Defenders": [],
-        "Midfielders": [],
-        "Forwards": []
+        "Goalkeepers": [
+          {
+            "name": "Utkir Yusupov",
+            "club": "Navbahor"
+          },
+          {
+            "name": "Abduvohid Nematov",
+            "club": "Nasaf"
+          },
+          {
+            "name": "Botirali Ergashev (Neftchi).",
+            "club": "Đang cập nhật"
+          }
+        ],
+        "Defenders": [
+          {
+            "name": "Rustam Ashurmatov",
+            "club": "Esteghlal"
+          },
+          {
+            "name": "Farrukh Sayfiev",
+            "club": "Neftchi"
+          },
+          {
+            "name": "Khojiakbar Alijonov",
+            "club": "Pakhtakor"
+          },
+          {
+            "name": "Sherzod Nasrullaev",
+            "club": "Nasaf"
+          },
+          {
+            "name": "Umar Eshmurodov",
+            "club": "Nasaf"
+          },
+          {
+            "name": "Abdukodir Khusanov",
+            "club": "Manchester City"
+          },
+          {
+            "name": "Abdulla Abdullaev",
+            "club": "Dibba"
+          },
+          {
+            "name": "Bekhruz Karimov",
+            "club": "Surkhon"
+          },
+          {
+            "name": "Jakhongir Urozov",
+            "club": "Dinamo Samarqand"
+          },
+          {
+            "name": "Avazbek Ulmasaliev (AGMK).",
+            "club": "Đang cập nhật"
+          }
+        ],
+        "Midfielders": [
+          {
+            "name": "Otabek Shukurov",
+            "club": "Baniyas"
+          },
+          {
+            "name": "Jaloliddin Masharipov",
+            "club": "Esteghlal"
+          },
+          {
+            "name": "Odiljon Hamrobekov",
+            "club": "Tractor"
+          },
+          {
+            "name": "Oston Urunov",
+            "club": "Persepolis"
+          },
+          {
+            "name": "Jamshid Iskanderov",
+            "club": "Neftchi"
+          },
+          {
+            "name": "Dostonbek Khamdamov",
+            "club": "Pakhtakor"
+          },
+          {
+            "name": "Abbosbek Fayzullaev",
+            "club": "Istanbul Basaksehir"
+          },
+          {
+            "name": "Akmal Mozgovoy",
+            "club": "Pakhtakor"
+          },
+          {
+            "name": "Azizjon Ganiev",
+            "club": "Al Bataeh"
+          },
+          {
+            "name": "Sherzod Esanov (Bukhara).",
+            "club": "Đang cập nhật"
+          }
+        ],
+        "Forwards": [
+          {
+            "name": "Eldor Shomurodov",
+            "club": "Istanbul Basaksehir, on loan from Roma"
+          },
+          {
+            "name": "Igor Sergeev",
+            "club": "Persepolis"
+          },
+          {
+            "name": "Azizbek Amonov (Bukhara).",
+            "club": "Đang cập nhật"
+          }
+        ]
       }
     },
     "Colombia": {
-      "status": "full",
+      "status": "final",
       "squad": {
         "Goalkeepers": [
           {
@@ -4499,8 +5131,8 @@
             "club": "Krasnodar"
           },
           {
-            "name": "Jaminton Campaz (Rosario Central))",
-            "club": ""
+            "name": "Jaminton Campaz",
+            "club": "Rosario Central"
           }
         ],
         "Forwards": [
@@ -4510,7 +5142,7 @@
           },
           {
             "name": "Carlos Andrés Gómez",
-            "club": "Campeonato Brasileiro"
+            "club": "Vasco da Gama"
           },
           {
             "name": "Jhon Córdoba",
@@ -4647,79 +5279,71 @@
       }
     },
     "Croatia": {
-      "status": "preliminary",
+      "status": "final",
       "squad": {
         "Goalkeepers": [
           {
-            "name": "Dominik Livaković",
+            "name": "Dominik Livakovic",
             "club": "Dinamo Zagreb"
           },
           {
             "name": "Dominik Kotarski",
-            "club": "København"
+            "club": "Copenhagen"
           },
           {
-            "name": "Ivor Pandur",
-            "club": "Hull City"
-          },
-          {
-            "name": "Karlo Letica",
-            "club": "Lausanne-Sport"
+            "name": "Ivor Pandur (Hull City).",
+            "club": "Đang cập nhật"
           }
         ],
         "Defenders": [
           {
-            "name": "Joško Gvardiol",
+            "name": "Josko Gvardiol",
             "club": "Manchester City"
           },
           {
-            "name": "Duje Ćaleta-Car",
+            "name": "Duje Caleta-Car",
             "club": "Real Sociedad"
           },
           {
-            "name": "Josip Šutalo",
-            "club": "Ajax"
+            "name": "Josip Sutalo",
+            "club": "Ajax Amsterdam"
           },
           {
-            "name": "Josip Stanišić",
-            "club": "Bayern München"
+            "name": "Josip Stanisic",
+            "club": "Bayern Munich"
           },
           {
-            "name": "Marin Pongračić",
+            "name": "Marin Pongracic",
             "club": "Fiorentina"
           },
           {
-            "name": "Martin Erlić",
+            "name": "Martin Erlic",
             "club": "Midtjylland"
           },
           {
-            "name": "Luka Vušković",
-            "club": "Hamburger SV"
-          },
-          {
-            "name": "Ivan Smolčić",
-            "club": "Como"
+            "name": "Luka Vuskovic (Hamburg).",
+            "club": "Đang cập nhật"
           }
         ],
         "Midfielders": [
           {
-            "name": "Luka Modrić",
-            "club": "Milan"
+            "name": "Luka Modric",
+            "club": "AC Milan"
           },
           {
-            "name": "Mateo Kovačić",
+            "name": "Mateo Kovacic",
             "club": "Manchester City"
           },
           {
-            "name": "Mario Pašalić",
+            "name": "Mario Pasalic",
             "club": "Atalanta"
           },
           {
-            "name": "Nikola Vlašić",
+            "name": "Nikola Vlasic",
             "club": "Torino"
           },
           {
-            "name": "Luka Sučić",
+            "name": "Luka Sucic",
             "club": "Real Sociedad"
           },
           {
@@ -4727,41 +5351,29 @@
             "club": "Como"
           },
           {
-            "name": "Kristijan Jakić",
+            "name": "Kristijan Jakic",
             "club": "Augsburg"
           },
           {
-            "name": "Petar Sučić",
-            "club": "Internazionale"
+            "name": "Petar Sucic",
+            "club": "Inter Milan"
           },
           {
             "name": "Nikola Moro",
             "club": "Bologna"
           },
           {
-            "name": "Toni Fruk",
-            "club": "Rijeka"
-          },
-          {
-            "name": "Lovro Majer",
-            "club": "Wolfsburg"
-          },
-          {
-            "name": "Adrian Segečić",
-            "club": "Portsmouth"
-          },
-          {
-            "name": "Luka Stojković",
-            "club": "Dinamo Zagreb"
+            "name": "Toni Fruk (Rijeka).",
+            "club": "Đang cập nhật"
           }
         ],
         "Forwards": [
           {
-            "name": "Ivan Perišić",
+            "name": "Ivan Perisic",
             "club": "PSV Eindhoven"
           },
           {
-            "name": "Andrej Kramarić",
+            "name": "Andrej Kramaric",
             "club": "Hoffenheim"
           },
           {
@@ -4769,7 +5381,7 @@
             "club": "Osasuna"
           },
           {
-            "name": "Marco Pašalić",
+            "name": "Marco Pasalic",
             "club": "Orlando City"
           },
           {
@@ -4777,27 +5389,127 @@
             "club": "Dallas"
           },
           {
-            "name": "Igor Matanović",
-            "club": "Freiburg"
-          },
-          {
-            "name": "Franjo Ivanović",
-            "club": "Benfica"
-          },
-          {
-            "name": "Dion Drena Beljo",
-            "club": "Dinamo Zagreb"
+            "name": "Igor Matanovic (Freiburg).",
+            "club": "Đang cập nhật"
           }
         ]
       }
     },
     "Ghana": {
-      "status": "announced",
+      "status": "final",
       "squad": {
-        "Goalkeepers": [],
-        "Defenders": [],
-        "Midfielders": [],
-        "Forwards": []
+        "Goalkeepers": [
+          {
+            "name": "Benjamin Asare",
+            "club": "Accra Hearts of Oak"
+          },
+          {
+            "name": "Lawrence Ati-Zigi",
+            "club": "St. Gallen"
+          },
+          {
+            "name": "Joseph Anang",
+            "club": "St. Patrick’s Athletic"
+          }
+        ],
+        "Defenders": [
+          {
+            "name": "Baba Abdul Rahman",
+            "club": "PAOK"
+          },
+          {
+            "name": "Derrick Luckassen",
+            "club": "Pafos"
+          },
+          {
+            "name": "Gideon Mensah",
+            "club": "Auxerre"
+          },
+          {
+            "name": "Marvin Senaya",
+            "club": "Auxerre"
+          },
+          {
+            "name": "Alidu Seidu",
+            "club": "Rennes"
+          },
+          {
+            "name": "Abdul Mumin",
+            "club": "Rayo Vallecano"
+          },
+          {
+            "name": "Jerome Opoku",
+            "club": "Istanbul Basaksehir"
+          },
+          {
+            "name": "Jonas Adjetey",
+            "club": "VfL Wolfsburg"
+          },
+          {
+            "name": "Kojo Oppong Peprah",
+            "club": "OGC Nice"
+          }
+        ],
+        "Midfielders": [
+          {
+            "name": "Thomas Partey",
+            "club": "Villarreal"
+          },
+          {
+            "name": "Kamaldeen Sulemana",
+            "club": "Atalanta BC"
+          },
+          {
+            "name": "Kwasi Sibo",
+            "club": "Real Oviedo"
+          },
+          {
+            "name": "Augustine Boakye",
+            "club": "Saint-Etienne"
+          },
+          {
+            "name": "Caleb Yirenkyi",
+            "club": "FC Nordsjaelland"
+          },
+          {
+            "name": "Abdul Fatawu Issahaku",
+            "club": "Leicester City"
+          },
+          {
+            "name": "Elisha Owusu",
+            "club": "Auxerre"
+          }
+        ],
+        "Forwards": [
+          {
+            "name": "Christopher Bonsu Baah",
+            "club": "Al Qadsiah"
+          },
+          {
+            "name": "Ernest Nuamah",
+            "club": "Lyon"
+          },
+          {
+            "name": "Antoine Semenyo",
+            "club": "Manchester City"
+          },
+          {
+            "name": "Brandon Thomas-Asante",
+            "club": "Coventry City"
+          },
+          {
+            "name": "Prince Kwabena Adu",
+            "club": "Viktoria Plzen"
+          },
+          {
+            "name": "Iñaki Williams",
+            "club": "Athletic Club"
+          },
+          {
+            "name": "Jordan Ayew",
+            "club": "Leicester City"
+          }
+        ]
       }
     },
     "Panama": {
@@ -4823,7 +5535,7 @@
             "club": "Slovan Bratislava"
           },
           {
-            "name": "Jorge Gutiérrez",
+            "name": "Jorge Gutiérrez",
             "club": "Deportivo La Guaira"
           },
           {
@@ -4881,7 +5593,7 @@
             "club": "FC Juarez"
           },
           {
-            "name": "Cesar Yanis",
+            "name": "Cesar Yanis",
             "club": "CD Cobresal"
           },
           {
@@ -4889,7 +5601,7 @@
             "club": "Mazatlan FC"
           },
           {
-            "name": "Alberto Quintero",
+            "name": "Alberto Quintero",
             "club": "CD Plaza Amador"
           },
           {
