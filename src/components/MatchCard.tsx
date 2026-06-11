@@ -125,9 +125,9 @@ export default React.memo(function MatchCard({
   const getFlagUrl = (iso2: string) => {
     if (!iso2) return null;
     const code = iso2.toLowerCase();
-    if (code === "eng") return "https://flagcdn.com/w40/gb-eng.png";
-    if (code === "sco") return "https://flagcdn.com/w40/gb-sct.png";
-    return `https://flagcdn.com/w40/${code}.png`;
+    if (code === "eng") return "https://flagcdn.com/w80/gb-eng.png";
+    if (code === "sco") return "https://flagcdn.com/w80/gb-sct.png";
+    return `https://flagcdn.com/w80/${code}.png`;
   };
 
   // Check if team is placeholder (e.g. "1A", "2B", "W74")

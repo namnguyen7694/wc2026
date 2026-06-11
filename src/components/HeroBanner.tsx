@@ -14,9 +14,9 @@ interface HeroBannerProps {
 const getFlagUrl = (iso2: string) => {
   if (!iso2) return null;
   const code = iso2.toLowerCase();
-  if (code === "eng") return "https://flagcdn.com/w40/gb-eng.png";
-  if (code === "sco") return "https://flagcdn.com/w40/gb-sct.png";
-  return `https://flagcdn.com/w40/${code}.png`;
+  if (code === "eng") return "https://flagcdn.com/w80/gb-eng.png";
+  if (code === "sco") return "https://flagcdn.com/w80/gb-sct.png";
+  return `https://flagcdn.com/w80/${code}.png`;
 };
 
 // Helper to parse "dd/mm/yyyy hh:mm" date string into a timestamp

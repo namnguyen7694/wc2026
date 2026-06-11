@@ -34,9 +34,9 @@ export default function GroupStandings({ matches }: GroupStandingsProps) {
   const getFlagUrl = (iso2: string) => {
     if (!iso2) return null;
     const code = iso2.toLowerCase();
-    if (code === "eng") return "https://flagcdn.com/w20/gb-eng.png";
-    if (code === "sco") return "https://flagcdn.com/w20/gb-sct.png";
-    return `https://flagcdn.com/w20/${code}.png`;
+    if (code === "eng") return "https://flagcdn.com/w80/gb-eng.png";
+    if (code === "sco") return "https://flagcdn.com/w80/gb-sct.png";
+    return `https://flagcdn.com/w80/${code}.png`;
   };
 
   return (
