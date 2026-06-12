@@ -272,9 +272,17 @@ export default React.memo(function MatchCard({
               </span>
             ) : (
               <span
-                className={`text-emerald-500 dark:text-emerald-400 font-extrabold mt-0.5 uppercase tracking-tighter ${timeText}`}
+                className={`font-extrabold mt-0.5 uppercase tracking-tighter ${timeText} ${
+                  match.status === "finished"
+                    ? "text-emerald-500 dark:text-emerald-400"
+                    : "text-red-500 dark:text-red-400"
+                }`}
               >
-                {match.status === "finished" ? "Xong" : "Live"}
+                {match.status === "finished"
+                  ? "Xong"
+                  : match.status === "live"
+                    ? "Live"
+                    : `Live - ${match.status.toUpperCase()}`}
               </span>
             )}
           </div>
@@ -435,13 +443,24 @@ export default React.memo(function MatchCard({
         </td>
 
         {/* Score / VS */}
-        <td className="px-2 py-3 text-center whitespace-nowrap font-black">
+        <td className="px-2 py-3 text-center whitespace-nowrap font-black align-middle">
           {match.status === "notstarted" ? (
             <span className="text-foreground/40 text-xs font-mono">vs</span>
           ) : (
-            <span className="px-2 py-1 bg-slate-100 dark:bg-white/5 rounded-lg border border-slate-200/50 text-foreground text-xs sm:text-sm font-black">
-              {match.home_score} - {match.away_score}
-            </span>
+            <div className="flex flex-col items-center justify-center gap-1">
+              <span className="px-2 py-1 bg-slate-100 dark:bg-white/5 rounded-lg border border-slate-200/50 text-foreground text-xs sm:text-sm font-black">
+                {match.home_score} - {match.away_score}
+              </span>
+              {match.status !== "finished" && (
+                <span className="text-[9px] font-black text-red-500 dark:text-red-400 inline-flex items-center gap-1 select-none animate-pulse">
+                  <span className="relative flex h-1 w-1">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1 w-1 bg-red-500"></span>
+                  </span>
+                  {match.status.toUpperCase()}
+                </span>
+              )}
+            </div>
           )}
         </td>
 
@@ -670,8 +689,18 @@ export default React.memo(function MatchCard({
                   <Clock size={10} /> {match.local_date.split(" ")[1]}
                 </span>
               ) : (
-                <span className="text-[10px] text-emerald-500 dark:text-emerald-400 font-extrabold mt-1 uppercase tracking-wider">
-                  {match.status === "finished" ? "Đã xong" : "Đang đá"}
+                <span
+                  className={`text-[10px] font-extrabold mt-1 uppercase tracking-wider ${
+                    match.status === "finished"
+                      ? "text-emerald-500 dark:text-emerald-400"
+                      : "text-red-500 dark:text-red-400"
+                  }`}
+                >
+                  {match.status === "finished"
+                    ? "Đã xong"
+                    : match.status === "live"
+                      ? "Đang đá"
+                      : `Live - ${match.status.toUpperCase()}`}
                 </span>
               )}
             </div>
@@ -731,6 +760,25 @@ export default React.memo(function MatchCard({
               </div>
             )}
 
+            {/* Tỉ số chi tiết (Hiệp 1 / Cả trận) */}
+            {match.match_score && (match.match_score.halftime || match.match_score.fulltime) && (
+              <div className="bg-slate-50 dark:bg-white/[0.01] border border-slate-200/50 dark:border-white/5 rounded-2xl p-3.5 space-y-2">
+                <h4 className="text-[10px] font-black text-secondary uppercase tracking-widest flex items-center gap-1.5 select-none">
+                  📊 TỈ SỐ CHI TIẾT
+                </h4>
+                <div className="grid grid-cols-2 gap-3 text-xs">
+                  <div className="flex justify-between items-center bg-slate-100/50 dark:bg-white/[0.02] p-2.5 rounded-xl border border-slate-200/30 dark:border-white/5">
+                    <span className="text-foreground/60 font-bold">Hiệp 1</span>
+                    <span className="font-mono font-black text-foreground">{match.match_score.halftime || "—"}</span>
+                  </div>
+                  <div className="flex justify-between items-center bg-slate-100/50 dark:bg-white/[0.02] p-2.5 rounded-xl border border-slate-200/30 dark:border-white/5">
+                    <span className="text-foreground/60 font-bold">Cả trận</span>
+                    <span className="font-mono font-black text-foreground">{match.match_score.fulltime || "—"}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* General Metadata Info */}
             <div className="grid grid-cols-2 gap-3.5 text-xs bg-slate-50 dark:bg-white/[0.01] border border-slate-200/50 dark:border-white/5 p-4 rounded-2xl">
               <div>
@@ -743,19 +791,26 @@ export default React.memo(function MatchCard({
                 <span className="text-[10px] text-foreground/45 font-bold uppercase tracking-wider block mb-0.5">
                   Trạng Thái Trận Đấu
                 </span>
-                <span className="font-extrabold text-foreground/90 flex items-center gap-1">
+                <span className="font-extrabold text-foreground/90 flex items-center gap-1.5">
                   {match.status === "finished" ? (
                     <span className="inline-block w-2 h-2 rounded-full bg-slate-400" />
-                  ) : match.status === "live" ? (
-                    <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                  ) : match.status !== "notstarted" ? (
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                    </span>
                   ) : (
                     <span className="inline-block w-2 h-2 rounded-full bg-amber-500" />
                   )}
-                  {match.status === "finished"
-                    ? "Đã kết thúc"
-                    : match.status === "live"
-                      ? "Đang trực tiếp"
-                      : "Chưa diễn ra"}
+                  {match.status === "finished" ? (
+                    "Đã kết thúc"
+                  ) : match.status !== "notstarted" ? (
+                    <span className="text-red-500 dark:text-red-400">
+                      {match.status === "live" ? "Đang trực tiếp" : `Trực tiếp - ${match.status.toUpperCase()}`}
+                    </span>
+                  ) : (
+                    "Chưa diễn ra"
+                  )}
                 </span>
               </div>
               <div className="col-span-2">

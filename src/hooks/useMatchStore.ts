@@ -15,6 +15,19 @@ interface MatchState {
   getGroupStandings: (group: string) => GroupTeamStanding[];
 }
 
+const getMatchTimestamp = (localDate?: string): number => {
+  if (!localDate) return 0;
+  try {
+    const [dateStr, timeStr] = localDate.split(" ");
+    if (!dateStr || !timeStr) return 0;
+    const [day, month, year] = dateStr.split("/");
+    const [hours, minutes] = timeStr.split(":");
+    return new Date(Number(year), Number(month) - 1, Number(day), Number(hours), Number(minutes)).getTime();
+  } catch {
+    return 0;
+  }
+};
+
 export const useMatchStore = create<MatchState>((set, get) => ({
   matches: [],
   allMatches: [],
@@ -23,11 +36,28 @@ export const useMatchStore = create<MatchState>((set, get) => ({
   matchesByTeam: {},
   isLoaded: false,
   setMatches: (matches: Match[]) => {
+    const processedMatches = matches.map((match) => {
+      const timestamp = getMatchTimestamp(match.local_date);
+      return {
+        ...match,
+        id: `${timestamp}_${match.match_id}`,
+      };
+    });
+
+    // Sort all matches chronologically (earliest to latest)
+    processedMatches.sort((a, b) => {
+      const [tsA, mIdA] = (a.id || "").split("_");
+      const [tsB, mIdB] = (b.id || "").split("_");
+      const timeDiff = (Number(tsA) || 0) - (Number(tsB) || 0);
+      if (timeDiff !== 0) return timeDiff;
+      return (Number(mIdA) || 0) - (Number(mIdB) || 0);
+    });
+
     const matchesByDay: Record<string, Match[]> = {};
     const groups: Record<string, Match[]> = {};
     const matchesByTeam: Record<string, Match[]> = {};
 
-    matches.forEach((match) => {
+    processedMatches.forEach((match) => {
       // 1. Group by Day (extracting date string portion YYYY-MM-DD or similar)
       if (match.local_date) {
         const dateStr = match.local_date.split(" ")[0];
@@ -69,8 +99,8 @@ export const useMatchStore = create<MatchState>((set, get) => ({
     });
 
     set({
-      matches,
-      allMatches: matches,
+      matches: processedMatches,
+      allMatches: processedMatches,
       matchesByDay,
       groups,
       matchesByTeam,
@@ -89,16 +119,15 @@ export const useMatchStore = create<MatchState>((set, get) => ({
         throw new Error(`HTTP error! status: ${res.status}`);
       }
 
-      const text = await res.text();
-      if (text && text.trim().startsWith('"match_id"')) {
-        console.log("Successfully fetched live World Cup 2026 schedule from live system via store!");
-        get().setMatches(parseCSV(text));
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        get().setMatches(data);
       } else {
-        throw new Error("Invalid CSV format returned from live API");
+        throw new Error("Invalid JSON format returned from live API");
       }
     } catch (error) {
       console.warn(
-        "Unable to fetch live World Cup 2026 data from live system (Using offline fallback data):",
+        "Unable to fetch enriched live World Cup 2026 data from API proxy, falling back to local CSV:",
         error instanceof Error ? error.message : error
       );
       get().setMatches(parseCSV(FALLBACK_CSV));

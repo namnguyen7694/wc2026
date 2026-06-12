@@ -1,5 +1,6 @@
 export interface Match {
   match_id: string;
+  id?: string;
   phase: 'group' | 'knockout';
   stage_key: string;
   stage_label: string;
@@ -26,6 +27,10 @@ export interface Match {
   away_scorers: string;
   home_placeholder?: string;
   away_placeholder?: string;
+  match_score?: {
+    halftime: string | null;
+    fulltime: string | null;
+  } | null;
 }
 
 export interface UserScore {

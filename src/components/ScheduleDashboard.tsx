@@ -364,6 +364,9 @@ export default function ScheduleDashboard() {
     }));
   }, [allMatchesResolved]);
 
+  console.log("groupedMatches", groupedMatches);
+  console.log("match", matches);
+
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-4 space-y-6">
       {/* 1. Stunning Hero Section */}
