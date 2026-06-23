@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+import BuyMeACoffee from "@/components/BuyMeACoffee";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -57,6 +58,8 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">
         {children}
+        {/* Buy Me A Coffee Popup */}
+        <BuyMeACoffee />
         <Analytics />
       </body>
     </html>

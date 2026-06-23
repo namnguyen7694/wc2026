@@ -44,15 +44,29 @@ const matchName = (localName: string, apiAwayTeam: ApiTeam | undefined): boolean
   const normLocal = normalizeName(localName);
   const normApiShort = normalizeName(apiAwayTeam?.team_name);
   const normApiFull = normalizeName(apiAwayTeam?.team_name_full);
-  
+
   // USA / United States handling
   const isUsaLocal = normLocal === "unitedstates" || normLocal === "usa" || normLocal === "my";
-  const isUsaApi = normApiShort === "usa" || normApiFull === "usa" || normApiShort === "unitedstates" || normApiFull === "unitedstates";
+  const isUsaApi =
+    normApiShort === "usa" ||
+    normApiFull === "usa" ||
+    normApiShort === "unitedstates" ||
+    normApiFull === "unitedstates";
   if (isUsaLocal && isUsaApi) return true;
 
   // South Korea / Republic of Korea / Korea Republic handling
-  const isKoreaLocal = normLocal === "southkorea" || normLocal === "republicofkorea" || normLocal === "korearepublic" || normLocal === "hanquoc";
-  const isKoreaApi = normApiShort === "southkorea" || normApiFull === "southkorea" || normApiShort === "republicofkorea" || normApiFull === "republicofkorea" || normApiShort === "korearepublic" || normApiFull === "korearepublic";
+  const isKoreaLocal =
+    normLocal === "southkorea" ||
+    normLocal === "republicofkorea" ||
+    normLocal === "korearepublic" ||
+    normLocal === "hanquoc";
+  const isKoreaApi =
+    normApiShort === "southkorea" ||
+    normApiFull === "southkorea" ||
+    normApiShort === "republicofkorea" ||
+    normApiFull === "republicofkorea" ||
+    normApiShort === "korearepublic" ||
+    normApiFull === "korearepublic";
   if (isKoreaLocal && isKoreaApi) return true;
 
   return (
@@ -66,6 +80,32 @@ const matchName = (localName: string, apiAwayTeam: ApiTeam | undefined): boolean
 };
 
 export async function GET() {
+  const now = new Date();
+
+  // Format current time precisely in Asia/Ho_Chi_Minh timezone
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Ho_Chi_Minh",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: false,
+  });
+  const parts = formatter.formatToParts(now);
+  const vnHour = parseInt(parts.find((p) => p.type === "hour")?.value || "0", 10);
+  const vnMinute = parseInt(parts.find((p) => p.type === "minute")?.value || "0", 10);
+  const vnSecond = parseInt(parts.find((p) => p.type === "second")?.value || "0", 10);
+
+  // From 13h to 22h, no matches are played.
+  // We cache for up to 1 hour (3600s), but ensure it expires exactly at 22:00:00 VN time
+  let revalidateVal = 60;
+  if (vnHour >= 13 && vnHour < 22) {
+    const secondsRemaining = (22 - vnHour) * 3600 - vnMinute * 60 - vnSecond;
+    revalidateVal = Math.min(3600, Math.max(60, secondsRemaining));
+  }
+
+  const vnTimeStr = now.toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
+  console.log(`revalidateVal: ${revalidateVal} for VN Time: ${vnTimeStr}, VN hour: ${vnHour}`);
+
   const csvUrl = "https://vnexpress.net/the-thao/microservice/wc2026-score?t=" + Date.now();
   const jsonUrl = "https://gw.vnexpress.net/football/fixture?league_id=1";
 
@@ -73,10 +113,11 @@ export async function GET() {
     // 1. Fetch CSV Schedule
     const csvRes = await fetch(csvUrl, {
       headers: {
-        "Accept": "text/csv,text/plain,application/csv",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        Accept: "text/csv,text/plain,application/csv",
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
       },
-      next: { revalidate: 60 },
+      next: { revalidate: revalidateVal },
     });
 
     if (!csvRes.ok) {
@@ -91,10 +132,11 @@ export async function GET() {
     try {
       const jsonRes = await fetch(jsonUrl, {
         headers: {
-          "Accept": "application/json",
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+          Accept: "application/json",
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         },
-        next: { revalidate: 60 },
+        next: { revalidate: revalidateVal },
       });
 
       if (jsonRes.ok) {
@@ -118,14 +160,14 @@ export async function GET() {
       matches.forEach((match) => {
         if (match.phase === "group") {
           const matchTimeMs = getMatchDate(match.local_date, match.utc_offset).getTime();
-          
+
           // Find candidates by timestamp
-          const candidates = apiMatches.filter(apiM => apiM.event_timestamp * 1000 === matchTimeMs);
+          const candidates = apiMatches.filter((apiM) => apiM.event_timestamp * 1000 === matchTimeMs);
           let matchedApi = null;
           if (candidates.length === 1) {
             matchedApi = candidates[0];
           } else if (candidates.length > 1) {
-            matchedApi = candidates.find(apiM => matchName(match.away_team_name, apiM.away_team));
+            matchedApi = candidates.find((apiM) => matchName(match.away_team_name, apiM.away_team));
           }
 
           if (matchedApi) {
@@ -136,7 +178,7 @@ export async function GET() {
             if (typeof matchedApi.goals_away_team === "number" && !isNaN(matchedApi.goals_away_team)) {
               match.away_score = matchedApi.goals_away_team;
             }
-            
+
             // Enrich detailed match score
             if (matchedApi.score) {
               match.match_score = {
@@ -144,7 +186,7 @@ export async function GET() {
                 fulltime: matchedApi.score.fulltime || null,
               };
             }
-            
+
             // Enrich status
             const apiStatus = (matchedApi.status_short || "").toUpperCase();
             if (apiStatus === "FT" || apiStatus === "AET" || apiStatus === "PEN") {
@@ -157,7 +199,7 @@ export async function GET() {
               match.status = apiStatus.toLowerCase();
               match.finished = false;
             }
-            
+
             // Enrich time elapsed
             if (matchedApi.elapsed) {
               match.time_elapsed = String(matchedApi.elapsed);
@@ -171,13 +213,13 @@ export async function GET() {
     return NextResponse.json(matches, {
       status: 200,
       headers: {
-        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=30",
+        "Cache-Control": `public, s-maxage=${revalidateVal}, stale-while-revalidate=${revalidateVal / 2}`,
       },
     });
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
