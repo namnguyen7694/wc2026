@@ -1,35 +1,10 @@
 import { NextResponse } from "next/server";
 import { parseCSV } from "../../../utils/csvParser";
 import { getMatchDate } from "../../../utils/calendarUtils";
+import { FALLBACK_CSV } from "../../../constants/fallbackData";
+import { ApiMatch, ApiTeam, ApiResponse } from "../../../types/match";
 
 export const dynamic = "force-dynamic";
-
-interface ApiTeam {
-  team_id: number;
-  team_name: string;
-  team_name_full: string;
-  logo: string;
-}
-
-interface ApiMatch {
-  fixture_id: number;
-  event_timestamp: number;
-  status_short: string;
-  goals_home_team: number | null;
-  goals_away_team: number | null;
-  elapsed: number | null;
-  away_team: ApiTeam;
-  home_team: ApiTeam;
-  score?: {
-    halftime: string | null;
-    fulltime: string | null;
-  } | null;
-}
-
-interface ApiResponse {
-  code: number;
-  data: Record<string, { data: ApiMatch[] }>;
-}
 
 const normalizeName = (name?: string): string => {
   if (!name) return "";
@@ -39,6 +14,7 @@ const normalizeName = (name?: string): string => {
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]/g, "");
 };
+
 
 const matchName = (localName: string, apiAwayTeam: ApiTeam | undefined): boolean => {
   const normLocal = normalizeName(localName);
@@ -106,26 +82,10 @@ export async function GET() {
   const vnTimeStr = now.toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
   console.log(`revalidateVal: ${revalidateVal} for VN Time: ${vnTimeStr}, VN hour: ${vnHour}`);
 
-  const csvUrl = "https://vnexpress.net/the-thao/microservice/wc2026-score?t=" + Date.now();
   const jsonUrl = "https://gw.vnexpress.net/football/fixture?league_id=1";
 
   try {
-    // 1. Fetch CSV Schedule
-    const csvRes = await fetch(csvUrl, {
-      headers: {
-        Accept: "text/csv,text/plain,application/csv",
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      },
-      next: { revalidate: revalidateVal },
-    });
-
-    if (!csvRes.ok) {
-      throw new Error(`Failed to fetch CSV schedule: ${csvRes.status}`);
-    }
-
-    const csvText = await csvRes.text();
-    const matches = parseCSV(csvText);
+    const matches = parseCSV(FALLBACK_CSV);
 
     // 2. Fetch live JSON fixtures
     let apiMatches: ApiMatch[] = [];

@@ -63,9 +63,6 @@ export function getGoogleCalendarUrl(match: Match): string {
   
   let details = `Trận đấu thuộc ${match.stage_label}${match.group ? ` - Bảng ${match.group}` : ""}.\n`;
   details += `Mã trận đấu: #${match.match_id}\n`;
-  if (match.home_placeholder || match.away_placeholder) {
-    details += `Vị trí bốc thăm: ${match.home_placeholder || match.home_team_name} vs ${match.away_placeholder || match.away_team_name}\n`;
-  }
   details += `Sân vận động: ${match.stadium_name} (${match.stadium_city}, ${match.stadium_country})\n`;
   details += `\nTheo dõi và cập nhật kết quả tại Lịch thi đấu World Cup 2026 Dashboard!`;
   
@@ -96,9 +93,6 @@ export function downloadIcsFile(match: Match): void {
   
   let details = `Trận đấu thuộc ${match.stage_label}${match.group ? ` - Bảng ${match.group}` : ""}.\n`;
   details += `Mã trận đấu: #${match.match_id}\n`;
-  if (match.home_placeholder || match.away_placeholder) {
-    details += `Vị trí bốc thăm: ${match.home_placeholder || match.home_team_name} vs ${match.away_placeholder || match.away_team_name}\n`;
-  }
   details += `Sân vận động: ${match.stadium_name} (${match.stadium_city}, ${match.stadium_country})\n`;
   details += `\nTheo dõi và cập nhật kết quả tại Lịch thi đấu World Cup 2026 Dashboard!`;
 
@@ -181,9 +175,6 @@ export function downloadMatchesIcsFile(matches: Match[], filterType: "all" | "gr
 
       let details = `Trận đấu thuộc ${match.stage_label}${match.group ? ` - Bảng ${match.group}` : ""}.\n`;
       details += `Mã trận đấu: #${match.match_id}\n`;
-      if (match.home_placeholder || match.away_placeholder) {
-        details += `Vị trí bốc thăm: ${match.home_placeholder || match.home_team_name} vs ${match.away_placeholder || match.away_team_name}\n`;
-      }
       details += `Sân vận động: ${match.stadium_name} (${match.stadium_city}, ${match.stadium_country})\n`;
       details += `\nTheo dõi và cập nhật kết quả tại Lịch thi đấu World Cup 2026 Dashboard!`;
 

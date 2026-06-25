@@ -128,7 +128,7 @@ export const useMatchStore = create<MatchState>((set, get) => ({
     } catch (error) {
       console.warn(
         "Unable to fetch enriched live World Cup 2026 data from API proxy, falling back to local CSV:",
-        error instanceof Error ? error.message : error
+        error instanceof Error ? error.message : error,
       );
       get().setMatches(parseCSV(FALLBACK_CSV));
     }
@@ -216,10 +216,7 @@ export const useMatchStore = create<MatchState>((set, get) => ({
 
       const teamNames = new Set(tiedTeams.map((t) => t.teamName));
       const h2hMatches = matches.filter(
-        (m) =>
-          m.status !== "notstarted" &&
-          teamNames.has(m.home_team_name) &&
-          teamNames.has(m.away_team_name)
+        (m) => m.status !== "notstarted" && teamNames.has(m.home_team_name) && teamNames.has(m.away_team_name),
       );
 
       // Initialize H2H stats
@@ -236,9 +233,9 @@ export const useMatchStore = create<MatchState>((set, get) => ({
 
         if (homeStats && awayStats) {
           homeStats.gs += h;
-          homeStats.gd += (h - a);
+          homeStats.gd += h - a;
           awayStats.gs += a;
-          awayStats.gd += (a - h);
+          awayStats.gd += a - h;
 
           if (h > a) {
             homeStats.points += 3;
@@ -285,4 +282,3 @@ export const useMatchStore = create<MatchState>((set, get) => ({
     return finalStandings;
   },
 }));
-

@@ -230,7 +230,7 @@ export default React.memo(function MatchCard({
               )}
             </div>
             <span
-              className={`font-bold w-full group-hover/team:text-secondary transition-colors flex flex-col items-center justify-center gap-0.5 min-w-0 ${teamText} ${
+              className={`font-bold w-full group-hover/team:text-secondary transition-colors flex items-center justify-center min-w-0 ${teamText} ${
                 isPlaceholderTeam(match.home_team_name)
                   ? "text-secondary/80 italic font-medium"
                   : isHomeFavorite
@@ -238,17 +238,8 @@ export default React.memo(function MatchCard({
                     : "text-foreground"
               }`}
             >
-              <div className="flex items-center justify-center gap-0.5 w-full min-w-0">
-                {isHomeFavorite && <Heart size={heartIconSize} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
-                <span className="truncate pr-1 min-w-0">{match.home_team_name}</span>
-              </div>
-              {match.home_placeholder && (
-                <span
-                  className={`opacity-40 font-mono tracking-tight block select-none uppercase mt-0.5 ${placeholderText}`}
-                >
-                  ({match.home_placeholder})
-                </span>
-              )}
+              {isHomeFavorite && <Heart size={heartIconSize} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
+              <span className="truncate pr-1 min-w-0">{match.home_team_name}</span>
             </span>
           </div>
 
@@ -315,7 +306,7 @@ export default React.memo(function MatchCard({
               )}
             </div>
             <span
-              className={`font-bold w-full group-hover/team:text-secondary transition-colors flex flex-col items-center justify-center gap-0.5 min-w-0 ${teamText} ${
+              className={`font-bold w-full group-hover/team:text-secondary transition-colors flex items-center justify-center min-w-0 ${teamText} ${
                 isPlaceholderTeam(match.away_team_name)
                   ? "text-secondary/80 italic font-medium"
                   : isAwayFavorite
@@ -323,17 +314,8 @@ export default React.memo(function MatchCard({
                     : "text-foreground"
               }`}
             >
-              <div className="flex items-center justify-center gap-0.5 w-full min-w-0">
-                {isAwayFavorite && <Heart size={heartIconSize} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
-                <span className="truncate pr-1 min-w-0">{match.away_team_name}</span>
-              </div>
-              {match.away_placeholder && (
-                <span
-                  className={`opacity-40 font-mono tracking-tight block select-none uppercase mt-0.5 ${placeholderText}`}
-                >
-                  ({match.away_placeholder})
-                </span>
-              )}
+              <span className="truncate pr-1 min-w-0">{match.away_team_name}</span>
+              {isAwayFavorite && <Heart size={heartIconSize} className="fill-rose-500 text-rose-500 flex-shrink-0" />}
             </span>
           </div>
         </div>
@@ -677,11 +659,6 @@ export default React.memo(function MatchCard({
               </div>
               <span className="text-xs sm:text-sm font-black truncate w-full text-foreground group-hover/modal-team:text-secondary transition-colors flex flex-col items-center">
                 <span>{match.home_team_name}</span>
-                {match.home_placeholder && (
-                  <span className="text-[9px] opacity-45 font-mono uppercase font-medium mt-0.5">
-                    ({match.home_placeholder})
-                  </span>
-                )}
               </span>
             </div>
 
@@ -740,11 +717,6 @@ export default React.memo(function MatchCard({
               </div>
               <span className="text-xs sm:text-sm font-black truncate w-full text-foreground group-hover/modal-team:text-secondary transition-colors flex flex-col items-center">
                 <span>{match.away_team_name}</span>
-                {match.away_placeholder && (
-                  <span className="text-[9px] opacity-45 font-mono uppercase font-medium mt-0.5">
-                    ({match.away_placeholder})
-                  </span>
-                )}
               </span>
             </div>
           </div>

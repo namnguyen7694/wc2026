@@ -1,7 +1,7 @@
 export interface Match {
   match_id: string;
   id?: string;
-  phase: 'group' | 'knockout';
+  phase: "group" | "knockout";
   stage_key: string;
   stage_label: string;
   group: string;
@@ -27,8 +27,6 @@ export interface Match {
   time_elapsed: string;
   home_scorers: string;
   away_scorers: string;
-  home_placeholder?: string;
-  away_placeholder?: string;
   match_score?: {
     halftime: string | null;
     fulltime: string | null;
@@ -55,4 +53,31 @@ export interface GroupTeamStanding {
   goalsAgainst: number;
   goalDifference: number;
   points: number;
+}
+
+export interface ApiTeam {
+  team_id: number;
+  team_name: string;
+  team_name_full: string;
+  logo: string;
+}
+
+export interface ApiMatch {
+  fixture_id: number;
+  event_timestamp: number;
+  status_short: string;
+  goals_home_team: number | null;
+  goals_away_team: number | null;
+  elapsed: number | null;
+  away_team: ApiTeam;
+  home_team: ApiTeam;
+  score?: {
+    halftime: string | null;
+    fulltime: string | null;
+  } | null;
+}
+
+export interface ApiResponse {
+  code: number;
+  data: Record<string, { data: ApiMatch[] }>;
 }

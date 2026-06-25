@@ -5,7 +5,6 @@ import { Match } from "../types/match";
 import MatchCard from "./MatchCard";
 import { GitCommit, Grid, TreeDeciduous, Trophy } from "lucide-react";
 import { getMatchOrFallback, resolveTeam } from "../utils/matchUtils";
-import { useMatchStore } from "../hooks/useMatchStore";
 
 interface KnockoutBracketProps {
   matches: Match[];
@@ -14,9 +13,6 @@ interface KnockoutBracketProps {
 export default function KnockoutBracket({ matches }: KnockoutBracketProps) {
   const [viewMode, setViewMode] = useState<"tree" | "list">("tree");
   const [activeRound, setActiveRound] = useState<string>("all");
-  const getGroupStandings = useMatchStore((state) => state.getGroupStandings);
-
-  // Filter and resolve knockout matches (Vercel optimization: batch-resolving)
   const knockoutMatchesResolved = useMemo(() => {
     // 1. Create a rapid matches map for resolution lookups of WXX/LXX
     const tempMap = new Map<string, Match>();
@@ -25,19 +21,17 @@ export default function KnockoutBracket({ matches }: KnockoutBracketProps) {
     return matches
       .filter((m) => m.phase === "knockout")
       .map((m) => {
-        const resolvedHome = resolveTeam(m.home_team_name, tempMap, getGroupStandings);
-        const resolvedAway = resolveTeam(m.away_team_name, tempMap, getGroupStandings);
+        const resolvedHome = resolveTeam(m.home_team_name, tempMap);
+        const resolvedAway = resolveTeam(m.away_team_name, tempMap);
         return {
           ...m,
           home_team_name: resolvedHome.name || m.home_team_name,
           home_team_iso2: resolvedHome.iso2 || m.home_team_iso2,
           away_team_name: resolvedAway.name || m.away_team_name,
           away_team_iso2: resolvedAway.iso2 || m.away_team_iso2,
-          home_placeholder: m.home_team_name !== resolvedHome.name ? m.home_team_name : undefined,
-          away_placeholder: m.away_team_name !== resolvedAway.name ? m.away_team_name : undefined,
         };
       });
-  }, [matches, getGroupStandings]);
+  }, [matches]);
 
   // Index matches by match_id for rapid O(1) lookups
   const matchesMap = useMemo(() => {
