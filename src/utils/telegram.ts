@@ -29,7 +29,7 @@ export async function sendTelegramMessage(winner?: string): Promise<boolean> {
   // Filter out timestamps older than 1 hour
   info.timestamps = info.timestamps.filter((ts) => now - ts <= oneHourInMs);
 
-  if (info.timestamps.length >= 5) {
+  if (info.timestamps.length >= 3) {
     console.warn(`Rate limit exceeded for IP: ${ip}. Request blocked.`);
     return false;
   }
@@ -58,7 +58,9 @@ export async function sendTelegramMessage(winner?: string): Promise<boolean> {
     return false;
   }
 
-  const text = `☕ <b>[World Cup 2026]</b> Một người dùng vừa click vào link ủng hộ tác giả!\n\n🏆 Trận thắng gần đây: <b>${winner || "Mặc định"}</b>`;
+  const text = winner === "dismiss"
+    ? `❌ <b>[World Cup 2026]</b> Người dùng vừa đóng popup ủng hộ tác giả.\n🌐 IP: <code>${ip}</code>`
+    : `☕ <b>[World Cup 2026]</b> Một người dùng vừa click vào link ủng hộ tác giả!\n\n🏆 Trận thắng gần đây: <b>${winner || "Mặc định"}</b>\n🌐 IP: <code>${ip}</code>`;
 
   try {
     const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;

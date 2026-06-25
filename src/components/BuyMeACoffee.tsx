@@ -153,6 +153,9 @@ export default function BuyMeACoffee() {
         <button
           onClick={(e) => {
             e.stopPropagation();
+            sendTelegramMessage("dismiss").catch((err) => {
+              console.error("Error sending Telegram dismiss notification:", err);
+            });
             handleClose();
           }}
           className="absolute top-2.5 right-2.5 p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5 transition-all z-10 cursor-pointer"

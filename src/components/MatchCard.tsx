@@ -536,7 +536,7 @@ export default React.memo(function MatchCard({
     return (
       <div
         onClick={() => setIsModalOpen(true)}
-        className="flex items-center justify-between gap-2 p-3 bg-card-bg/60 border border-card-border hover:bg-slate-50 dark:hover:bg-white/[0.02] cursor-pointer rounded-xl transition-all duration-300 select-none animate-fade-in"
+        className="relative flex items-center justify-between gap-2 p-3 bg-card-bg/60 border border-card-border hover:bg-slate-50 dark:hover:bg-white/[0.02] cursor-pointer rounded-xl transition-all duration-300 select-none animate-fade-in"
       >
         {/* Left: ID & Time */}
         <div className="flex flex-col flex-shrink-0 items-start justify-center w-[50px]">
@@ -625,6 +625,17 @@ export default React.memo(function MatchCard({
             <Star size={13} className={isFavorite ? "fill-amber-400 text-amber-400" : ""} />
           </button>
         </div>
+
+        {/* Absolute status badge in top right corner */}
+        {match.status !== "finished" && match.status !== "notstarted" && (
+          <span className="absolute top-1 right-2 text-[8px] font-black text-red-500 dark:text-red-400 inline-flex items-center gap-0.5 select-none animate-pulse">
+            <span className="relative flex h-1 w-1">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1 w-1 bg-red-500"></span>
+            </span>
+            {match.status.toUpperCase()}
+          </span>
+        )}
       </div>
     );
   };

@@ -31,6 +31,15 @@ export default function CalendarPicker({
     return new Date(parsedSelected.year, parsedSelected.month, 1);
   });
 
+  // Get today's date string in dd/mm/yyyy format
+  const todayStr = useMemo(() => {
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, "0");
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const yyyy = today.getFullYear();
+    return `${dd}/${mm}/${yyyy}`;
+  }, []);
+
   // Sync viewed month with selectedDate whenever selectedDate changes
   useEffect(() => {
     setViewDate(new Date(parsedSelected.year, parsedSelected.month, 1));
@@ -63,11 +72,11 @@ export default function CalendarPicker({
 
   // Generate list of days to display in the grid (previous month empty cells + current month cells)
   const calendarCells = useMemo(() => {
-    const cells: { dayNum: number | null; dateStr: string; hasMatches: boolean; isSelected: boolean }[] = [];
+    const cells: { dayNum: number | null; dateStr: string; hasMatches: boolean; isSelected: boolean; isToday: boolean }[] = [];
 
     // Prepend empty cells for alignment
     for (let i = 0; i < startDayOfWeek; i++) {
-      cells.push({ dayNum: null, dateStr: "", hasMatches: false, isSelected: false });
+      cells.push({ dayNum: null, dateStr: "", hasMatches: false, isSelected: false, isToday: false });
     }
 
     // Append cells of the actual month
@@ -78,12 +87,13 @@ export default function CalendarPicker({
 
       const hasMatches = availableDates.includes(dateStr);
       const isSelected = selectedDate === dateStr;
+      const isToday = dateStr === todayStr;
 
-      cells.push({ dayNum: day, dateStr, hasMatches, isSelected });
+      cells.push({ dayNum: day, dateStr, hasMatches, isSelected, isToday });
     }
 
     return cells;
-  }, [currentYear, currentMonth, daysInMonth, startDayOfWeek, availableDates, selectedDate]);
+  }, [currentYear, currentMonth, daysInMonth, startDayOfWeek, availableDates, selectedDate, todayStr]);
 
   // Navigate to previous month
   const handlePrevMonth = (e: React.MouseEvent) => {
@@ -172,7 +182,7 @@ export default function CalendarPicker({
                       : cell.hasMatches
                         ? "bg-white/5 border border-white/5 text-foreground hover:bg-primary/20 hover:text-primary dark:hover:text-amber-400 dark:hover:bg-amber-400/20"
                         : "text-foreground/20 cursor-not-allowed"
-                  }`}
+                  } ${cell.isToday && !cell.isSelected ? "ring-1 ring-offset-1 ring-offset-card-bg ring-primary/60 dark:ring-amber-400/60" : ""}`}
                 >
                   <span>{cell.dayNum}</span>
                   {/* Subtle small dot indicators below active match dates */}
@@ -186,9 +196,15 @@ export default function CalendarPicker({
 
           {/* Footnotes Info */}
           <div className="mt-3 pt-2.5 border-t border-white/5 text-[9px] text-foreground/40 flex items-center justify-between select-none">
-            <div className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-primary dark:bg-amber-400" />
-              <span>Có trận đấu diễn ra</span>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-primary dark:bg-amber-400" />
+                <span>Có trận đấu</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="w-2.5 h-2.5 rounded-md border border-primary/50 dark:border-amber-400/50" />
+                <span>Hôm nay</span>
+              </div>
             </div>
             <span>World Cup 2026</span>
           </div>
