@@ -79,6 +79,8 @@ export function parseCSV(csvText: string): Match[] {
       time_elapsed: record.time_elapsed || "",
       home_scorers: record.home_scorers || "",
       away_scorers: record.away_scorers || "",
+      home_team_logo: record.home_team_logo || "",
+      away_team_logo: record.away_team_logo || "",
     };
 
     matches.push(match);
