@@ -122,8 +122,9 @@ export default React.memo(function MatchCard({
     }
   };
 
-  const getFlagUrl = (iso2: string) => {
-    if (!iso2) return null;
+  const getFlagUrl = (iso2: string, teamLogo: string) => {
+    if (!teamLogo && !iso2) return null;
+    if (!iso2 && !!teamLogo) return teamLogo;
     const code = iso2.toLowerCase();
     if (code === "eng") return "https://flagcdn.com/w80/gb-eng.png";
     if (code === "sco") return "https://flagcdn.com/w80/gb-sct.png";
@@ -214,10 +215,10 @@ export default React.memo(function MatchCard({
             <div
               className={`relative ${flagWrapper} rounded shadow-sm overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover/team:border-secondary transition-colors`}
             >
-              {getFlagUrl(match.home_team_iso2) ? (
+              {getFlagUrl(match.home_team_iso2, match.home_team_logo) ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={getFlagUrl(match.home_team_iso2)!}
+                  src={getFlagUrl(match.home_team_iso2, match.home_team_logo)!}
                   alt={match.home_team_name}
                   className="w-full h-full object-cover"
                   onError={(e) => {
@@ -299,10 +300,10 @@ export default React.memo(function MatchCard({
             <div
               className={`relative ${flagWrapper} rounded shadow-sm overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover/team:border-secondary transition-colors`}
             >
-              {getFlagUrl(match.away_team_iso2) ? (
+              {getFlagUrl(match.away_team_iso2, match.away_team_logo) ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={getFlagUrl(match.away_team_iso2)!}
+                  src={getFlagUrl(match.away_team_iso2, match.away_team_logo)!}
                   alt={match.away_team_name}
                   className="w-full h-full object-cover"
                   onError={(e) => {
@@ -425,10 +426,10 @@ export default React.memo(function MatchCard({
               {match.home_team_name}
             </span>
             <div className="w-6 h-4 rounded overflow-hidden shadow-sm bg-slate-100 dark:bg-white/5 border border-slate-200/50 flex items-center justify-center flex-shrink-0 group-hover/team:border-secondary transition-colors">
-              {getFlagUrl(match.home_team_iso2) ? (
+              {getFlagUrl(match.home_team_iso2, match.home_team_logo) ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={getFlagUrl(match.home_team_iso2)!}
+                  src={getFlagUrl(match.home_team_iso2, match.home_team_logo)!}
                   alt={match.home_team_name}
                   className="w-full h-full object-cover"
                   onError={(e) => {
@@ -475,10 +476,10 @@ export default React.memo(function MatchCard({
             }`}
           >
             <div className="w-6 h-4 rounded overflow-hidden shadow-sm bg-slate-100 dark:bg-white/5 border border-slate-200/50 flex items-center justify-center flex-shrink-0 group-hover/team:border-secondary transition-colors">
-              {getFlagUrl(match.away_team_iso2) ? (
+              {getFlagUrl(match.away_team_iso2, match.away_team_logo) ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={getFlagUrl(match.away_team_iso2)!}
+                  src={getFlagUrl(match.away_team_iso2, match.away_team_logo)!}
                   alt={match.away_team_name}
                   className="w-full h-full object-cover"
                   onError={(e) => {
@@ -561,10 +562,10 @@ export default React.memo(function MatchCard({
               {match.home_team_name}
             </span>
             <div className="w-5 h-3.5 rounded-sm overflow-hidden shadow-sm bg-slate-100 dark:bg-white/5 border border-slate-200/50 flex items-center justify-center flex-shrink-0">
-              {getFlagUrl(match.home_team_iso2) ? (
+              {getFlagUrl(match.home_team_iso2, match.home_team_logo) ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={getFlagUrl(match.home_team_iso2)!}
+                  src={getFlagUrl(match.home_team_iso2, match.home_team_logo)!}
                   alt={match.home_team_name}
                   className="w-full h-full object-cover"
                 />
@@ -590,10 +591,10 @@ export default React.memo(function MatchCard({
           {/* Away Team */}
           <div className="flex items-center gap-1.5 justify-start flex-1 min-w-0 text-left">
             <div className="w-5 h-3.5 rounded-sm overflow-hidden shadow-sm bg-slate-100 dark:bg-white/5 border border-slate-200/50 flex items-center justify-center flex-shrink-0">
-              {getFlagUrl(match.away_team_iso2) ? (
+              {getFlagUrl(match.away_team_iso2, match.away_team_logo) ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={getFlagUrl(match.away_team_iso2)!}
+                  src={getFlagUrl(match.away_team_iso2, match.away_team_logo)!}
                   alt={match.away_team_name}
                   className="w-full h-full object-cover"
                 />
@@ -663,10 +664,10 @@ export default React.memo(function MatchCard({
               }`}
             >
               <div className="relative w-12 h-8 sm:w-16 sm:h-10 rounded-lg shadow overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-2 group-hover/modal-team:border-secondary transition-colors">
-                {getFlagUrl(match.home_team_iso2) ? (
+                {getFlagUrl(match.home_team_iso2, match.home_team_logo) ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={getFlagUrl(match.home_team_iso2)!.replace("w40", "w80")}
+                    src={getFlagUrl(match.home_team_iso2, match.home_team_logo)!.replace("w40", "w80")}
                     alt={match.home_team_name}
                     className="w-full h-full object-cover"
                   />
@@ -726,10 +727,10 @@ export default React.memo(function MatchCard({
               }`}
             >
               <div className="relative w-12 h-8 sm:w-16 sm:h-10 rounded-lg shadow overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-2 group-hover/modal-team:border-secondary transition-colors">
-                {getFlagUrl(match.away_team_iso2) ? (
+                {getFlagUrl(match.away_team_iso2, match.away_team_logo) ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={getFlagUrl(match.away_team_iso2)!.replace("w40", "w80")}
+                    src={getFlagUrl(match.away_team_iso2, match.away_team_logo)!.replace("w40", "w80")}
                     alt={match.away_team_name}
                     className="w-full h-full object-cover"
                   />

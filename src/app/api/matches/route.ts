@@ -155,55 +155,69 @@ export async function GET() {
       console.warn("Unable to fetch live JSON fixtures from VnExpress Gateway:", err);
     }
 
-    // 3. Map & Enrich Group Stage Matches
+    // 3. Map & Enrich Matches
     if (apiMatches.length > 0) {
       matches.forEach((match) => {
-        if (match.phase === "group") {
-          const matchTimeMs = getMatchDate(match.local_date, match.utc_offset).getTime();
+        const matchTimeMs = getMatchDate(match.local_date, match.utc_offset).getTime();
 
-          // Find candidates by timestamp
-          const candidates = apiMatches.filter((apiM) => apiM.event_timestamp * 1000 === matchTimeMs);
-          let matchedApi = null;
-          if (candidates.length === 1) {
-            matchedApi = candidates[0];
-          } else if (candidates.length > 1) {
-            matchedApi = candidates.find((apiM) => matchName(match.away_team_name, apiM.away_team));
+        // Find candidates by timestamp
+        const candidates = apiMatches.filter((apiM) => apiM.event_timestamp * 1000 === matchTimeMs);
+        let matchedApi = null;
+        if (candidates.length === 1) {
+          matchedApi = candidates[0];
+        } else if (candidates.length > 1) {
+          matchedApi = candidates.find((apiM) => matchName(match.away_team_name, apiM.away_team));
+        }
+
+        if (matchedApi) {
+          // Enrich home & away team info
+          if (matchedApi.home_team) {
+            match.home_team_name = matchedApi.home_team.team_name || match.home_team_name;
+            match.home_team_logo = matchedApi.home_team.logo;
+            if (matchedApi.home_team.team_id) {
+              match.home_team_id = String(matchedApi.home_team.team_id);
+            }
+          }
+          if (matchedApi.away_team) {
+            match.away_team_name = matchedApi.away_team.team_name || match.away_team_name;
+            match.away_team_logo = matchedApi.away_team.logo;
+            if (matchedApi.away_team.team_id) {
+              match.away_team_id = String(matchedApi.away_team.team_id);
+            }
           }
 
-          if (matchedApi) {
-            // Enrich score
-            if (typeof matchedApi.goals_home_team === "number" && !isNaN(matchedApi.goals_home_team)) {
-              match.home_score = matchedApi.goals_home_team;
-            }
-            if (typeof matchedApi.goals_away_team === "number" && !isNaN(matchedApi.goals_away_team)) {
-              match.away_score = matchedApi.goals_away_team;
-            }
+          // Enrich score
+          if (typeof matchedApi.goals_home_team === "number" && !isNaN(matchedApi.goals_home_team)) {
+            match.home_score = matchedApi.goals_home_team;
+          }
+          if (typeof matchedApi.goals_away_team === "number" && !isNaN(matchedApi.goals_away_team)) {
+            match.away_score = matchedApi.goals_away_team;
+          }
 
-            // Enrich detailed match score
-            if (matchedApi.score) {
-              match.match_score = {
-                halftime: matchedApi.score.halftime || null,
-                fulltime: matchedApi.score.fulltime || null,
-              };
-            }
+          // Enrich detailed match score
+          if (matchedApi.score) {
+            match.match_score = {
+              halftime: matchedApi.score.halftime || null,
+              fulltime: matchedApi.score.fulltime || null,
+            };
+          }
 
-            // Enrich status
-            const apiStatus = (matchedApi.status_short || "").toUpperCase();
-            if (apiStatus === "FT" || apiStatus === "AET" || apiStatus === "PEN") {
-              match.status = "finished";
-              match.finished = true;
-            } else if (apiStatus === "NS") {
-              match.status = "notstarted";
-              match.finished = false;
-            } else if (apiStatus) {
-              match.status = apiStatus.toLowerCase();
-              match.finished = false;
-            }
+          // Enrich status
+          const apiStatus = (matchedApi.status_short || "").toUpperCase();
+          if (apiStatus === "FT" || apiStatus === "AET" || apiStatus === "PEN") {
+            match.status = "finished";
+            match.finished = true;
+          } else if (apiStatus === "NS") {
+            match.status = "notstarted";
+            match.finished = false;
+          } else if (apiStatus) {
+            match.status = apiStatus.toLowerCase();
+            match.finished = false;
+          }
 
-            // Enrich time elapsed
-            if (matchedApi.elapsed) {
-              match.time_elapsed = String(matchedApi.elapsed);
-            }
+          // Enrich time elapsed
+          if (matchedApi.elapsed) {
+            match.time_elapsed = String(matchedApi.elapsed);
           }
         }
       });

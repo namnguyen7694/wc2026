@@ -170,7 +170,7 @@ export const useMatchStore = create<MatchState>((set, get) => ({
     });
 
     groupMatches.forEach((m) => {
-      const isPlayed = m.finished;
+      const isPlayed = m.status !== "notstarted";
       if (!isPlayed) return;
 
       const hScore = m.home_score;
@@ -208,12 +208,81 @@ export const useMatchStore = create<MatchState>((set, get) => ({
       }
     });
 
-    return Object.values(teamsData).sort((a, b) => {
-      if (b.points !== a.points) return b.points - a.points;
-      if (b.goalDifference !== a.goalDifference) return b.goalDifference - a.goalDifference;
-      if (b.goalsFor !== a.goalsFor) return b.goalsFor - a.goalsFor;
-      return a.teamName.localeCompare(b.teamName);
+    const initialSorted = Object.values(teamsData).sort((a, b) => b.points - a.points);
+
+    // Helper to rank teams that have the same overall points using H2H rules
+    const rankTiedTeams = (tiedTeams: GroupTeamStanding[], matches: Match[]): GroupTeamStanding[] => {
+      if (tiedTeams.length <= 1) return tiedTeams;
+
+      const teamNames = new Set(tiedTeams.map((t) => t.teamName));
+      const h2hMatches = matches.filter(
+        (m) =>
+          m.status !== "notstarted" &&
+          teamNames.has(m.home_team_name) &&
+          teamNames.has(m.away_team_name)
+      );
+
+      // Initialize H2H stats
+      const h2hStats: Record<string, { points: number; gd: number; gs: number }> = {};
+      tiedTeams.forEach((t) => {
+        h2hStats[t.teamName] = { points: 0, gd: 0, gs: 0 };
+      });
+
+      h2hMatches.forEach((m) => {
+        const h = m.home_score;
+        const a = m.away_score;
+        const homeStats = h2hStats[m.home_team_name];
+        const awayStats = h2hStats[m.away_team_name];
+
+        if (homeStats && awayStats) {
+          homeStats.gs += h;
+          homeStats.gd += (h - a);
+          awayStats.gs += a;
+          awayStats.gd += (a - h);
+
+          if (h > a) {
+            homeStats.points += 3;
+          } else if (h < a) {
+            awayStats.points += 3;
+          } else {
+            homeStats.points += 1;
+            awayStats.points += 1;
+          }
+        }
+      });
+
+      return [...tiedTeams].sort((a, b) => {
+        const aStats = h2hStats[a.teamName];
+        const bStats = h2hStats[b.teamName];
+
+        if (bStats.points !== aStats.points) return bStats.points - aStats.points;
+        if (bStats.gd !== aStats.gd) return bStats.gd - aStats.gd;
+        if (bStats.gs !== aStats.gs) return bStats.gs - aStats.gs;
+        if (b.goalDifference !== a.goalDifference) return b.goalDifference - a.goalDifference;
+        if (b.goalsFor !== a.goalsFor) return b.goalsFor - a.goalsFor;
+        return a.teamName.localeCompare(b.teamName);
+      });
+    };
+
+    // Group teams by their points to resolve ties
+    const groupsOfTied: Record<number, GroupTeamStanding[]> = {};
+    initialSorted.forEach((team) => {
+      groupsOfTied[team.points] = groupsOfTied[team.points] || [];
+      groupsOfTied[team.points].push(team);
     });
+
+    const finalStandings: GroupTeamStanding[] = [];
+    const sortedPointsKeys = Object.keys(groupsOfTied)
+      .map(Number)
+      .sort((a, b) => b - a);
+
+    sortedPointsKeys.forEach((pts) => {
+      const tied = groupsOfTied[pts];
+      const ranked = rankTiedTeams(tied, groupMatches);
+      finalStandings.push(...ranked);
+    });
+
+    return finalStandings;
   },
 }));
 

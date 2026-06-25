@@ -39,6 +39,16 @@ export default function GroupStandings({ matches }: GroupStandingsProps) {
     return `https://flagcdn.com/w80/${code}.png`;
   };
 
+  const isTeamLive = (teamName: string) => {
+    return matches.some(
+      (m) =>
+        m.phase === "group" &&
+        !m.finished &&
+        m.status !== "notstarted" &&
+        (m.home_team_name === teamName || m.away_team_name === teamName)
+    );
+  };
+
   return (
     <div className="space-y-6 text-foreground">
       {/* Horizontal Group Selector */}
@@ -114,6 +124,12 @@ export default function GroupStandings({ matches }: GroupStandingsProps) {
                               />
                             )}
                             <span className="truncate pr-1 min-w-0">{team.teamName}</span>
+                            {isTeamLive(team.teamName) && (
+                              <span className="text-[9px] text-red-500 font-black px-1 py-0.5 sm:py-0.2 bg-red-500/10 border border-red-500/20 rounded animate-pulse inline-flex items-center gap-0.5 select-none">
+                                <span className="w-1 h-1 rounded-full bg-red-500" />
+                                <span className="hidden sm:inline">LIVE</span>
+                              </span>
+                            )}
                             {isTopTwo && (
                               <span className="text-[9px] text-emerald-400 font-bold hidden sm:inline px-1 py-0.2 bg-emerald-500/10 border border-emerald-500/20 rounded">
                                 Đi tiếp
@@ -148,7 +164,7 @@ export default function GroupStandings({ matches }: GroupStandingsProps) {
             </div>
           </div>
           <div className="mt-4 pt-3 border-t border-slate-200 dark:border-white/5 text-[10px] text-foreground/40 flex justify-between">
-            <span>* Cách xếp hạng: Điểm &rarr; Hiệu số (HS) &rarr; Bàn thắng (BT)</span>
+            <span>* Cách xếp hạng: Điểm &rarr; Đối đầu (Điểm &rarr; HS &rarr; BT) &rarr; HS toàn bảng &rarr; Số BT toàn bảng</span>
             <span className="text-emerald-400 font-medium">Xanh: Đủ điều kiện đi tiếp</span>
           </div>
         </div>

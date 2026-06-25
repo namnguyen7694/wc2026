@@ -15,9 +15,11 @@ export interface Match {
   home_team_id: string;
   home_team_name: string;
   home_team_iso2: string;
+  home_team_logo: string;
   away_team_id: string;
   away_team_name: string;
   away_team_iso2: string;
+  away_team_logo: string;
   home_score: number;
   away_score: number;
   status: string;
