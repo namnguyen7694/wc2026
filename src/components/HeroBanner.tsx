@@ -11,8 +11,9 @@ interface HeroBannerProps {
 }
 
 // Flags CDN helper
-const getFlagUrl = (iso2: string) => {
-  if (!iso2) return null;
+const getFlagUrl = (iso2: string, teamLogo: string) => {
+  if (!teamLogo && !iso2) return null;
+  if (!iso2 && !!teamLogo) return teamLogo;
   const code = iso2.toLowerCase();
   if (code === "eng") return "https://flagcdn.com/w80/gb-eng.png";
   if (code === "sco") return "https://flagcdn.com/w80/gb-sct.png";
@@ -161,7 +162,11 @@ export default function HeroBanner({ matches, myTeams }: HeroBannerProps) {
 
           <span
             className={`text-[10px] font-black uppercase tracking-widest mb-4 block ${
-              heroTabIndex === 0 ? "text-amber-600 dark:text-amber-400" : heroTabIndex === 1 ? "text-sky-600 dark:text-sky-400" : "text-rose-600 dark:text-rose-400"
+              heroTabIndex === 0
+                ? "text-amber-600 dark:text-amber-400"
+                : heroTabIndex === 1
+                  ? "text-sky-600 dark:text-sky-400"
+                  : "text-rose-600 dark:text-rose-400"
             }`}
           >
             {heroTabIndex === 0 && "🔥 TRẬN ĐẤU HOT NHẤT 🔥"}
@@ -189,10 +194,10 @@ export default function HeroBanner({ matches, myTeams }: HeroBannerProps) {
                 {/* Home Team */}
                 <div className="flex flex-col items-center flex-1 min-w-0">
                   <div className="relative w-12 h-8 rounded shadow-md overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-2">
-                    {getFlagUrl(activeHeroMatch.home_team_iso2) ? (
+                    {getFlagUrl(activeHeroMatch.home_team_iso2, activeHeroMatch.home_team_logo) ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={getFlagUrl(activeHeroMatch.home_team_iso2)!}
+                        src={getFlagUrl(activeHeroMatch.home_team_iso2, activeHeroMatch.home_team_logo)!}
                         alt={activeHeroMatch.home_team_name}
                         className="w-full h-full object-cover"
                       />
@@ -208,7 +213,11 @@ export default function HeroBanner({ matches, myTeams }: HeroBannerProps) {
                 {/* VS */}
                 <span
                   className={`text-xs font-black px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 ${
-                    heroTabIndex === 0 ? "text-amber-600 dark:text-amber-400" : heroTabIndex === 1 ? "text-sky-600 dark:text-sky-400" : "text-rose-600 dark:text-rose-400"
+                    heroTabIndex === 0
+                      ? "text-amber-600 dark:text-amber-400"
+                      : heroTabIndex === 1
+                        ? "text-sky-600 dark:text-sky-400"
+                        : "text-rose-600 dark:text-rose-400"
                   }`}
                 >
                   VS
@@ -217,10 +226,10 @@ export default function HeroBanner({ matches, myTeams }: HeroBannerProps) {
                 {/* Away Team */}
                 <div className="flex flex-col items-center flex-1 min-w-0">
                   <div className="relative w-12 h-8 rounded shadow-md overflow-hidden bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center mb-2">
-                    {getFlagUrl(activeHeroMatch.away_team_iso2) ? (
+                    {getFlagUrl(activeHeroMatch.away_team_iso2, activeHeroMatch.away_team_logo) ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={getFlagUrl(activeHeroMatch.away_team_iso2)!}
+                        src={getFlagUrl(activeHeroMatch.away_team_iso2, activeHeroMatch.away_team_logo)!}
                         alt={activeHeroMatch.away_team_name}
                         className="w-full h-full object-cover"
                       />
@@ -235,7 +244,9 @@ export default function HeroBanner({ matches, myTeams }: HeroBannerProps) {
               </div>
             </div>
           ) : (
-            <div className="text-xs text-slate-500 dark:text-slate-400 font-bold py-6">Đang cập nhật lịch thi đấu...</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400 font-bold py-6">
+              Đang cập nhật lịch thi đấu...
+            </div>
           )}
         </div>
 

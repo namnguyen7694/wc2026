@@ -77,6 +77,7 @@ export default function ScheduleDashboard() {
     };
   }, [searchQuery]);
   const [viewMode, setViewMode] = usePersistentState<"grid" | "table">("wc2026_all_matches_view_mode", "table");
+  const [hideGroupStage, setHideGroupStage] = usePersistentState<boolean>("wc2026_hide_group_stage", true);
 
   const fetchMatches = useMatchStore((state) => state.fetchMatches);
   const matches = useMatchStore((state) => state.matches);
@@ -100,8 +101,16 @@ export default function ScheduleDashboard() {
     return map;
   }, [matches]);
 
-  // Extract and sort unique dates from all matches (both group and knockout stage)
-  const sortedDates = useMemo(() => getSortedDates(matches), [matches]);
+  // Filter matches based on group stage visibility toggle
+  const displayMatches = useMemo(() => {
+    if (hideGroupStage) {
+      return matches.filter((m) => m.phase !== "group");
+    }
+    return matches;
+  }, [matches, hideGroupStage]);
+
+  // Extract and sort unique dates from displayed matches
+  const sortedDates = useMemo(() => getSortedDates(displayMatches), [displayMatches]);
 
   const handleTabChange = (tabId: TabId) => {
     setActiveTab(tabId);
@@ -114,23 +123,25 @@ export default function ScheduleDashboard() {
     }
   }, [selectedDate]);
 
-  // Initialise selected date to localStorage, today, or the closest match date when mounted
+  // Initialise selected date to localStorage, today, or the closest match date when mounted (or adjust if selected date becomes hidden)
   useEffect(() => {
-    if (isLoadedMatches && sortedDates.length > 0 && !selectedDate) {
-      let initialDate = "";
-      if (typeof window !== "undefined") {
-        try {
-          const savedDate = localStorage.getItem("wc2026_selected_date");
-          if (savedDate && sortedDates.includes(savedDate)) {
-            initialDate = savedDate;
-          }
-        } catch {}
-      }
+    if (isLoadedMatches && sortedDates.length > 0) {
+      if (!selectedDate || !sortedDates.includes(selectedDate)) {
+        let initialDate = "";
+        if (typeof window !== "undefined" && !selectedDate) {
+          try {
+            const savedDate = localStorage.getItem("wc2026_selected_date");
+            if (savedDate && sortedDates.includes(savedDate)) {
+              initialDate = savedDate;
+            }
+          } catch {}
+        }
 
-      if (initialDate) {
-        setSelectedDate(initialDate);
-      } else {
-        setSelectedDate(getClosestDate(sortedDates));
+        if (initialDate) {
+          setSelectedDate(initialDate);
+        } else {
+          setSelectedDate(getClosestDate(sortedDates));
+        }
       }
     }
   }, [isLoadedMatches, sortedDates, selectedDate]);
@@ -252,7 +263,7 @@ export default function ScheduleDashboard() {
 
   // Filter and resolve ALL matches (with search query filtering and placeholder resolving)
   const allMatchesResolved = useMemo(() => {
-    return matches
+    return displayMatches
       .filter((m) => {
         return (
           debouncedSearchQuery === "" ||
@@ -276,7 +287,7 @@ export default function ScheduleDashboard() {
         }
         return m;
       });
-  }, [matches, debouncedSearchQuery, matchesMap]);
+  }, [displayMatches, debouncedSearchQuery, matchesMap]);
 
   // List of all matches involving any of the user's favorite teams
   const favoriteTeamsMatches = useMemo(() => {
@@ -289,7 +300,7 @@ export default function ScheduleDashboard() {
   }, [allMatchesResolved, myTeams]);
 
   const filteredMatchesByDate = useMemo(() => {
-    return matches
+    return displayMatches
       .filter((m) => m.local_date.split(" ")[0] === selectedDate)
       .map((m) => {
         if (m.phase === "knockout") {
@@ -305,7 +316,7 @@ export default function ScheduleDashboard() {
         }
         return m;
       });
-  }, [matches, selectedDate, matchesMap]);
+  }, [displayMatches, selectedDate, matchesMap]);
 
   // Filter matches for the "favorites" tab (resolving placeholder knockout teams dynamically)
   const favoriteMatches = useMemo(() => {
@@ -431,6 +442,8 @@ export default function ScheduleDashboard() {
                 groupedMatches={groupedMatches}
                 viewMode={viewMode}
                 setViewMode={setViewMode}
+                hideGroupStage={hideGroupStage}
+                setHideGroupStage={setHideGroupStage}
               />
             )}
 

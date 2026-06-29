@@ -28,6 +28,8 @@ interface ScheduleTabProps {
   groupedMatches: { dateStr: string; matches: Match[] }[];
   viewMode: "table" | "grid";
   setViewMode: (mode: "table" | "grid") => void;
+  hideGroupStage: boolean;
+  setHideGroupStage: (hide: boolean) => void;
 }
 
 export default function ScheduleTab({
@@ -42,6 +44,8 @@ export default function ScheduleTab({
   groupedMatches,
   viewMode,
   setViewMode,
+  hideGroupStage,
+  setHideGroupStage,
 }: ScheduleTabProps) {
   const [activeSubTab, setActiveSubTab] = useState<SubTabId>("all");
 
@@ -74,9 +78,9 @@ export default function ScheduleTab({
         </div>
       </div>
 
-      {/* Sub-Controls Bar (Calendar Picker & Search box on its own line) */}
+      {/* Sub-Controls Bar (Calendar Picker, Search box & Group Stage Toggle) */}
       {activeSubTab !== "knockout" && (
-        <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 w-full">
           {/* Calendar Picker (Only visible when date subtab is active) */}
           {activeSubTab === "date" && (
             <div className="w-full sm:w-auto flex-1 sm:flex-initial">
@@ -97,6 +101,24 @@ export default function ScheduleTab({
               <Search className="absolute left-3.5 top-3.5 text-foreground/45" size={16} />
             </div>
           )}
+
+          {/* Collapse/Hide Group Stage Toggle */}
+          <div className="flex items-center gap-3 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2 w-full sm:w-auto self-stretch sm:self-auto justify-between sm:justify-start">
+            <span className="text-xs sm:text-sm font-bold text-foreground/75 whitespace-nowrap">Ẩn vòng bảng</span>
+            <button
+              onClick={() => setHideGroupStage(!hideGroupStage)}
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                hideGroupStage ? "bg-primary" : "bg-slate-300 dark:bg-white/20"
+              }`}
+              aria-label="Ẩn các trận vòng bảng"
+            >
+              <span
+                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                  hideGroupStage ? "translate-x-5" : "translate-x-0"
+                }`}
+              />
+            </button>
+          </div>
         </div>
       )}
 
