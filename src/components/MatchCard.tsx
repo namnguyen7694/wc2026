@@ -252,10 +252,21 @@ export default React.memo(function MatchCard({
                 - - -
               </span>
             ) : (
-              <div className={`flex items-center gap-1 font-black tracking-wider text-foreground ${scoreText}`}>
-                <span>{homeScore}</span>
-                <span className={`text-foreground/45 font-medium ${scoreColonText}`}>:</span>
-                <span>{awayScore}</span>
+              <div className="flex flex-col items-center">
+                <div className={`flex items-center gap-1 font-black tracking-wider text-foreground ${scoreText}`}>
+                  <span>{homeScore}</span>
+                  <span className={`text-foreground/45 font-medium ${scoreColonText}`}>:</span>
+                  <span>{awayScore}</span>
+                </div>
+                {match.match_score?.penalty ? (
+                  <span className="text-[9px] font-black text-amber-500 dark:text-amber-400 mt-0.5 whitespace-nowrap">
+                    ({match.match_score.penalty} PEN)
+                  </span>
+                ) : match.match_score?.extratime ? (
+                  <span className="text-[9px] font-black text-emerald-500 dark:text-emerald-400 mt-0.5 whitespace-nowrap">
+                    (AET)
+                  </span>
+                ) : null}
               </div>
             )}
             {match.status === "notstarted" ? (
@@ -430,10 +441,19 @@ export default React.memo(function MatchCard({
           {match.status === "notstarted" ? (
             <span className="text-foreground/40 text-xs font-mono">vs</span>
           ) : (
-            <div className="flex flex-col items-center justify-center gap-1">
+            <div className="flex flex-col items-center justify-center gap-0.5">
               <span className="px-2 py-1 bg-slate-100 dark:bg-white/5 rounded-lg border border-slate-200/50 text-foreground text-xs sm:text-sm font-black">
                 {match.home_score} - {match.away_score}
               </span>
+              {match.match_score?.penalty ? (
+                <span className="text-[10px] text-amber-500 dark:text-amber-400 font-bold">
+                  ({match.match_score.penalty} PEN)
+                </span>
+              ) : match.match_score?.extratime ? (
+                <span className="text-[10px] text-emerald-500 dark:text-emerald-400 font-bold">
+                  (AET)
+                </span>
+              ) : null}
               {match.status !== "finished" && (
                 <span className="text-[9px] font-black text-red-500 dark:text-red-400 inline-flex items-center gap-1 select-none animate-pulse">
                   <span className="relative flex h-1 w-1">
@@ -564,9 +584,20 @@ export default React.memo(function MatchCard({
                 vs
               </span>
             ) : (
-              <span className="px-2 py-0.5 bg-primary/10 border border-primary/20 text-primary dark:text-rose-400 rounded-md text-[11px] font-black tracking-tight select-none">
-                {match.home_score} - {match.away_score}
-              </span>
+              <div className="flex flex-col items-center gap-0.5">
+                <span className="px-2 py-0.5 bg-primary/10 border border-primary/20 text-primary dark:text-rose-400 rounded-md text-[11px] font-black tracking-tight select-none">
+                  {match.home_score} - {match.away_score}
+                </span>
+                {match.match_score?.penalty ? (
+                  <span className="text-[8px] font-bold text-amber-500 dark:text-amber-400">
+                    ({match.match_score.penalty} PEN)
+                  </span>
+                ) : match.match_score?.extratime ? (
+                  <span className="text-[8px] font-bold text-emerald-500 dark:text-emerald-400">
+                    (AET)
+                  </span>
+                ) : null}
+              </div>
             )}
           </div>
 
@@ -667,10 +698,17 @@ export default React.memo(function MatchCard({
               {match.status === "notstarted" ? (
                 <span className="text-sm sm:text-base font-black text-foreground/45 tracking-widest">- - -</span>
               ) : (
-                <div className="flex items-center gap-1.5 text-xl sm:text-2xl font-black tracking-wider text-foreground">
-                  <span>{homeScore}</span>
-                  <span className="text-foreground/40 font-medium text-sm">:</span>
-                  <span>{awayScore}</span>
+                <div className="flex flex-col items-center">
+                  <div className="flex items-center gap-1.5 text-xl sm:text-2xl font-black tracking-wider text-foreground">
+                    <span>{homeScore}</span>
+                    <span className="text-foreground/40 font-medium text-sm">:</span>
+                    <span>{awayScore}</span>
+                  </div>
+                  {match.match_score?.penalty && (
+                    <span className="text-xs font-black text-amber-500 dark:text-amber-400 mt-1">
+                      ({match.match_score.penalty} PEN)
+                    </span>
+                  )}
                 </div>
               )}
               {match.status === "notstarted" ? (
@@ -744,8 +782,8 @@ export default React.memo(function MatchCard({
               </div>
             )}
 
-            {/* Tỉ số chi tiết (Hiệp 1 / Cả trận) */}
-            {match.match_score && (match.match_score.halftime || match.match_score.fulltime) && (
+            {/* Tỉ số chi tiết (Hiệp 1 / Cả trận / Hiệp phụ / Luân lưu) */}
+            {match.match_score && (match.match_score.halftime || match.match_score.fulltime || match.match_score.extratime || match.match_score.penalty) && (
               <div className="bg-slate-50 dark:bg-white/[0.01] border border-slate-200/50 dark:border-white/5 rounded-2xl p-3.5 space-y-2">
                 <h4 className="text-[10px] font-black text-secondary uppercase tracking-widest flex items-center gap-1.5 select-none">
                   📊 TỈ SỐ CHI TIẾT
@@ -759,6 +797,18 @@ export default React.memo(function MatchCard({
                     <span className="text-foreground/60 font-bold">Cả trận</span>
                     <span className="font-mono font-black text-foreground">{match.match_score.fulltime || "—"}</span>
                   </div>
+                  {match.match_score.extratime && (
+                    <div className="flex justify-between items-center bg-slate-100/50 dark:bg-white/[0.02] p-2.5 rounded-xl border border-slate-200/30 dark:border-white/5">
+                      <span className="text-foreground/60 font-bold">Hiệp phụ</span>
+                      <span className="font-mono font-black text-foreground">{match.match_score.extratime}</span>
+                    </div>
+                  )}
+                  {match.match_score.penalty && (
+                    <div className="flex justify-between items-center bg-slate-100/50 dark:bg-white/[0.02] p-2.5 rounded-xl border border-slate-200/30 dark:border-white/5 col-span-2">
+                      <span className="text-foreground/60 font-bold">Luân lưu (PEN)</span>
+                      <span className="font-mono font-black text-amber-500 dark:text-amber-400">{match.match_score.penalty}</span>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

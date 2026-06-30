@@ -30,6 +30,8 @@ export interface Match {
   match_score?: {
     halftime: string | null;
     fulltime: string | null;
+    extratime?: string | null;
+    penalty?: string | null;
   } | null;
 }
 
@@ -74,6 +76,8 @@ export interface ApiMatch {
   score?: {
     halftime: string | null;
     fulltime: string | null;
+    extratime?: string | null;
+    penalty?: string | null;
   } | null;
 }
 

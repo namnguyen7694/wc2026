@@ -159,6 +159,8 @@ export async function GET() {
             match.match_score = {
               halftime: matchedApi.score.halftime || null,
               fulltime: matchedApi.score.fulltime || null,
+              extratime: matchedApi.score.extratime || null,
+              penalty: matchedApi.score.penalty || null,
             };
           }
 

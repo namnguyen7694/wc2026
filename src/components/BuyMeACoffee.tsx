@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Coffee, X } from "lucide-react";
 import { useMatchStore } from "../hooks/useMatchStore";
+import { Match } from "../types/match";
 import { sendTelegramMessage } from "../utils/telegram";
 
 const getMatchTimestamp = (localDate?: string): number => {
@@ -64,6 +65,31 @@ export default function BuyMeACoffee() {
 
     if (finishedMatches.length === 0) return;
 
+    const getWinner = (m: Match): "home" | "away" | null => {
+      if (m.home_score > m.away_score) return "home";
+      if (m.away_score > m.home_score) return "away";
+
+      // If draw, check penalties
+      if (m.match_score?.penalty) {
+        const parts = m.match_score.penalty.split("-").map((p) => parseInt(p.trim(), 10));
+        if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+          if (parts[0] > parts[1]) return "home";
+          if (parts[1] > parts[0]) return "away";
+        }
+      }
+
+      // Check extra time score (fallback)
+      if (m.match_score?.extratime) {
+        const parts = m.match_score.extratime.split("-").map((p) => parseInt(p.trim(), 10));
+        if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+          if (parts[0] > parts[1]) return "home";
+          if (parts[1] > parts[0]) return "away";
+        }
+      }
+
+      return null;
+    };
+
     let winningTeamName = "";
 
     // 1. Try to find a match where the user's favorite team won (must be within the last 24 hours)
@@ -81,11 +107,12 @@ export default function BuyMeACoffee() {
         const homeIso = match.home_team_iso2?.toUpperCase();
         const awayIso = match.away_team_iso2?.toUpperCase();
 
-        if (match.home_score > match.away_score && myTeams.includes(homeIso)) {
+        const winner = getWinner(match);
+        if (winner === "home" && myTeams.includes(homeIso)) {
           winningTeamName = match.home_team_name;
           break;
         }
-        if (match.away_score > match.home_score && myTeams.includes(awayIso)) {
+        if (winner === "away" && myTeams.includes(awayIso)) {
           winningTeamName = match.away_team_name;
           break;
         }
@@ -95,9 +122,10 @@ export default function BuyMeACoffee() {
     // 2. If no favorite team win found, get the winner of the most recent finished match overall
     if (!winningTeamName) {
       const latestMatch = finishedMatches[0];
-      if (latestMatch.home_score > latestMatch.away_score) {
+      const winner = getWinner(latestMatch);
+      if (winner === "home") {
         winningTeamName = latestMatch.home_team_name;
-      } else if (latestMatch.away_score > latestMatch.home_score) {
+      } else if (winner === "away") {
         winningTeamName = latestMatch.away_team_name;
       }
     }
