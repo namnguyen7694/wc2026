@@ -90,7 +90,7 @@ export const FALLBACK_CSV = `"match_id","phase","stage_key","stage_label","group
 "89","knockout","round16","Vong 1/8","","","05/07/2026 04:00","UTC+7","10","Philadelphia Stadium","Philadelphia","United States","","W74","","","W77","","0","0","notstarted","FALSE","notstarted","null","null"
 "90","knockout","round16","Vong 1/8","","","05/07/2026 00:00","UTC+7","5","Houston Stadium","Houston","United States","","W73","","","W75","","0","0","notstarted","FALSE","notstarted","null","null"
 "91","knockout","round16","Vong 1/8","","","06/07/2026 03:00","UTC+7","11","New York/New Jersey Stadium","New York/New Jersey (East Rutherford)","United States","","W76","","","W78","","0","0","notstarted","FALSE","notstarted","null","null"
-"92","knockout","round16","Vong 1/8","","","06/07/2026 07:00","UTC+7","1","Mexico City Stadium","Mexico City","Mexico","","W79","","","W80","","0","0","notstarted","FALSE","notstarted","null","null"
+"92","knockout","round16","Vong 1/8","","","06/07/2026 08:00","UTC+7","1","Mexico City Stadium","Mexico City","Mexico","","W79","","","W80","","0","0","notstarted","FALSE","notstarted","null","null"
 "93","knockout","round16","Vong 1/8","","","07/07/2026 02:00","UTC+7","4","Dallas Stadium","Dallas (Arlington, Texas)","United States","","W83","","","W84","","0","0","notstarted","FALSE","notstarted","null","null"
 "94","knockout","round16","Vong 1/8","","","07/07/2026 07:00","UTC+7","14","Seattle Stadium","Seattle","United States","","W81","","","W82","","0","0","notstarted","FALSE","notstarted","null","null"
 "95","knockout","round16","Vong 1/8","","","07/07/2026 23:00","UTC+7","7","Atlanta Stadium","Atlanta","United States","","W86","","","W88","","0","0","notstarted","FALSE","notstarted","null","null"
